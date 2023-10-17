@@ -32,7 +32,7 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
-          dir('/var/lib/jenkins/workspace/frontend') {
+          dir('/var/www/shiksha.uniteframework.io/public') {
             sh 'rm -rf *'
             sh 'cp /var/lib/jenkins/workspace/frontend/shiksha-ui.tar .'
             sh 'tar -xvf shiksha-ui.tar'
