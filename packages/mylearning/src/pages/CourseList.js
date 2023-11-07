@@ -140,7 +140,7 @@ export default function MyLearning({ footerLinks, appName }) {
       defaultInputs.map((e) => {
         return {
           ...e,
-          ["data"]: ["subject"].includes(e.attributeName)
+          ["attributeName"]: ["subject"].includes(e.attributeName)
             ? subjectData
             : e.data,
           ["attributeName"]: ["gradeLevel"].includes(e.attributeName)

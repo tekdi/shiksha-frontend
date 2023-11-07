@@ -6,6 +6,7 @@ import MyLearning from "./pages/MyLearning";
 import CourseDetails from "./pages/CourseDetails";
 import VideoList from "./pages/VideoList";
 import VideoDetails from "./pages/VideoDetails";
+import Player from "pages/Player";
 
 function App() {
   initializeI18n(
@@ -18,16 +19,16 @@ function App() {
       path: "/",
       component: CourseList,
     },
-    // {
-    //   moduleName: "mylearning",
-    //   path: "/mylearning/list/:state",
-    //   component: CourseList,
-    // },
-    // {
-    //   moduleName: "mylearning",
-    //   path: "/mylearning/list",
-    //   component: CourseList,
-    // },
+    {
+      moduleName: "mylearning",
+      path: "/mylearning/list/:state",
+      component: CourseList,
+    },
+    {
+      moduleName: "mylearning",
+      path: "/mylearning/list",
+      component: CourseList,
+    },
     {
       moduleName: "mylearning",
       path: "/mylearning/:id/view",
@@ -38,16 +39,22 @@ function App() {
     //   path: "/mylearning/video/list/:state",
     //   component: VideoList,
     // },
-    // {
-    //   moduleName: "mylearning",
-    //   path: "/mylearning/video/list",
-    //   component: VideoList,
-    // },
+    {
+      moduleName: "mylearning",
+      path: "/mylearning/video/list",
+      component: VideoList,
+    },
     // {
     //   moduleName: "mylearning",
     //   path: "/mylearning/video/:id/view",
     //   component: VideoDetails,
     // },
+
+    {
+      moduleName: "mylearning",
+      path: "/player",
+      component: Player,
+    },
   ];
   const LoginComponent = React.lazy(() => import("core/Login"));
   const skipLogin = !(
