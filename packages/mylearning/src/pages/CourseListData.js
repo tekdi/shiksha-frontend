@@ -90,7 +90,7 @@ const ONGOING = "Ongoing";
 const ASSIGNED = "Assigned";
 const COMPLETED = "Completed";
 
-export default function MyLearning({ footerLinks, appName }) {
+export default function CourseListData({ footerLinks, appName }) {
   const { t } = useTranslation();
   const [filterObject, setFilterObject] = React.useState({});
   const [courses, setCourses] = React.useState([]);
@@ -101,7 +101,12 @@ export default function MyLearning({ footerLinks, appName }) {
   const [courseStartTime, setCourseStartTime] = React.useState();
   const [filters, setFilters] = React.useState();
 
+  const { id } = useParams();
   const { state } = useParams();
+
+  console.log(id)
+
+
   const userId = localStorage.getItem("id");
 
   const handleSearchState = (item) => {
@@ -151,9 +156,10 @@ export default function MyLearning({ footerLinks, appName }) {
       })
     );
 
-    const dikshaData =  await coursetrackingRegistryService.getAll({
+    const dikshaData =  await coursetrackingRegistryService.getOne({
       ...filterObject,
       limit: 10,
+      doID: id,
       userId,
       status: state,
     })
@@ -327,13 +333,13 @@ const Children = ({
 
   return (
     <Stack>
-      <FilterButton
+      {/* <FilterButton
         getObject={handleFilter}
         _box={{ pt: 5, px: 5 }}
         _actionSheet={{ bg: "mylearning.cardBg" }}
         resetButtonText={t("COLLAPSE")}
         filters={filters}
-      />
+      /> */}
       <VStack>
         <Box
           bg={"mylearning.white"}

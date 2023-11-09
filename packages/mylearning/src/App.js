@@ -7,6 +7,7 @@ import CourseDetails from "./pages/CourseDetails";
 import VideoList from "./pages/VideoList";
 import VideoDetails from "./pages/VideoDetails";
 import Player from "pages/Player";
+import CourseListData from "pages/CourseListData";
 
 function App() {
   initializeI18n(
@@ -49,6 +50,12 @@ function App() {
     //   path: "/mylearning/video/:id/view",
     //   component: VideoDetails,
     // },
+
+    {
+      moduleName: "mylearning",
+      path: "/:id/courseData",
+      component: CourseListData,
+    },
 
     {
       moduleName: "mylearning",

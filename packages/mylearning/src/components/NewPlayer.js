@@ -12,7 +12,7 @@ const NewSunbirdPlayer = ({
 }) => {
   const { mimeType } = props
   let trackData = []
-  const [url, setUrl] = React.useState("https://obj.diksha.gov.in/ntp-content-production/content/do_313316594363015168111564/artifact/do_313316594363015168111564_1625560835739_capture.png")
+  const [url, setUrl] = React.useState("https://sunbirdsaaspublic.blob.core.windows.net/content/content/assets/do_11389701914878771211241/od_eng_u1_l1-playing-with-words.pdf")
   React.useEffect(() => {
     if (mimeType === 'application/pdf') {
       setUrl(`/pdf`)

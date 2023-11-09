@@ -107,13 +107,15 @@ export default function MyCoursesComponent({
         <Stack>
           <VStack space={3}>
             {data.map((item, index) => {
+               console.log("INSIDE COMPONENT");
+              console.log(item.identifier);
               return (
                 <CourseBox
                   _addIconButton={{ onPress: (e) => handleModuleOpen(item) }}
                   appName={appName}
                   canShare={true}
                   key={index}
-                  {...{ item, url: `/mylearning/${item.id}/view` }}
+                  {...{ item, url: `/${item.identifier}/courseData` }}
                   {..._courseBox}
                 />
               );

@@ -29,7 +29,7 @@ export const getAll = async ({ ...params } = {}, header = {}) => {
     Authorization: 'Bearer ' + localStorage.getItem('token')
   }
   const result = await get(
-    `https://diksha.gov.in/api/course/v1/hierarchy/do_313316673200873472111821`,
+    `https://sunbirdsaas.com/api/course/v1/hierarchy/do_11390060253845094411834?`,
     null,
     { params, headers }
   )
@@ -41,30 +41,50 @@ export const getAll = async ({ ...params } = {}, header = {}) => {
   }
 }
 
-export const getOne = async (filters = {}, header = {}) => {
+export const getOne = async ({ ...params } = {}, header = {}) => {
+
+  console.log(params.doID)
   let headers = {
     ...header,
     Authorization: 'Bearer ' + localStorage.getItem('token')
   }
-  try {
-    const result = await get(
-      process.env.REACT_APP_API_URL + '/coursetracking/' + filters.id,
-      {
-        headers
-      }
-    )
-    if (result?.data?.data) {
-      const data = result?.data?.data[0]
-        ? result?.data?.data[0]
-        : result?.data?.data
-      return await getDataWithCourseOne(data)
-    } else {
-      return {}
-    }
-  } catch {
-    return {}
+  const result = await get(
+    `https://sunbirdsaas.com/api/course/v1/hierarchy/` + params.doID,
+    null,
+    { params, headers }
+  )
+  if (result) {
+    return result
+    // return await getDataWithCourse(result.data.data)
+  } else {
+    return []
   }
 }
+
+// export const getOne = async (filters = {}, header = {}) => {
+//   let headers = {
+//     ...header,
+//     Authorization: 'Bearer ' + localStorage.getItem('token')
+//   }
+//   try {
+//     const result = await get(
+//       process.env.REACT_APP_API_URL + '/coursetracking/' + filters.id,
+//       {
+//         headers
+//       }
+//     )
+//     if (result?.data?.data) {
+//       const data = result?.data?.data[0]
+//         ? result?.data?.data[0]
+//         : result?.data?.data
+//       return await getDataWithCourseOne(data)
+//     } else {
+//       return {}
+//     }
+//   } catch {
+//     return {}
+//   }
+// }
 
 export const getLikes = async (id) => {
   return await likeRegistryService.getAll({
