@@ -29,8 +29,8 @@ import {
 import { useParams } from "react-router-dom";
 import manifest from "../manifest.json";
 import { defaultInputs } from "config/mylearningConfig";
-import MyCoursesComponent from "components/MyCoursesComponent";
 import moment from "moment";
+import MyCoursesComponentData from "components/MyCoursesComponentData";
 
 const sortArray = [
   {
@@ -349,7 +349,7 @@ const Children = ({
           roundedBottom={"xl"}
           shadow={2}
         >
-          <MyCoursesComponent
+          <MyCoursesComponentData
             seeButton={<React.Fragment />}
             appName={appName}
             data={courses}
