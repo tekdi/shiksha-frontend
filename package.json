@@ -14,8 +14,7 @@
       "packages/teacher-app",
       "packages/cohort",
       "packages/observation",
-      "packages/mylearning",
-      "packages/admin"
+      "packages/mylearning"
     ]
   },
   "scripts": {

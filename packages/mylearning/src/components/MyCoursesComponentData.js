@@ -130,7 +130,7 @@ export default function MyCoursesComponentData({
               colorScheme="button"
               rounded="lg"
               onPress={(e) => navigate("/mylearning/list")}
-              {..._seeButton}
+              {..._seeButton} 
             >
               {seeButtonText}
             </Button>
