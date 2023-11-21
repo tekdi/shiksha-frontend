@@ -23,19 +23,36 @@ const interfaceData = {
 
 let only = Object.keys(interfaceData)
 
+// export const getAll = async ({ ...params } = {}, header = {}) => {
+//   let headers = {
+//     ...header,
+//     Authorization: 'Bearer ' + localStorage.getItem('token')
+//   }
+//   const result = await get(
+//     `https://sunbirdsaas.com/api/course/v1/hierarchy/do_11390060253845094411834?`,
+//     null,
+//     { params, headers }
+//   )
+//   if (result) {
+//     return result
+//     // return await getDataWithCourse(result.data.data)
+//   } else {
+//     return []
+//   }
+// }
+
 export const getAll = async ({ ...params } = {}, header = {}) => {
   let headers = {
     ...header,
     Authorization: 'Bearer ' + localStorage.getItem('token')
   }
-  const result = await get(
-    `https://sunbirdsaas.com/api/course/v1/hierarchy/do_11390060253845094411834?`,
+  const result = await post(
+    process.env.REACT_APP_API_URL + '/coursetracking/search',
     null,
     { params, headers }
   )
-  if (result) {
-    return result
-    // return await getDataWithCourse(result.data.data)
+  if (result.data.data) {
+    return await getDataWithCourse(result.data.data)
   } else {
     return []
   }

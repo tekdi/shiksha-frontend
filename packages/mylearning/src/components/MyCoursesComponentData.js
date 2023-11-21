@@ -16,6 +16,7 @@ import CourseActionsheet from "./Actionsheet/CourseActionsheet";
 import CommentActionsheet from "./Actionsheet/CommentActionsheet";
 import LikeActionsheet from "./Actionsheet/LikeActionsheet";
 import moment from "moment";
+import { useHistory } from 'react-router-dom';
 
 const colors = overrideColorTheme(colorTheme);
 
@@ -38,6 +39,7 @@ export default function MyCoursesComponentData({
   const [comments, setComments] = React.useState([]);
   const [showModuleLike, setShowModuleLike] = React.useState(false);
   const [commentStartTime, setCommentStartTime] = React.useState();
+  const history = useHistory();
 
   const handleLikeModuleOpen = async () => {
     const result = await coursetrackingRegistryService.getLikes(course.id);
@@ -110,14 +112,25 @@ export default function MyCoursesComponentData({
                console.log("INSIDE COMPONENT");
               console.log(item.identifier);
               return (
-                <CourseBox
-                  _addIconButton={{ onPress: (e) => handleModuleOpen(item) }}
-                  appName={appName}
-                  canShare={true}
-                  key={index}
-                  {...{ item, url: `/${item.artifactUrl}/player` }}
-                  {..._courseBox}
-                />
+               <CourseBox
+  _addIconButton={{
+    onPress: (e) => {
+      // Store item.artifactUrl in local storage
+      localStorage.setItem('artifactUrl', item.artifactUrl);
+
+      // Construct the correct player URL
+      const playerUrl = `/modules/mylearning/player`;
+
+      // Navigate to the player URL
+      history.push(playerUrl);
+    },
+  }}
+  appName={appName}
+  canShare={true}
+  key={index}
+  {...{ item, url: `/player/${encodeURIComponent(item.artifactUrl)}` }}
+  {..._courseBox}
+/>
               );
             })}
           </VStack>

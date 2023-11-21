@@ -135,7 +135,7 @@ const NewSunbirdPlayer = ({
 
   if (url) {
     return (
-      <VStack {...{ width, height }}>
+      <VStack> 
         <IconByName
           name='CloseCircleLineIcon'
           onPress={() => {
@@ -149,20 +149,22 @@ const NewSunbirdPlayer = ({
             }
             handleExitButton()
           }}
-          position='absolute'
+          position='relative'
           zIndex='10'
           right='15px'
-          top='-50px'
+          top='-500px'
           _icon={{ size: 40 }}
           bg='white'
           p='0'
           rounded='full'
         />
         <iframe
-          style={{ border: 'none' }}
+          style={{ border: 'none', position: 'absolute',
+          marginLeft: "10%",
+          width: "80%",
+          height: "30em"}}
           id='preview'
-          height={'100%'}
-          width='100%'
+         
           name={JSON.stringify({
             ...props,
             questionListUrl: 'https://sunbirdsaas.com/api/question/v1/list'

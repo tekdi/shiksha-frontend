@@ -59,7 +59,7 @@ function App() {
 
     {
       moduleName: "mylearning",
-      path: "/mylearning/player",
+      path: "/player/:url",
       component: Player,
     },
   ];
