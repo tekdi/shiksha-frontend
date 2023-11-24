@@ -48,7 +48,7 @@ function AdminHome({footerLinks, appName}) {
       link: "/",
       data: [
         {
-          link: "/admin/users/add",
+          link: "/admin/students",
 
           title: <H2>Manage Student</H2>,
 

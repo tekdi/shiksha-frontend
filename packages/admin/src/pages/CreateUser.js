@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import Form from "@rjsf/core";
 import validator from "@rjsf/validator-ajv8";
 import { Box, Container, useToast } from "native-base";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 let schema = {
   title: "Add Users",
@@ -59,7 +59,7 @@ let schema = {
 let uiSchema = {
   name: {
     "ui:classNames": "custom-class-name",
-    "ui:placeholder": ""
+    "ui:placeholder": "",
   },
   password: {
     "ui:widget": "password",
@@ -78,8 +78,8 @@ function CreateUser({ footerLinks, appName }) {
   });
   const [fields, setFields] = useState([]);
   const [fieldResponse, setFieldResponse] = useState({});
-  let userIdentifier = localStorage.getItem("id");
-
+  const [isEditForm, setIsEditForm] = useState(false);
+  const { state } = useLocation();
   useEffect(() => {
     fieldsRegistryService
       .getFields(
@@ -109,6 +109,13 @@ function CreateUser({ footerLinks, appName }) {
         });
         setFields(extraFields);
         setFieldResponse(fieldRes);
+        console.log("state", state);
+        if (state) {
+          setFormData((prev) => {
+            return { ...prev, ...state };
+          });
+          setIsEditForm(true);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -173,22 +180,42 @@ function CreateUser({ footerLinks, appName }) {
     }
     corePayload["password"] = data["password"];
     corePayload["fieldValues"] = fieldsPayload;
-    userRegistryService
-      .create(corePayload, {
-        tenantid:
-          "31d1cc30-da56-4c6a-90d7-8bc4fc51bc70" ||
-          process.env.REACT_APP_TENANT_ID,
-      })
-      .then((response) => {
-        console.log("response", response);
-        if (!toast.isActive("user-created")) {
-          toast.show({
-            id: "user-created",
-            title: "User created successfully!",
-          });
-        }
-        navigate("/admin");
-      });
+
+    if (isEditForm) {
+      userRegistryService
+        .update(corePayload, {
+          tenantid:
+            "31d1cc30-da56-4c6a-90d7-8bc4fc51bc70" ||
+            process.env.REACT_APP_TENANT_ID,
+        })
+        .then((response) => {
+          console.log("response", response);
+          if (!toast.isActive("user-updated")) {
+            toast.show({
+              id: "user-updated",
+              title: "User updated successfully!",
+            });
+          }
+          navigate("/admin");
+        });
+    } else {
+      userRegistryService
+        .create(corePayload, {
+          tenantid:
+            "31d1cc30-da56-4c6a-90d7-8bc4fc51bc70" ||
+            process.env.REACT_APP_TENANT_ID,
+        })
+        .then((response) => {
+          console.log("response", response);
+          if (!toast.isActive("user-created")) {
+            toast.show({
+              id: "user-created",
+              title: "User created successfully!",
+            });
+          }
+          navigate("/admin");
+        });
+    }
   };
   const colors = overrideColorTheme();
   return (

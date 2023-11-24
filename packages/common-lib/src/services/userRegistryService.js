@@ -57,17 +57,35 @@ export const getAll = async (filters = {}, header = {}) => {
     ...header
   }
 
-  const result = await post(
-    `${process.env.REACT_APP_API_URL}/user/search`,
-    { filters },
-    {
-      headers
+  try {
+    const result = await post(
+      `${process.env.REACT_APP_API_URL}/user/search`,
+      { filters },
+      {
+        headers
+      }
+    )
+    if (result?.data?.data) {
+      // return result.data.data.map((e) => mapInterfaceData(e, interfaceData))
+      let res = result.data.data
+      res = res.map((item) => {
+        if (item?.fields) {
+          item.fields = item.fields.map((field) => {
+            item[field.name] = ''
+            if (field?.fieldValues.length) {
+              item[field.name] = field.fieldValues[0].value
+            }
+            return field;
+          });
+        }
+        return item;
+      })
+      return res
+    } else {
+      return []
     }
-  )
-  if (result.data.data) {
-    return result.data.data.map((e) => mapInterfaceData(e, interfaceData))
-  } else {
-    return []
+  } catch (e) {
+    console.log(e)
   }
 }
 
@@ -85,10 +103,10 @@ export const getOne = async ({ id, ...params } = {}, header = {}) => {
     headers
   }).catch((error) => error)
   if (result.data && id) {
-    localStorage.setItem("currentUser", JSON.stringify(result.data.data));
+    localStorage.setItem('currentUser', JSON.stringify(result.data.data))
     return mapInterfaceData(result.data.data, interfaceData)
   } else if (result?.data?.data) {
-    localStorage.setItem("currentUser", JSON.stringify(result.data.data[0]));
+    localStorage.setItem('currentUser', JSON.stringify(result.data.data[0]))
     return mapInterfaceData(result.data.data[0], interfaceData)
   } else {
     return {}
@@ -115,19 +133,10 @@ export const update = async (data = {}, header = {}) => {
     Authorization: 'Bearer ' + localStorage.getItem('token'),
     ...header
   }
-  let newInterfaceData = interfaceData
-  if (headers?.removeParameter || headers?.onlyParameter) {
-    newInterfaceData = {
-      ...interfaceData,
-      removeParameter: headers?.removeParameter ? headers?.removeParameter : [],
-      onlyParameter: headers?.onlyParameter ? headers?.onlyParameter : []
-    }
-  }
-  let newData = mapInterfaceData(data, newInterfaceData, true)
 
   const result = await updateRequest(
-    process.env.REACT_APP_API_URL + '/user/' + data.id,
-    newData,
+    process.env.REACT_APP_API_URL + '/user/' + data.userId,
+    data,
     { headers }
   )
   if (result?.data) {
@@ -143,13 +152,11 @@ export const create = async (data = {}, header = {}) => {
     ...header
   }
 
-  const result = await post(
-    process.env.REACT_APP_API_URL + '/user',
-    data,
-    { headers }
-  )
+  const result = await post(process.env.REACT_APP_API_URL + '/user', data, {
+    headers
+  })
   if (result?.data) {
-    return result.data?.data;
+    return result.data?.data
   } else {
     return {}
   }

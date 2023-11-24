@@ -10,10 +10,15 @@ import CoursesPage from "pages/CoursesPage";
 const ClassDetails = React.lazy(() => import("classes/ClassDetails"));
 // const SampleComponent = React.lazy(() => import("cohort/SampleComponent"));
 // const CohortDetails = React.lazy(() => import("classes/CohortDetails"));
-const CohortDetails = React.lazy(() => import("cohort/CohortDetails"));
 const CreateCohort = React.lazy(() => import("admin/CreateCohort"));
 const CreateUser = React.lazy(() => import("admin/CreateUser"));
 const AdminHome = React.lazy(() => import("admin/AdminHome"))
+const ManageCohorts = React.lazy(() => import("admin/ManageCohorts"));
+const ManageStudents = React.lazy(() => import("admin/ManageStudents"));
+const ManageTeachers = React.lazy(() => import("admin/ManageTeachers"));
+
+
+const CohortDetails = React.lazy(() => import("cohort/CohortDetails"));
 const CohortMemberList = React.lazy(() => import("cohort/CohortMemberList"));
 const Attendance = React.lazy(() => import("attendance/Attendance"));
 const Report = React.lazy(() => import("attendance/Report"));
@@ -162,6 +167,47 @@ export const routes = [
   //   path: "/worksheet",
   //   component: Teaching,
   // },
+  // Admin
+  {
+    moduleName: "admin",
+    path: "/admin",
+    component: AdminHome
+  },
+  {
+    moduleName: "admin",
+    path: "/admin/users/add",
+    component: CreateUser
+  },
+  {
+    moduleName: "admin",
+    path: "/admin/users/edit",
+    component: CreateUser
+  },
+  {
+    moduleName: "admin",
+    path: "/admin/students/add",
+    component: CreateUser
+  },
+  {
+    moduleName: "admin",
+    path: "/admin/teachers/add",
+    component: CreateUser
+  },
+  {
+    moduleName: "admin",
+    path: "/admin/cohorts",
+    component: ManageCohorts
+  },
+  {
+    moduleName: "admin",
+    path: "/admin/students",
+    component: ManageStudents
+  },
+  {
+    moduleName: "admin",
+    path: "/admin/teachers",
+    component: ManageTeachers
+  },
   // classess
   {
     // moduleName: "classes",
@@ -188,19 +234,9 @@ export const routes = [
     component: CohortMemberList
   },
   {
-    moduleName: "admin",
-    path: "/admin",
-    component: AdminHome
-  },
-  {
     moduleName: "cohort",
     path: "/admin/cohorts/add",
     component: CreateCohort
-  },
-  {
-    moduleName: "cohort",
-    path: "/admin/users/add",
-    component: CreateUser
   },
   {
     moduleName: "classes",
