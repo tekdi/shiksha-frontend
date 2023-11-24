@@ -71,18 +71,19 @@ export const getAll = async (filters = {}, header = {}) => {
       res = res.map((item) => {
         if (item?.fields) {
           item.fields = item.fields.map((field) => {
-            item[field.name] = ''
+            item[field.name] = '';
             if (field?.fieldValues.length) {
               item[field.name] = field.fieldValues[0].value
             }
             return field;
           });
         }
-        return item;
-      })
-      return res
+        const omitKeys = ['fields', 'createdAt', 'updatedAt'];
+        return excludeKeys(item, omitKeys);
+      });
+      return res;
     } else {
-      return []
+      return [];
     }
   } catch (e) {
     console.log(e)
@@ -161,3 +162,13 @@ export const create = async (data = {}, header = {}) => {
     return {}
   }
 }
+
+
+const excludeKeys = (obj, keysToExclude) => {
+  return Object.keys(obj).reduce((result, key) => {
+    if (!keysToExclude.includes(key)) {
+      result[key] = obj[key];
+    }
+    return result;
+  }, {});
+};

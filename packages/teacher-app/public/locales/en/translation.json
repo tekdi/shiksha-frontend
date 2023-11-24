@@ -430,5 +430,21 @@
   "ASSESSMENT_REPORTS": "Assessment Reports",
   "WELCOME_BACK": "Welcome back",
   "WELCOME": "Welcome",
-  "NO_CLASSES_FOUND": "No Classes found"
+  "NO_CLASSES_FOUND": "No Classes found",
+  "MANAGE_COHORTS": "Manage Cohorts",
+  "MANAGE_TEACHERS": "Manage Teachers",
+  "MANAGE_STUDENTS": "Manage Students",
+  "CREATE_NEW_COHORT": "Create New Cohort",
+  "SUBMIT_FORM": "Submit the below given form",
+  "CREATE_NEW_USER": "Create New User",
+  "USER_CREATED_SUCCESSFULLY": "User created successfully!",
+  "COHORT_CREATED_SUCCESSFULLY": "Cohort created successfully!",
+  "USER_UPDATED_SUCCESSFULLY": "User updated successfully!",
+  "COHORT_UPDATED_SUCCESSFULLY": "Cohort updated successfully!",
+  "USER_DELETED_SUCCESSFULLY": "User deleted successfully!",
+  "COHORT_DELETED_SUCCESSFULLY": "Cohort deleted successfully!",
+  "ADD_STUDENT": "Add Student",
+  "DELETE": "Delete",
+  "ADMIN_PANEL": "Admin Panel",
+  "ADMIN_PANEL_DESC": "Welcome to the Admin Panel. Please choose one of the following entities to manage records. Within each entity, you have the capability to perform various operations."
 }

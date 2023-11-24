@@ -92,9 +92,7 @@ function CreateUser({ footerLinks, appName }) {
           },
         },
         {
-          tenantid:
-            "31d1cc30-da56-4c6a-90d7-8bc4fc51bc70" ||
-            process.env.REACT_APP_TENANT_ID,
+          tenantid: process.env.REACT_APP_TENANT_ID,
         }
       )
       .then((response) => {
@@ -184,16 +182,14 @@ function CreateUser({ footerLinks, appName }) {
     if (isEditForm) {
       userRegistryService
         .update(corePayload, {
-          tenantid:
-            "31d1cc30-da56-4c6a-90d7-8bc4fc51bc70" ||
-            process.env.REACT_APP_TENANT_ID,
+          tenantid: process.env.REACT_APP_TENANT_ID,
         })
         .then((response) => {
           console.log("response", response);
           if (!toast.isActive("user-updated")) {
             toast.show({
               id: "user-updated",
-              title: "User updated successfully!",
+              title: t("USER_UPDATED_SUCCESSFULLY"),
             });
           }
           navigate("/admin");
@@ -201,16 +197,14 @@ function CreateUser({ footerLinks, appName }) {
     } else {
       userRegistryService
         .create(corePayload, {
-          tenantid:
-            "31d1cc30-da56-4c6a-90d7-8bc4fc51bc70" ||
-            process.env.REACT_APP_TENANT_ID,
+          tenantid: process.env.REACT_APP_TENANT_ID,
         })
         .then((response) => {
           console.log("response", response);
           if (!toast.isActive("user-created")) {
             toast.show({
               id: "user-created",
-              title: "User created successfully!",
+              title: t("USER_CREATED_SUCCESSFULLY"),
             });
           }
           navigate("/admin");
@@ -221,11 +215,11 @@ function CreateUser({ footerLinks, appName }) {
   return (
     <Layout
       _header={{
-        title: "Create New User",
+        title: t("CREATE_NEW_USER"),
       }}
       _appBar={{ languages: manifest.languages }}
       subHeader={
-        <H3 textTransform="none">{t("Submit the below given form")}</H3>
+        <H3 textTransform="none">{t("SUBMIT_FORM")}</H3>
       }
       _subHeader={{
         bg: colors?.cardBg,

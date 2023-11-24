@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
 import { AgGridReact } from "ag-grid-react";
+import { useEffect, useState } from "react";
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { Loading, useWindowSize } from "@shiksha/common-lib";
-import { Box, Button, View } from "native-base";
+import { Button, View } from "native-base";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const UserList = ({ users }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [rowData, setRowData] = useState([]);
 
@@ -18,7 +18,7 @@ const UserList = ({ users }) => {
     { field: "email" },
     {
       field: "Actions",
-      cellRenderer: MyEditButtonRenderer,
+      cellRenderer: EditButtonRenderer,
     },
   ]);
 
@@ -28,7 +28,7 @@ const UserList = ({ users }) => {
     }
   }, [users]);
 
-  function MyEditButtonRenderer(params) {
+  function EditButtonRenderer(params) {
     return (
       <Button
         m={2}
@@ -37,7 +37,7 @@ const UserList = ({ users }) => {
           navigate("/admin/users/edit", { state: params.data });
         }}
       >
-        Edit
+        {t("EDIT")}
       </Button>
     );
   }
@@ -49,7 +49,7 @@ const UserList = ({ users }) => {
         style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}
       >
         <Button onPress={() => navigate("/admin/users/add")}>
-          Add Student
+          {t("ADD_STUDENT")}
         </Button>
       </View>
 

@@ -12,8 +12,7 @@ function ManageStudents({footerLinks, appName}) {
 
   useEffect(() => {
     userRegistryService.getAll({}, {
-      tenantid:
-        "31d1cc30-da56-4c6a-90d7-8bc4fc51bc70" || process.env.REACT_APP_TENANT_ID
+      tenantid: process.env.REACT_APP_TENANT_ID
     }).then((res) => {
       console.log(res);
       setStudents(res);
@@ -25,7 +24,7 @@ function ManageStudents({footerLinks, appName}) {
   return (
     <Layout
       _header={{
-        title: "Manage Students",
+        title: t("MANAGE_STUDENTS"),
       }}
       _appBar={{ languages: manifest.languages }}
       // subHeader={

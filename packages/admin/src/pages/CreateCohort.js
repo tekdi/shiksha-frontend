@@ -213,11 +213,11 @@ function CreateCohort({ footerLinks, appName }) {
   return (
     <Layout
       _header={{
-        title: "Create New Cohort",
+        title: t("CREATE_NEW_COHORT"),
       }}
       _appBar={{ languages: manifest.languages }}
       subHeader={
-        <H3 textTransform="none">{t("Submit the below given form")}</H3>
+        <H3 textTransform="none">{t("SUBMIT_FORM")}</H3>
       }
       _subHeader={{
         bg: colors?.cardBg,
