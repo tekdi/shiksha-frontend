@@ -16,8 +16,8 @@ function AdminHome({footerLinks, appName}) {
       link: "/",
       data: [
         {
-          link: "/admin/cohorts/add",
-          title: <H2>Manage Cohort</H2>,
+          link: "/admin/cohorts",
+          title: <H2>{t("MANAGE_COHORTS")}</H2>,
           _box: {
             style: {
               background:
@@ -32,7 +32,7 @@ function AdminHome({footerLinks, appName}) {
       data: [
         {
           link: "/admin/users/add",
-          title: <H2>Manage Teacher</H2>,
+          title: <H2>{t("MANAGE_TEACHERS")}</H2>,
 
           _box: {
             style: {
@@ -48,9 +48,9 @@ function AdminHome({footerLinks, appName}) {
       link: "/",
       data: [
         {
-          link: "/admin/users/add",
+          link: "/admin/students",
 
-          title: <H2>Manage Student</H2>,
+          title: <H2>{t("MANAGE_STUDENTS")}</H2>,
 
           _box: {
             style: {
@@ -68,7 +68,7 @@ function AdminHome({footerLinks, appName}) {
       <Layout
         loading={loading}
         _header={{
-          title: t("ADMIN PANEL"),
+          title: t("ADMIN_PANEL"),
           subHeading: moment().format("hh:mm:ss A"),
         }}
         _appBar={{
@@ -84,9 +84,7 @@ function AdminHome({footerLinks, appName}) {
           <Stack>
             <VStack space={6}>
               <Box display={"inline"}>
-                Welcome to the Admin Panel. Please choose one of the following
-                entities to manage records. Within each entity, you have the
-                capability to perform various operations.
+                {t("ADMIN_PANEL_DESC")}
               </Box>
               <div className={styles.gridContainer}>
                 {widgetData.map((item, index) => {

@@ -47,7 +47,7 @@ export default function CohortList() {
                 (item?.name ? item?.name : "") +
                 (item?.section ? " • Sec " + item?.section : ""),
               subTitle: t("CLASS_TEACHER"),
-              link: generatePath(item.id, { ...{ id: item.id } }),
+              link: generatePath(item.cohortId, { ...{ id: item.cohortId } }),
               _box: {
                 style: {
                   background:

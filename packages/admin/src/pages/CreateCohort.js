@@ -1,77 +1,82 @@
+import Form from "@rjsf/core";
+import validator from "@rjsf/validator-ajv8";
 import {
   H3,
   Layout,
-  overrideColorTheme,
-  fieldsRegistryService,
   cohortRegistryService,
+  fieldsRegistryService,
+  overrideColorTheme,
 } from "@shiksha/common-lib";
-import React, { useCallback, useEffect, useState } from "react";
-import manifest from "../manifest.json";
+import { Box, useToast } from "native-base";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Form from "@rjsf/core";
-import validator from "@rjsf/validator-ajv8";
-import { Box, Container, useToast } from "native-base";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import manifest from "../manifest.json";
 
-let schema = {
-  title: "Add Cohort",
-  type: "object",
-  required: ["name", "type", "status", "createdBy", "updatedBy"],
-  properties: {
-    name: { type: "string", title: "Name", default: "" },
-    type: { type: "string", title: "Type", default: "" },
-    status: {
-      type: "string",
-      anyOf: [
-        {
-          title: "Published",
-          enum: ["published"],
-        },
-        {
-          title: "Draft",
-          enum: ["draft"],
-        },
-      ],
-    },
-    // class: {
-    //   type: "string",
-    //   title: "Class",
-    //   enum: ["1-4", "5-8", "9-10", "11-12"],
-    // },
-    createdBy: { type: "string", title: "Created By", default: "" },
-    updatedBy: { type: "string", title: "Updated By", default: "" },
-  },
-};
 
-let uiSchema = {
-  name: {
-    "ui:classNames": "custom-class-name",
-    "ui:placeholder": "Enter a name of the cohort",
-  },
-  type: {
-    "ui:classNames": "custom-class-type",
-    "ui:placeholder": "Enter the type of Cohort",
-  },
-  createdBy: {
-    "ui:widget": "hidden",
-  },
-  updatedBy: {
-    "ui:widget": "hidden",
-  },
-};
 
 function CreateCohort({ footerLinks, appName }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const toast = useToast();
+  let schema = {
+    title: t("ADD_COHORT"),
+    type: "object",
+    required: ["name", "type", "status", "createdBy", "updatedBy"],
+    properties: {
+      name: { type: "string", title: "Name", default: "" },
+      type: { type: "string", title: "Type", default: "" },
+      status: {
+        type: "string",
+        title: "Status",
+        anyOf: [
+          {
+            title: "Published",
+            enum: ["published"],
+          },
+          {
+            title: "Draft",
+            enum: ["draft"],
+          },
+        ],
+      },
+      // class: {
+      //   type: "string",
+      //   title: "Class",
+      //   enum: ["1-4", "5-8", "9-10", "11-12"],
+      // },
+      createdBy: { type: "string", title: "Created By", default: "" },
+      updatedBy: { type: "string", title: "Updated By", default: "" },
+    },
+  };
+  
+  let uiSchema = {
+    name: {
+      "ui:classNames": "custom-class-name",
+      "ui:placeholder": "Enter a name of the cohort",
+    },
+    type: {
+      "ui:classNames": "custom-class-type",
+      "ui:placeholder": "Enter the type of Cohort",
+    },
+    createdBy: {
+      "ui:widget": "hidden",
+    },
+    updatedBy: {
+      "ui:widget": "hidden",
+    },
+  };
+
   const [formData, setFormData] = useState({ name: "My First Cohort" });
   const [showForm, setShowForm] = useState(false);
+  const [isEditForm, setIsEditForm] = useState(false);
   const [formSchema, setFormSchema] = useState({
     schema: schema,
     uiSchema: uiSchema,
   });
   const [fields, setFields] = useState([]);
   const [fieldResponse, setFieldResponse] = useState({});
+  const { state } = useLocation();
   let userIdentifier = localStorage.getItem("id");
 
   useEffect(() => {
@@ -109,6 +114,12 @@ function CreateCohort({ footerLinks, appName }) {
         });
         setFields(extraFields);
         setFieldResponse(fieldRes);
+        if (state) {
+          setFormData((prev) => {
+            return { ...prev, ...state };
+          });
+          setIsEditForm(true);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -176,11 +187,11 @@ function CreateCohort({ footerLinks, appName }) {
   });
 
   const handleSubmit = (data) => {
-    console.log("data", data);
     const fieldKeys = fields.map((obj) => Object.keys(obj)[0]);
     let corePayload = {};
     let fieldsPayload = "";
     const formData = new FormData();
+    delete data["fields"]; //todo: optimize this
     for (let key in data) {
       if (fieldKeys.includes(key)) {
         if (fieldsPayload === "") {
@@ -194,31 +205,47 @@ function CreateCohort({ footerLinks, appName }) {
       }
     }
     formData.append("fieldValues", fieldsPayload);
-    cohortRegistryService
-      .create(formData, {
-        tenantid: process.env.REACT_APP_TENANT_ID,
-      })
-      .then((response) => {
-        console.log("response", response);
-        if (!toast.isActive("cohort-created")) {
-          toast.show({
-            id: "cohort-created",
-            title: "Cohort created successfully!",
-          });
-        }
-        navigate("/admin");
-      });
+
+    if (isEditForm) {
+      cohortRegistryService
+        .updateCohort(data.cohortId, formData, {
+          tenantid: process.env.REACT_APP_TENANT_ID,
+        })
+        .then((response) => {
+          console.log("response", response);
+          if (!toast.isActive("cohort-updated")) {
+            toast.show({
+              id: "cohort-updated",
+              title: t("COHORT_UPDATED_SUCCESSFULLY"),
+            });
+          }
+          navigate("/admin");
+        });
+    } else {
+      cohortRegistryService
+        .create(formData, {
+          tenantid: process.env.REACT_APP_TENANT_ID,
+        })
+        .then((response) => {
+          console.log("response", response);
+          if (!toast.isActive("cohort-created")) {
+            toast.show({
+              id: "cohort-created",
+              title: t("COHORT_CREATED_SUCCESSFULLY")
+            });
+          }
+          navigate("/admin");
+        });
+    }
   };
   const colors = overrideColorTheme();
   return (
     <Layout
       _header={{
-        title: "Create New Cohort",
+        title: isEditForm ? t("EDIT_COHORT") : t("CREATE_NEW_COHORT"),
       }}
       _appBar={{ languages: manifest.languages }}
-      subHeader={
-        <H3 textTransform="none">{t("Submit the below given form")}</H3>
-      }
+      subHeader={<H3 textTransform="none">{t("SUBMIT_FORM")}</H3>}
       _subHeader={{
         bg: colors?.cardBg,
         _text: {
@@ -230,7 +257,7 @@ function CreateCohort({ footerLinks, appName }) {
       _footer={footerLinks}
     >
       {showForm && (
-        <Box mx={"30px"}>
+        <Box m={"30px"}>
           <Form
             schema={formSchema.schema}
             uiSchema={formSchema.uiSchema}
