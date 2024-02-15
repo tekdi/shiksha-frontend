@@ -25,7 +25,7 @@ import {
 } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Camera from "./Camera";
 import moment from "moment";
 
@@ -133,7 +133,7 @@ export default function SelfAttendanceSheet({
   const [config, setConfig] = React.useState({});
   const [selfAttendance, setSelfAttendance] = React.useState({});
   const navigate = useNavigate();
-
+  const { cohortId } = useParams();
   const handleTelemetry = (newAttedance) => {
     const telemetryData = telemetryFactory.interact({
       appName,
@@ -172,7 +172,7 @@ export default function SelfAttendanceSheet({
       setCameraUrl(image);
       let newAttedance = {
         ...selfAttendance,
-        image: image,
+        // image: image,        // -- for time being, we are not sending image parameter in api --
       };
       handleMarkAttendance(newAttedance);
     } else {
@@ -189,6 +189,8 @@ export default function SelfAttendanceSheet({
             id: newAttedance.id,
             attendance: newAttedance.attendance,
             remark: newAttedance.remark,
+            contextId: cohortId,
+            contextType: "class",
           },
           {
             onlyParameter: [
@@ -225,6 +227,8 @@ export default function SelfAttendanceSheet({
         ...newAttedance,
         date: moment().format("YYYY-MM-DD"),
         studentId: userId || localStorage.getItem("id"),
+        contextId: cohortId,
+        contextType: "class",
       };
       setSelfAttendance(newAttedance);
       attendanceRegistryService
@@ -244,6 +248,8 @@ export default function SelfAttendanceSheet({
             "latitude",
             "longitude",
             "image",
+            "contextId",
+            "contextType",
           ],
           tenantid: process.env.REACT_APP_TENANT_ID,
         })
