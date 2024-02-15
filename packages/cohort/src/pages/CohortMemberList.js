@@ -172,13 +172,15 @@ export default function CohortMemberList({ footerLinks, appName }) {
                         >
                           Take Attendance
                         </Button>
-                        <Button
+                        {/* 
+                        //-- time being, code is commented specific for oblf --
+                         <Button
                           variant={"link"}
                           colorScheme="secondary"
                           onPress={() => console.log("hello world")}
                         >
                           Take Observation
-                        </Button>
+                        </Button> */}
                       </HStack>
                     </HStack>
                   </Box>

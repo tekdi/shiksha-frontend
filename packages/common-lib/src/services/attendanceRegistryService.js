@@ -19,7 +19,9 @@ const interfaceData = {
   longitude: 'longitude',
   image: 'image',
   updatedAt: 'updatedAt',
-  parentName: 'parentName'
+  parentName: 'parentName',
+  contextId: 'contextId',
+  contextType: 'contextType'
 }
 
 let only = Object.keys(interfaceData)
