@@ -166,7 +166,6 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
           tenantid: process.env.REACT_APP_TENANT_ID,
         }
       );
-      console.log("result", result);
 
       if (result.length) {
         setCohortDetails(result[0]);

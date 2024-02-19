@@ -11,6 +11,7 @@ import {
   H1,
   getApiConfig,
   getArray,
+  cohortRegistryService,
 } from "@shiksha/common-lib";
 import {
   Actionsheet,
@@ -131,6 +132,7 @@ export default function SelfAttendanceSheet({
   const myRef = React.useRef(null);
   const [loding, setLoding] = React.useState(false);
   const [config, setConfig] = React.useState({});
+  const [cohortDetails, setCohortDetails] = React.useState({});
   const [selfAttendance, setSelfAttendance] = React.useState({});
   const navigate = useNavigate();
   const { cohortId } = useParams();
@@ -273,6 +275,17 @@ export default function SelfAttendanceSheet({
     async function getData() {
       let newConfig = await getApiConfig(["attendance"]);
       setConfig(newConfig);
+
+      // Get the cohort details to get the capture image config & show the camera accordingly
+      let cohortDetailsInfo = await cohortRegistryService.getCohortDetails(
+        {
+          cohortId: cohortId,
+        },
+        {
+          tenantid: process.env.REACT_APP_TENANT_ID,
+        }
+      );
+      setCohortDetails(cohortDetailsInfo[0]);
       const status = getArray(newConfig["attendance_states_of_staff"]);
       const newData = newMarkList.filter((e) => {
         return status.includes(e.value);
@@ -361,7 +374,10 @@ export default function SelfAttendanceSheet({
       handleMarkAttendance(selfAttendance);
     } else if (config && config["captureLocation"] === "true") {
       setLocationModal(true);
-    } else if (config && config["capture_selfie"] === "true") {
+    } else if (
+      cohortDetails &&
+      cohortDetails?.attendanceCaptureImage === "true"
+    ) {
       setCameraModal(true);
     } else {
       setDone(true);
@@ -515,7 +531,8 @@ export default function SelfAttendanceSheet({
             <BodyMedium textAlign="center" textTransform="inherit">
               {selfAttendance.attendance === PRESENT &&
               selfAttendance.name !== selfAttendance.remark
-                ? config && config["capture_selfie"] === "true"
+                ? cohortDetails &&
+                  cohortDetails?.attendanceCaptureImage === "true"
                   ? t("YOU_SUCCESS_UPLOAD_IMAGE_ATTENDANCE")
                   : t("YOU_SUCCESS_ATTENDANCE")
                 : ""}
@@ -577,7 +594,10 @@ export default function SelfAttendanceSheet({
                     _text={{ color: "profile.white" }}
                     onPress={async () => {
                       setLocationModal(false);
-                      if (config && config["capture_selfie"] === "true") {
+                      if (
+                        cohortDetails &&
+                        cohortDetails?.attendanceCaptureImage === "true"
+                      ) {
                         getLocation();
                         setCameraModal(true);
                       } else {
