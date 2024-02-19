@@ -23,6 +23,7 @@ import {
   cohortRegistryService,
   Loading,
   useWindowSize,
+  attendanceRegistryService,
 } from "@shiksha/common-lib";
 import moment from "moment";
 import manifest from "../manifest.json";
@@ -56,6 +57,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
   useEffect(() => {
     let ignore = false;
     const getData = async () => {
+    
       if (!ignore) {
         const results = await Promise.all([
           cohortRegistryService.getCohortMembers(
@@ -80,7 +82,35 @@ export default function CohortMemberList({ footerLinks, appName }) {
           ),
         ]);
 
-        setMembers(results[0]);
+        // get status of use attendance from attendanceSearchData api
+        const searchData = {
+          limit: "string",
+          page: 0,
+          filters: {
+            contextId: { _eq: cohortId },
+            userId: { _eq: userId },
+            contextType: { _eq: "class" },
+          },
+        };
+  
+        const attendanceSearchData =
+          await attendanceRegistryService.searchAttendance(searchData, {
+            Tenantid: process.env.REACT_APP_TENANT_ID,
+          });
+
+        if (
+          attendanceSearchData?.data ||
+          attendanceSearchData?.data[0]?.attendance
+        ) {
+          const modifiedCohortMembers = results[0].map((member) => ({
+            ...member,
+            attendanceStatus: attendanceSearchData?.data[0]?.attendance,
+          }));
+          setMembers(modifiedCohortMembers);
+        } else {
+          setMembers(results[0]);
+        }
+
         setCohortDetails(results[1][0]);
         setLoading(false);
       }
@@ -97,6 +127,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
         appName,
         userId,
         setUserId,
+        members,
       }}
     >
       <Layout
@@ -162,6 +193,11 @@ export default function CohortMemberList({ footerLinks, appName }) {
                         <BodySmall>{item?.role}</BodySmall>
                       </VStack>
                       <HStack space={2}>
+                        {item?.attendanceStatus ? (
+                          <Button colorScheme="primary">
+                            {item?.attendanceStatus}
+                          </Button>
+                        ) : null}
                         <Button
                           variant={"link"}
                           colorScheme="primary"

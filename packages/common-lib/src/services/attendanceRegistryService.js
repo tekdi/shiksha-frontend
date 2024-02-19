@@ -168,3 +168,26 @@ const addFile = (newData) => {
     return newData
   }
 }
+
+// search attendendance by filter
+export const searchAttendance = async (data = {}, header = {}) => {
+  let headers = {
+    ...header,
+    Authorization: 'Bearer ' + localStorage.getItem('token')
+  }
+
+  try {
+    const result = await post(
+      process.env.REACT_APP_API_URL + '/attendance/search',
+      data,
+      { headers }
+    )
+
+    if (result.data) {
+      return result.data
+    }
+  } catch (error) {
+    console.error(error)
+    return error
+  }
+}
