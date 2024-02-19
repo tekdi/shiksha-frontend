@@ -69,11 +69,14 @@ export default function Camera({
                   size: "30px",
                 }}
                 onPress={(e) => {
-                  if (cameraUrl) {
+                  setCameraModal(false);
+                  // Commented below code because ideal when user click on the close icon button on capture photo modal then setCameraModal should get closed
+                  //& all the state regarding this modal should also get cleared
+                  /*if (cameraUrl) {
                     setCameraUrl();
                   } else {
                     setCameraModal(false);
-                  }
+                  }*/
                 }}
               />
             </HStack>
