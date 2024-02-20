@@ -66,6 +66,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
               page: 0,
               filters: {
                 cohortId: { _eq: cohortId },
+                role: { _eq: "student" },
               },
             },
             {
