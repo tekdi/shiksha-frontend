@@ -24,7 +24,7 @@ import {
   Stack,
   VStack,
 } from "native-base";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import Camera from "./Camera";
@@ -119,6 +119,7 @@ export default function SelfAttendanceSheet({
   appName,
   setAlert,
   userId,
+  members,
 }) {
   const { t } = useTranslation();
   const [specialDutyModal, setSpecialDutyModal] = React.useState(false);
@@ -132,8 +133,10 @@ export default function SelfAttendanceSheet({
   const myRef = React.useRef(null);
   const [loding, setLoding] = React.useState(false);
   const [config, setConfig] = React.useState({});
-  const [cohortDetails, setCohortDetails] = React.useState({});
   const [selfAttendance, setSelfAttendance] = React.useState({});
+  const [changedAttendanceStatus, setChangedAttendanceStatus] =
+    React.useState();
+  const [membersData, setMembersData] = React.useState(members);
   const navigate = useNavigate();
   const { cohortId } = useParams();
   const handleTelemetry = (newAttedance) => {
@@ -144,6 +147,7 @@ export default function SelfAttendanceSheet({
       end: "Filnal",
       duration: 10,
     });
+
     capture("END", telemetryData);
     if (newAttedance.attendance == UNMARKED) {
       setDone(false);
@@ -152,6 +156,10 @@ export default function SelfAttendanceSheet({
       setDone(true);
     }
   };
+
+  useEffect(() => {
+    setMembersData(members);
+  }, [members]);
 
   const handleResetToUnmarkTelemetry = (item) => {
     const newAttedance = {
@@ -275,7 +283,6 @@ export default function SelfAttendanceSheet({
     async function getData() {
       let newConfig = await getApiConfig(["attendance"]);
       setConfig(newConfig);
-
       // Get the cohort details to get the capture image config & show the camera accordingly
       let cohortDetailsInfo = await cohortRegistryService.getCohortDetails(
         {
@@ -349,6 +356,7 @@ export default function SelfAttendanceSheet({
   }, []);
 
   const handleGoBack = () => {
+    window.location.reload();
     setDone(false);
     setCameraModal(false);
     setLocationModal(false);
@@ -637,18 +645,25 @@ export default function SelfAttendanceSheet({
         </Actionsheet.Content>
         <Box w="100%" justifyContent="center" bg={"profile.white"}>
           {markList.map((item, index) => {
-            let isActive =
-              selfAttendance?.name === t(item.name) ||
-              (specialDutyList.some(
-                (e) => t(e.name) === selfAttendance?.name
-              ) &&
-                item.color === "profile.specialDuty");
+            const isActive =
+              (changedAttendanceStatus === "Present" &&
+                item.value === "Present") ||
+              (changedAttendanceStatus === item.value &&
+                !specialDutyList.some(
+                  (e) => t(e.name) === changedAttendanceStatus
+                )) ||
+              (membersData?.[0]?.attendanceStatus === item.value &&
+                !specialDutyList.some(
+                  (e) => t(e.name) === membersData?.[0]?.attendanceStatus
+                ));
             return (
               <Pressable
                 key={index}
                 p={3}
                 bg={
-                  selfAttendance?.name === t(item.name)
+                  changedAttendanceStatus
+                    ? changedAttendanceStatus
+                    : membersData?.[0]?.attendanceStatus === t(item.value)
                     ? "profile.lightGray5"
                     : ""
                 }
@@ -658,12 +673,14 @@ export default function SelfAttendanceSheet({
                   } else if (item.name === "MARK_SPECIAL_DUTY") {
                     setSpecialDutyModal(true);
                   } else {
+                    setChangedAttendanceStatus(item.attendance);
                     setSelfAttendance({
                       ...selfAttendance,
                       attendance: item.attendance,
                       name: t(item.name),
                       remark: "",
                     });
+                    setMembersData([]);
                   }
                 }}
               >

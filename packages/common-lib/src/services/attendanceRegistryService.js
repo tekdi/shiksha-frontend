@@ -168,7 +168,6 @@ const addFile = (newData) => {
     return newData
   }
 }
-
 // search attendendance by filter
 export const searchAttendance = async (data = {}, header = {}) => {
   let headers = {
@@ -182,12 +181,13 @@ export const searchAttendance = async (data = {}, header = {}) => {
       data,
       { headers }
     )
-
     if (result.data) {
       return result.data
+    } else {
+      return {}
     }
   } catch (error) {
     console.error(error)
-    return error
+    return {}
   }
 }
