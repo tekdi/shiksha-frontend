@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Box, HStack, VStack, Text, Heading } from "native-base";
 import { useTranslation } from "react-i18next";
 import { generatePath } from "react-router-dom";
-import { H4, Widget, cohortRegistryService, Loading, useWindowSize } from "@shiksha/common-lib";
+import {
+  H4,
+  Widget,
+  cohortRegistryService,
+  Loading,
+  useWindowSize,
+} from "@shiksha/common-lib";
 // import ChooseClassActionSheet from "./Molecules/ChooseClassActionSheet";
 
 export default function CohortList() {
@@ -13,24 +19,78 @@ export default function CohortList() {
   const teacherId = localStorage.getItem("id");
   useEffect(() => {
     let ignore = false;
-    const getData = async () => {
+    // Get the cohortIds from the cohortMembers having role as teacher for logged in user(teacher)
+    const getCohortIdsData = async () => {
       if (!ignore) {
-        setClasses(
-          await cohortRegistryService.getAll(
+        const cohortMemebersData = await cohortRegistryService.getCohortMembers(
+          {
+            filters: {
+              userId: {
+                _in: teacherId,
+              },
+              role: { _eq: "teacher" },
+            },
+          },
+          {
+            tenantid: process.env.REACT_APP_TENANT_ID,
+          }
+        );
+
+        if (cohortMemebersData) {
+          const cohortIdsInfo = cohortMemebersData.map(
+            (item) => `${item.cohortId}`
+          );
+          const cohortIdsData = cohortIdsInfo.join(", ");
+          getData(cohortIdsData);
+        } else {
+          getData();
+        }
+      }
+    };
+
+    getCohortIdsData();
+
+    // Get the cohort
+    const getData = async (cohortIdsData) => {
+      if (!ignore) {
+        let classesData;
+        if (cohortIdsData) {
+          const cohortIdsDataArray = cohortIdsData
+            .split(",")
+            .map((param) => param.trim());
+          classesData = await cohortRegistryService.getAll(
+            {
+              filters: {
+                cohortId: {
+                  _in: cohortIdsDataArray,
+                },
+              },
+            },
+            {
+              tenantid: process.env.REACT_APP_TENANT_ID,
+            }
+          );
+        } else {
+          // If no cohortIdsData, call getAll without cohortIdsData
+          classesData = await cohortRegistryService.getAll(
             {
               teacherId: teacherId,
               type: "class",
               role: "teacher",
             },
             {
-              tenantid: process.env.REACT_APP_TENANT_ID, //'fbe108db-e236-48a7-8230-80d34c370800' //process.env.TENANT_ID
+              tenantid: process.env.REACT_APP_TENANT_ID,
             }
-          )
-        );
+          );
+        }
+        setClasses(classesData);
         setLoading(false);
       }
     };
-    getData();
+    // Cleanup function
+    return () => {
+      ignore = true;
+    };
   }, [teacherId]);
 
   if (loading) {
