@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Text,
-  Box,
   Pressable,
   Image,
   Avatar,
@@ -18,10 +17,7 @@ import { useTranslation } from "react-i18next";
 import {
   capture,
   Layout,
-  Tab,
   overrideColorTheme,
-  H3,
-  IconByName,
   Widget,
   cohortRegistryService,
   Loading,
@@ -89,54 +85,55 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
         },
       ],
     },
-    {
-      data: [
-        {
-          title: t("Class Digital Observation"),
-          link: "/classes",
-          icon: "ParentLineIcon",
-          _box: {
-            bg: "widgetColor.700",
-          },
-          _icon: {
-            color: "iconColor.700",
-          },
-          _text: { color: "warmGray.700" },
-        },
-      ],
-    },
-    {
-      data: [
-        {
-          title: t("Class Phygital Assessment"),
-          link: "/classes",
-          icon: "ParentLineIcon",
-          _box: {
-            bg: "widgetColor.800",
-          },
-          _icon: {
-            color: "iconColor.800",
-          },
-          _text: { color: "warmGray.700" },
-        },
-      ],
-    },
-    {
-      data: [
-        {
-          title: t("View Class Reports"),
-          link: "/classes",
-          icon: "ParentLineIcon",
-          _box: {
-            bg: "widgetColor.1000",
-          },
-          _icon: {
-            color: "iconColor.1000",
-          },
-          _text: { color: "warmGray.700" },
-        },
-      ],
-    },
+    // commented the below code (not required for OBLF for now)
+    // {
+    //   data: [
+    //     {
+    //       title: t("Class Digital Observation"),
+    //       link: "/classes",
+    //       icon: "ParentLineIcon",
+    //       _box: {
+    //         bg: "widgetColor.700",
+    //       },
+    //       _icon: {
+    //         color: "iconColor.700",
+    //       },
+    //       _text: { color: "warmGray.700" },
+    //     },
+    //   ],
+    // },
+    // {
+    //   data: [
+    //     {
+    //       title: t("Class Phygital Assessment"),
+    //       link: "/classes",
+    //       icon: "ParentLineIcon",
+    //       _box: {
+    //         bg: "widgetColor.800",
+    //       },
+    //       _icon: {
+    //         color: "iconColor.800",
+    //       },
+    //       _text: { color: "warmGray.700" },
+    //     },
+    //   ],
+    // },
+    // {
+    //   data: [
+    //     {
+    //       title: t("View Class Reports"),
+    //       link: "/classes",
+    //       icon: "ParentLineIcon",
+    //       _box: {
+    //         bg: "widgetColor.1000",
+    //       },
+    //       _icon: {
+    //         color: "iconColor.1000",
+    //       },
+    //       _text: { color: "warmGray.700" },
+    //     },
+    //   ],
+    // },
   ];
 
   const getFieldValues = (cohortsFields) => {
@@ -161,7 +158,6 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   };
 
   const handleOnPress = () => {
-    console.log("vaaa");
     setUserId(userId);
     setShowModal(true);
   };
@@ -209,7 +205,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
             title: cohortDetails?.name,
             subHeading: moment().format("hh:mm A"),
             iconComponent: (
-              <Pressable onPress={(e) => setShowModal(true)}>
+              <Pressable>
                 {cameraUrl ? (
                   <Image
                     ref={myRef}
@@ -236,7 +232,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
           }}
           _footer={footerLinks}
         >
-          {fields.length && (
+          {fields.length > 0 && (
             <Stack space={3} alignItems="start" ml={6}>
               <Button
                 variant="outline"
@@ -278,7 +274,6 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
                   {...(isMarkMyAttendance && { onpress: handleOnPress })}
                 />
               );
-              //return <Widget {...item} key={index} onpress={handleOnPress} />;
             })}
           </VStack>
         </Layout>
