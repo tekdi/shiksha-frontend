@@ -11,11 +11,13 @@ for f  do
     fi
 done 
 ' sh {} +
-#cp -r  packages/teacher-app/build/* prod-build/
-#cp -r  packages/admin/build/* prod-build/
-#cp -r  packages/assessment/build/* prod-build/
-#cp -r  packages/attendance/build/* prod-build/
-
+cp -r  packages/teacher-app/build/* prod-build/
+cp -r  packages/admin/build/* prod-build/
+cp -r  packages/assessment/build/* prod-build/
+cp -r  packages/attendance/build/* prod-build/
+cp -r  packages/calendar/build/* prod-build/
+cp -r  packages/cohort/build/* prod-build/
+cp -r  packages/classes/build/* prod-build/
 
 find  prod-build -name  'modules.json' | xargs sed -i 's|http://localhost:[0-9]*||g'
 cd prod-build && tar -cf ../shiksha-ui.tar . && cd ../
