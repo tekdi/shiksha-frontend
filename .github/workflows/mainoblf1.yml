@@ -24,9 +24,9 @@ jobs:
         run: |
          yarn install
          yarn build
-  #    - name: Create Lerna Bundles for Submodules
-   #     run: |
-    #      sh ./scripts/pack-prod-build.sh
+      - name: Create Lerna Bundles for Submodules
+        run: |
+          sh ./scripts/pack-prod-build.sh
 
       - name: Show PWD
         run: |
