@@ -23,6 +23,7 @@ import {
   cohortRegistryService,
   Loading,
   useWindowSize,
+  attendanceRegistryService,
 } from "@shiksha/common-lib";
 import moment from "moment";
 import manifest from "../manifest.json";
@@ -40,6 +41,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
   const [width, height] = useWindowSize();
   const [loading, setLoading] = React.useState(true);
   const [cohortDetails, setCohortDetails] = React.useState({});
+  const [attendanceStatusData, setAttendanceStatusData] = React.useState();
   let newAvatar = localStorage.getItem("firstName");
 
   const [members, setMembers] = useState([]);
@@ -56,6 +58,18 @@ export default function CohortMemberList({ footerLinks, appName }) {
   useEffect(() => {
     let ignore = false;
     const getData = async () => {
+      const currentDate = new Date().toLocaleDateString("en-CA"); // Format: "yyyy-mm-dd"
+      const searchData = {
+        limit: "string",
+        page: 0,
+        filters: {
+          contextId: { _eq: cohortId },
+          userId: { _eq: userId },
+          contextType: { _eq: "class" },
+          attendanceDate: { _eq: currentDate },
+        },
+      };
+
       if (!ignore) {
         const results = await Promise.all([
           cohortRegistryService.getCohortMembers(
@@ -81,7 +95,34 @@ export default function CohortMemberList({ footerLinks, appName }) {
           ),
         ]);
 
-        setMembers(results[0]);
+        // get status of use attendance from attendanceSearchData api
+        const attendanceSearchData =
+          await attendanceRegistryService.searchAttendance(searchData, {
+            Tenantid: process.env.REACT_APP_TENANT_ID,
+          });
+        if (
+          attendanceSearchData?.data &&
+          attendanceSearchData.data.length > 0
+        ) {
+          setAttendanceStatusData(attendanceSearchData.data);
+
+          // Merge attendance status into user data
+          const modifiedCohortMembers = results[0]?.map((member) => {
+            const attendanceRecord = attendanceSearchData.data.find(
+              (record) => record.userId === member.userId
+            );
+            return {
+              ...member,
+              attendanceStatus: attendanceRecord
+                ? attendanceRecord.attendance
+                : "",
+            };
+          });
+
+          setMembers(modifiedCohortMembers);
+        } else {
+          setMembers(results[0]);
+        }
         setCohortDetails(results[1][0]);
         setLoading(false);
       }
@@ -98,6 +139,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
         appName,
         userId,
         setUserId,
+        members,
       }}
     >
       <Layout
@@ -138,6 +180,10 @@ export default function CohortMemberList({ footerLinks, appName }) {
           <Box pb={4} pt="30">
             <VStack space={2}>
               {members.map((item, index) => {
+                const attendanceRecord = attendanceStatusData?.find(
+                  (record) => record?.userId === item?.userId
+                );
+
                 return (
                   <Box
                     p="2"
@@ -163,6 +209,11 @@ export default function CohortMemberList({ footerLinks, appName }) {
                         <BodySmall>{item?.role}</BodySmall>
                       </VStack>
                       <HStack space={2}>
+                        {attendanceRecord ? (
+                          <Button colorScheme="primary">
+                            {attendanceRecord.attendance}
+                          </Button>
+                        ) : null}
                         <Button
                           variant={"link"}
                           colorScheme="primary"
