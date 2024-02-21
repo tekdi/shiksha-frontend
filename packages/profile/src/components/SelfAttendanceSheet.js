@@ -11,7 +11,6 @@ import {
   H1,
   getApiConfig,
   getArray,
-  cohortRegistryService,
 } from "@shiksha/common-lib";
 import {
   Actionsheet,
@@ -24,9 +23,9 @@ import {
   Stack,
   VStack,
 } from "native-base";
-import React, { useEffect } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Camera from "./Camera";
 import moment from "moment";
 
@@ -119,7 +118,6 @@ export default function SelfAttendanceSheet({
   appName,
   setAlert,
   userId,
-  members,
 }) {
   const { t } = useTranslation();
   const [specialDutyModal, setSpecialDutyModal] = React.useState(false);
@@ -134,11 +132,8 @@ export default function SelfAttendanceSheet({
   const [loding, setLoding] = React.useState(false);
   const [config, setConfig] = React.useState({});
   const [selfAttendance, setSelfAttendance] = React.useState({});
-  const [changedAttendanceStatus, setChangedAttendanceStatus] =
-    React.useState();
-  const [membersData, setMembersData] = React.useState(members);
   const navigate = useNavigate();
-  const { cohortId } = useParams();
+
   const handleTelemetry = (newAttedance) => {
     const telemetryData = telemetryFactory.interact({
       appName,
@@ -147,7 +142,6 @@ export default function SelfAttendanceSheet({
       end: "Filnal",
       duration: 10,
     });
-
     capture("END", telemetryData);
     if (newAttedance.attendance == UNMARKED) {
       setDone(false);
@@ -156,10 +150,6 @@ export default function SelfAttendanceSheet({
       setDone(true);
     }
   };
-
-  useEffect(() => {
-    setMembersData(members);
-  }, [members]);
 
   const handleResetToUnmarkTelemetry = (item) => {
     const newAttedance = {
@@ -182,7 +172,7 @@ export default function SelfAttendanceSheet({
       setCameraUrl(image);
       let newAttedance = {
         ...selfAttendance,
-        // image: image,        // -- for time being, we are not sending image parameter in api --
+        image: image,
       };
       handleMarkAttendance(newAttedance);
     } else {
@@ -199,8 +189,6 @@ export default function SelfAttendanceSheet({
             id: newAttedance.id,
             attendance: newAttedance.attendance,
             remark: newAttedance.remark,
-            contextId: cohortId,
-            contextType: "class",
           },
           {
             onlyParameter: [
@@ -237,8 +225,6 @@ export default function SelfAttendanceSheet({
         ...newAttedance,
         date: moment().format("YYYY-MM-DD"),
         studentId: userId || localStorage.getItem("id"),
-        contextId: cohortId,
-        contextType: "class",
       };
       setSelfAttendance(newAttedance);
       attendanceRegistryService
@@ -258,8 +244,6 @@ export default function SelfAttendanceSheet({
             "latitude",
             "longitude",
             "image",
-            "contextId",
-            "contextType",
           ],
           tenantid: process.env.REACT_APP_TENANT_ID,
         })
@@ -283,16 +267,6 @@ export default function SelfAttendanceSheet({
     async function getData() {
       let newConfig = await getApiConfig(["attendance"]);
       setConfig(newConfig);
-      // Get the cohort details to get the capture image config & show the camera accordingly
-      let cohortDetailsInfo = await cohortRegistryService.getCohortDetails(
-        {
-          cohortId: cohortId,
-        },
-        {
-          tenantid: process.env.REACT_APP_TENANT_ID,
-        }
-      );
-      setCohortDetails(cohortDetailsInfo[0]);
       const status = getArray(newConfig["attendance_states_of_staff"]);
       const newData = newMarkList.filter((e) => {
         return status.includes(e.value);
@@ -356,12 +330,12 @@ export default function SelfAttendanceSheet({
   }, []);
 
   const handleGoBack = () => {
-    window.location.reload();
     setDone(false);
     setCameraModal(false);
     setLocationModal(false);
     setShowModal(false);
     setCameraUrl();
+    window.location.reload();
   };
 
   const setAttendanceMark = (e) => {
@@ -382,10 +356,7 @@ export default function SelfAttendanceSheet({
       handleMarkAttendance(selfAttendance);
     } else if (config && config["captureLocation"] === "true") {
       setLocationModal(true);
-    } else if (
-      cohortDetails &&
-      cohortDetails?.attendanceCaptureImage === "true"
-    ) {
+    } else if (config && config["capture_selfie"] === "true") {
       setCameraModal(true);
     } else {
       setDone(true);
@@ -539,8 +510,7 @@ export default function SelfAttendanceSheet({
             <BodyMedium textAlign="center" textTransform="inherit">
               {selfAttendance.attendance === PRESENT &&
               selfAttendance.name !== selfAttendance.remark
-                ? cohortDetails &&
-                  cohortDetails?.attendanceCaptureImage === "true"
+                ? config && config["capture_selfie"] === "true"
                   ? t("YOU_SUCCESS_UPLOAD_IMAGE_ATTENDANCE")
                   : t("YOU_SUCCESS_ATTENDANCE")
                 : ""}
@@ -602,10 +572,7 @@ export default function SelfAttendanceSheet({
                     _text={{ color: "profile.white" }}
                     onPress={async () => {
                       setLocationModal(false);
-                      if (
-                        cohortDetails &&
-                        cohortDetails?.attendanceCaptureImage === "true"
-                      ) {
+                      if (config && config["capture_selfie"] === "true") {
                         getLocation();
                         setCameraModal(true);
                       } else {
@@ -645,25 +612,18 @@ export default function SelfAttendanceSheet({
         </Actionsheet.Content>
         <Box w="100%" justifyContent="center" bg={"profile.white"}>
           {markList.map((item, index) => {
-            const isActive =
-              (changedAttendanceStatus === "Present" &&
-                item.value === "Present") ||
-              (changedAttendanceStatus === item.value &&
-                !specialDutyList.some(
-                  (e) => t(e.name) === changedAttendanceStatus
-                )) ||
-              (membersData?.[0]?.attendanceStatus === item.value &&
-                !specialDutyList.some(
-                  (e) => t(e.name) === membersData?.[0]?.attendanceStatus
-                ));
+            let isActive =
+              selfAttendance?.name === t(item.name) ||
+              (specialDutyList.some(
+                (e) => t(e.name) === selfAttendance?.name
+              ) &&
+                item.color === "profile.specialDuty");
             return (
               <Pressable
                 key={index}
                 p={3}
                 bg={
-                  changedAttendanceStatus
-                    ? changedAttendanceStatus
-                    : membersData?.[0]?.attendanceStatus === t(item.value)
+                  selfAttendance?.name === t(item.name)
                     ? "profile.lightGray5"
                     : ""
                 }
@@ -673,14 +633,12 @@ export default function SelfAttendanceSheet({
                   } else if (item.name === "MARK_SPECIAL_DUTY") {
                     setSpecialDutyModal(true);
                   } else {
-                    setChangedAttendanceStatus(item.attendance);
                     setSelfAttendance({
                       ...selfAttendance,
                       attendance: item.attendance,
                       name: t(item.name),
                       remark: "",
                     });
-                    setMembersData([]);
                   }
                 }}
               >

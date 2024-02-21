@@ -56,14 +56,19 @@ export const getCohortDetails = async (params = {}, header = {}) => {
     ...header,
     Authorization: 'Bearer ' + localStorage.getItem('token')
   }
-  const result = await get(
-    `${process.env.REACT_APP_API_URL}/cohort/${params.cohortId}`,
-    { headers }
-  )
-  if (result.data) {
-    return result.data.data
-  } else {
-    return []
+  try {
+    const result = await get(
+      `${process.env.REACT_APP_API_URL}/cohort/${params.cohortId}`,
+      { headers }
+    )
+    if (result.data) {
+      return result.data.data
+    } else {
+      return []
+    }
+  } catch (error) {
+    console.error('Error fetching cohort details:', error)
+    return [] // Handle error by returning empty array or re-throw the error
   }
 }
 
