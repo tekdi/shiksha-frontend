@@ -16,8 +16,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 21.1.0
-      - name: Clear Yarn Cache
-        run: yarn cache clean
+   #   - name: Clear Yarn Cache
+    #    run: yarn cache clean
 
           
       - name: Generate React Build
