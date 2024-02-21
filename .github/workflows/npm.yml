@@ -1,0 +1,31 @@
+name: Node CI
+
+on: [push]
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: npm install, build
+        run: |
+          npm install
+          npm run build --if-present
+    
+     # - name: Archive production artifacts
+     #   uses: actions/upload-artifact@v4
+     #   with:
+     #     name: Haq-Darshak-Dist-artifact
+     #     path: |
+     #       dist
+     #       !dist/**/*.md
+
+      - name: Show PWD
+        run: |
+           echo "Current Working Directory:"
+           pwd
+
+      - name: List Contents
+        run: |
+           echo "Contents of the current directory (in reverse order):"
+            ls -lr
