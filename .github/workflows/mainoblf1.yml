@@ -24,6 +24,7 @@ jobs:
         run: |
          yarn install
          yarn build
+         yarn start
       - name: Create Lerna Bundles for Submodules
         run: |
           sh ./scripts/pack-prod-build.sh
