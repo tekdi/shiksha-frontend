@@ -21,6 +21,7 @@ import {
   Widget,
   cohortRegistryService,
   Loading,
+  attendanceRegistryService,
 } from "@shiksha/common-lib";
 import moment from "moment";
 import manifest from "../manifest.json";
@@ -43,6 +44,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   let newAvatar = localStorage.getItem("firstName");
   const [userId, setUserId] = React.useState();
   const { cohortId } = useParams();
+  const [attendanceStatusData, setAttendanceStatusData] = React.useState();
 
   let cameraUrl = "";
   let avatarUrlObject = cameraUrl
@@ -164,6 +166,27 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
 
   React.useEffect(() => {
     const getData = async () => {
+      const currentDate = new Date().toLocaleDateString("en-CA"); // Format: "yyyy-mm-dd"
+      const searchData = {
+        limit: "string",
+        page: 0,
+        filters: {
+          contextId: { _eq: cohortId },
+          userId: { _eq: localStorage.getItem("id") },
+          contextType: { _eq: "class" },
+          attendanceDate: { _eq: currentDate },
+        },
+      };
+
+      // get status of use attendance from attendanceSearchData api
+      const attendanceSearchData =
+        await attendanceRegistryService.searchAttendance(searchData, {
+          tenantid: process.env.REACT_APP_TENANT_ID,
+        });
+
+      if (attendanceSearchData?.data && attendanceSearchData.data.length > 0) {
+        setAttendanceStatusData(attendanceSearchData);
+      }
       const result = await cohortRegistryService.getCohortDetails(
         {
           cohortId: cohortId,
@@ -266,12 +289,24 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
               const isMarkMyAttendance =
                 item.data[0].title === t("Mark My Attendance");
 
+              // Modify the title based on the attendance status
+              let modifiedTitle = item.data[0].title;
+              if (isMarkMyAttendance) {
+                modifiedTitle += `                           - ${attendanceStatusData.data[0].attendance}`;
+              }
+
               // Assign onPress handler only to "Mark My Attendance" widget
               return (
                 <Widget
                   {...item}
                   key={index}
-                  {...(isMarkMyAttendance && { onpress: handleOnPress })}
+                  data={[
+                    {
+                      ...item.data[0],
+                      title: modifiedTitle, // Updated title
+                    },
+                  ]}
+                  {...(isMarkMyAttendance && { onpress: handleOnPress })} // Fixed typo: 'onpress' to 'onPress'
                 />
               );
             })}

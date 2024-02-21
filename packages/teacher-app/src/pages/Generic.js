@@ -8,7 +8,7 @@ import {
   Pressable,
   Stack,
   VStack,
-  Heading
+  Heading,
 } from "native-base";
 import {
   BodyLarge,
@@ -88,47 +88,47 @@ function Generic({ footerLinks, appName, setAlert }) {
           },
           _text: { color: "warmGray.700" },
         },
-      ]
+      ],
     },
-        // {
-        //   title: t("ACTIVITY"),
-        //   subTitle: "1 " + t("REMAINING"),
-        //   icon: "LightbulbFlashLineIcon",
-        //   label: "NEW",
-        //   _box: {
-        //     bg: "widgetColor.600",
-        //   },
-        //   _icon: {
-        //     color: "iconColor.600",
-        //   },
-        //   _text: { color: "warmGray.700" },
-        // },
-        // {
-        //   title: t("HOLIDAYS"),
-        //   subTitle: "2 " + t("THIS_WEEK"),
-        //   icon: "FootballLineIcon",
-        //   _box: {
-        //     bg: "widgetColor.700",
-        //   },
-        //   _icon: {
-        //     color: "iconColor.700",
-        //   },
-        //   _text: {
-        //     color: "warmGray.700",
-        //   },
-        // },
-        // {
-        //   title: t("ATTENDANCE"),
-        //   subTitle: "12 " + t("REMAINING"),
-        //   icon: "UserFollowLineIcon",
-        //   _box: {
-        //     bg: "widgetColor.800",
-        //   },
-        //   _icon: {
-        //     color: "iconColor.800",
-        //   },
-        //   _text: { color: "warmGray.700" },
-        // },
+    // {
+    //   title: t("ACTIVITY"),
+    //   subTitle: "1 " + t("REMAINING"),
+    //   icon: "LightbulbFlashLineIcon",
+    //   label: "NEW",
+    //   _box: {
+    //     bg: "widgetColor.600",
+    //   },
+    //   _icon: {
+    //     color: "iconColor.600",
+    //   },
+    //   _text: { color: "warmGray.700" },
+    // },
+    // {
+    //   title: t("HOLIDAYS"),
+    //   subTitle: "2 " + t("THIS_WEEK"),
+    //   icon: "FootballLineIcon",
+    //   _box: {
+    //     bg: "widgetColor.700",
+    //   },
+    //   _icon: {
+    //     color: "iconColor.700",
+    //   },
+    //   _text: {
+    //     color: "warmGray.700",
+    //   },
+    // },
+    // {
+    //   title: t("ATTENDANCE"),
+    //   subTitle: "12 " + t("REMAINING"),
+    //   icon: "UserFollowLineIcon",
+    //   _box: {
+    //     bg: "widgetColor.800",
+    //   },
+    //   _icon: {
+    //     color: "iconColor.800",
+    //   },
+    //   _text: { color: "warmGray.700" },
+    // },
     // {
     //   title: t("THIS_WEEK_TASKS"),
     //   data: [
@@ -161,11 +161,11 @@ function Generic({ footerLinks, appName, setAlert }) {
   ];
 
   React.useEffect(() => {
-    capture("PAGE");
-    if (!localStorage.getItem("howToMarkAttendance")) {
-      setPopupModal(true);
-      localStorage.setItem("howToMarkAttendance", "true");
-    }
+    // capture("PAGE");
+    // if (!localStorage.getItem("howToMarkAttendance")) {
+    //   setPopupModal(true);
+    //   localStorage.setItem("howToMarkAttendance", "true");
+    // }
   }, []);
 
   return (
@@ -237,10 +237,7 @@ function Generic({ footerLinks, appName, setAlert }) {
         }}
         _footer={footerLinks}
       >
-      <VStack
-          space={2}
-          alignItems="center"
-        >
+        <VStack space={2} alignItems="center">
           <Avatar
             borderRadius="lg"
             bg="white"
@@ -258,7 +255,6 @@ function Generic({ footerLinks, appName, setAlert }) {
           </Heading>
         </VStack>
         <Box bg="white" roundedBottom={"2xl"} py={6} px={4} mb={5} shadow={3}>
-          
           <Stack>
             <VStack space={6}>
               {widgetData.map((item, index) => {
