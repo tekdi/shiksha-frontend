@@ -5,6 +5,7 @@ const interfaceData = {
   // id: 'ProgramId',
   id: 'cohortId',
   // schoolId: 'schoolId',
+  parentId: 'parentId',
   type: 'type',
   name: 'name',
   section: 'section',
@@ -21,7 +22,6 @@ const interfaceData = {
 }
 
 export const getAll = async (params = {}, header = {}) => {
-  console.log('params2==', JSON.stringify(params))
   let headers = {
     ...header,
     Authorization: 'Bearer ' + localStorage.getItem('token')

@@ -35,7 +35,6 @@ export default function CohortList() {
             tenantid: process.env.REACT_APP_TENANT_ID,
           }
         );
-
         if (cohortMemebersData) {
           const cohortIdsInfo = cohortMemebersData.map(
             (item) => `${item.cohortId}`
@@ -64,6 +63,7 @@ export default function CohortList() {
                 cohortId: {
                   _in: cohortIdsDataArray,
                 },
+                type: { _eq: "CLASS" },
               },
             },
             {
@@ -83,7 +83,24 @@ export default function CohortList() {
             }
           );
         }
-        setClasses(classesData);
+
+        // Fetch parent data for each class and add parent name to each class object
+        const updatedClassesData = await Promise.all(
+          classesData?.map(async (classItem) => {
+            const parentData = await cohortRegistryService.getCohortDetails(
+              {
+                cohortId: classItem?.parentId,
+              },
+              {
+                tenantid: process.env.REACT_APP_TENANT_ID,
+              }
+            );
+            const parentName =
+              parentData?.length > 0 ? parentData[0]?.name : ""; // Get parent name from the first object in the parentData array
+            return { ...classItem, parentName };
+          })
+        );
+        setClasses(updatedClassesData);
         setLoading(false);
       }
     };
@@ -104,6 +121,7 @@ export default function CohortList() {
           data={classes.map((item, index) => {
             return {
               title:
+                (item?.parentName ? item?.parentName + ", " : "") +
                 (item?.name ? item?.name : "") +
                 (item?.section ? " • Sec " + item?.section : ""),
               subTitle: t("CLASS_TEACHER"),
