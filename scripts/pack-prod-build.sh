@@ -12,6 +12,24 @@ for f  do
 done 
 ' sh {} +
 cp -r  packages/teacher-app/build/* prod-build/
+cp -r  packages/common-lib/build/* prod-build/
+cp -r  packages/admin/build/* prod-build/
+cp -r  packages/assessment/build/* prod-build/
+cp -r  packages/calendar/build/* prod-build/
+cp -r  packages/classes/build/* prod-build/
+cp -r  packages/cohort/build/* prod-build/
+cp -r  packages/core/build/* prod-build/
+cp -r  packages/attendance/build/* prod-build/
+cp -r  packages/lessonplans/build/* prod-build/
+cp -r  packages/mylearning/build/* prod-build/
+cp -r  packages/notification/build/* prod-build/
+cp -r  packages/observation/build/* prod-build/
+cp -r  packages/profile/build/* prod-build/
+cp -r  packages/schools/build/* prod-build/
+cp -r  packages/student/build/* prod-build/
+cp -r  packages/visits/build/* prod-build/
+cp -r  packages/worksheet/build/* prod-build/
+
 find  prod-build -name  'modules.json' | xargs sed -i 's|http://localhost:[0-9]*||g'
 cd prod-build && tar -cf ../shiksha-ui.tar . && cd ../
 
