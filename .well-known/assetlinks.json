@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "io.uniteframework.shiksha.twa",
-        "sha256_cert_fingerprints": ["72:34:4C:A9:13:0D:12:B8:3D:96:C4:7D:91:D9:5E:65:39:1F:83:AC:4B:E0:7C:D9:EC:92:6D:1E:DB:0E:CE:BD"]
+        "sha256_cert_fingerprints": ["5D:27:14:88:B0:06:02:E1:20:BB:4E:41:88:76:FD:32:0F:A4:26:EC:FE:BD:DA:C1:70:88:89:8C:50:C8:E9:F3"]
       }
     }]
