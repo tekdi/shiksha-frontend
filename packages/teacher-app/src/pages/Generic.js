@@ -245,7 +245,7 @@ function Generic({ footerLinks, appName, setAlert }) {
             size="lg"
             style={{ borderRadius: "50%" }}
             source={{
-              uri: "https://images.unsplash.com/photo-1614289371518-722f2615943d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+              uri: "https://png.pngtree.com/png-clipart/20210915/ourlarge/pngtree-user-avatar-placeholder-png-image_3918418.jpg",
             }}
           >
             {fullName?.toUpperCase().substr(0, 2)}
