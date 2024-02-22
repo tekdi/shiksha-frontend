@@ -12,6 +12,7 @@ for f  do
 done 
 ' sh {} +
 cp -r  packages/teacher-app/build/* prod-build/
+cp -r .well-known prod-build/.well-known
 #cp -r  packages/admin/build/* prod-build/
 #cp -r  packages/assessment/build/* prod-build/
 #cp -r  packages/attendance/build/* prod-build/
