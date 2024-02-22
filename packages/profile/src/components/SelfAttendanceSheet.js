@@ -448,7 +448,7 @@ export default function SelfAttendanceSheet({
                   >
                     {t("CLOSE")}
                   </Button>
-                  <Button
+                  {/* <Button
                     flex="1"
                     mr="5px"
                     colorScheme="button"
@@ -459,7 +459,7 @@ export default function SelfAttendanceSheet({
                     }}
                   >
                     {t("GO_TO_PROFILE")}
-                  </Button>
+                  </Button> */}
                 </Button.Group>
               )}
             </VStack>
@@ -704,7 +704,7 @@ export default function SelfAttendanceSheet({
             </Button>
           ) : (
             <Button.Group m="5">
-              <Button
+              {/* <Button
                 flex="1"
                 mr="5px"
                 colorScheme="button"
@@ -713,7 +713,7 @@ export default function SelfAttendanceSheet({
                 _text={{ textTransform: "uppercase" }}
               >
                 {t("GO_TO_PROFILE")}
-              </Button>
+              </Button> */}
               <Button
                 flex="1"
                 ml="5px"
@@ -831,7 +831,7 @@ export default function SelfAttendanceSheet({
             </Button>
           ) : (
             <Button.Group m="5">
-              <Button
+              {/* <Button
                 flex="1"
                 mr="5px"
                 colorScheme="button"
@@ -839,7 +839,7 @@ export default function SelfAttendanceSheet({
                 onPress={(e) => navigate("/profile")}
               >
                 {t("GO_TO_PROFILE")}
-              </Button>
+              </Button> */}
               <Button
                 flex="1"
                 ml="5px"
