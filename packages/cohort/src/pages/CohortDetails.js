@@ -290,9 +290,9 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
                 item.data[0].title === t("Mark My Attendance");
 
               // Modify the title based on the attendance status
-              let modifiedTitle = item.data[0].title;
-              if (isMarkMyAttendance) {
-                modifiedTitle += `                           - ${attendanceStatusData.data[0].attendance}`;
+              let modifiedTitle = item?.data[0]?.title;
+              if (isMarkMyAttendance && attendanceStatusData?.data[0]?.attendance) {
+                modifiedTitle += `                           - ${attendanceStatusData?.data[0]?.attendance}`;
               }
 
               // Assign onPress handler only to "Mark My Attendance" widget
