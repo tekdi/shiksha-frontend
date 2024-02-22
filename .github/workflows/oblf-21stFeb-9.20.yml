@@ -19,7 +19,7 @@ jobs:
           
       - name: Generate React Build
         run: |
-         rm yarn.lock
+        
          yarn install
          yarn build
       - name: Create Lerna Bundles for Submodules
