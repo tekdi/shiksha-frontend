@@ -38,10 +38,11 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   const [selfAttendance, setSelfAttendance] = React.useState({});
   const [showModal, setShowModal] = React.useState(false);
   const [cohortDetails, setCohortDetails] = React.useState({});
+  const [cohortParentDetails, setCohortParentDetails] = React.useState(true);
   const [toggleDetails, setToggleDetails] = React.useState(true);
   const [fields, setFields] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  let newAvatar = localStorage.getItem("firstName");
+  let newAvatar = localStorage.getItem("fullName");
   const [userId, setUserId] = React.useState();
   const { cohortId } = useParams();
   const [attendanceStatusData, setAttendanceStatusData] = React.useState();
@@ -138,6 +139,15 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
     // },
   ];
 
+  let getInitials = function (string) {
+    let names = string.split(' '), initials = names[0].substring(0, 1).toUpperCase();
+    
+    if (names.length > 1) {
+        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+    }
+    return initials;
+};
+
   const getFieldValues = (cohortsFields) => {
     let fieldVals = [];
     cohortsFields.map((item) => {
@@ -202,6 +212,17 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
           getFieldValues(result[0].fields);
           setSelfAttendance(result[0]);
         }
+        const parentResult = await cohortRegistryService.getCohortDetails(
+          {
+            cohortId: result[0].parentId,
+          },
+          {
+            tenantid: process.env.REACT_APP_TENANT_ID,
+          }
+        );
+        if (parentResult.length) {
+          setCohortParentDetails(parentResult[0]);
+        }
       }
       setLoading(false);
     };
@@ -225,7 +246,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
       >
         <Layout
           _header={{
-            title: cohortDetails?.name,
+            title: cohortParentDetails?.name + ", "  + " Level " + cohortDetails?.name,
             subHeading: moment().format("hh:mm A"),
             iconComponent: (
               <Pressable>
@@ -238,7 +259,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
                     size="50px"
                   />
                 ) : (
-                  <Avatar>{newAvatar?.toUpperCase().substr(0, 2)}</Avatar>
+                  <Avatar>{getInitials(newAvatar)}</Avatar>
                 )}
               </Pressable>
             ),

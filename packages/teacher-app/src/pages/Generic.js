@@ -45,7 +45,14 @@ function Generic({ footerLinks, appName, setAlert }) {
         },
       }
     : {};
-
+  let getInitials = function (string) {
+    let names = string.split(' '), initials = names[0].substring(0, 1).toUpperCase();
+    
+    if (names.length > 1) {
+        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+    }
+    return initials;
+  };
   const widgetData = [
     // {
     //   title: t("QUICK_CHECK"),
@@ -193,7 +200,7 @@ function Generic({ footerLinks, appName, setAlert }) {
                   size="50px"
                 />
               ) : (
-                <Avatar>{newAvatar?.toUpperCase().substr(0, 2)}</Avatar>
+                <Avatar>{getInitials(fullName)}</Avatar>
               )}
               {selfAttendance?.attendance ? (
                 <IconByName
@@ -248,7 +255,7 @@ function Generic({ footerLinks, appName, setAlert }) {
               uri: "https://png.pngtree.com/png-clipart/20210915/ourlarge/pngtree-user-avatar-placeholder-png-image_3918418.jpg",
             }}
           >
-            {fullName?.toUpperCase().substr(0, 2)}
+            {getInitials(fullName)}          
           </Avatar>
           <Heading size="md" textAlign="center">
             {fullName}
