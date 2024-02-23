@@ -140,13 +140,14 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   ];
 
   let getInitials = function (string) {
-    let names = string.split(' '), initials = names[0].substring(0, 1).toUpperCase();
-    
+    let names = string.split(" "),
+      initials = names[0].substring(0, 1).toUpperCase();
+
     if (names.length > 1) {
-        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+      initials += names[names.length - 1].substring(0, 1).toUpperCase();
     }
     return initials;
-};
+  };
 
   const getFieldValues = (cohortsFields) => {
     let fieldVals = [];
@@ -246,7 +247,11 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
       >
         <Layout
           _header={{
-            title: cohortParentDetails?.name + ", "  + " Level " + cohortDetails?.name,
+            title:
+              cohortParentDetails?.name +
+              ", " +
+              " Level " +
+              cohortDetails?.name,
             subHeading: moment().format("hh:mm A"),
             iconComponent: (
               <Pressable>
@@ -312,7 +317,10 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
 
               // Modify the title based on the attendance status
               let modifiedTitle = item?.data[0]?.title;
-              if (isMarkMyAttendance && attendanceStatusData?.data[0]?.attendance) {
+              if (
+                isMarkMyAttendance &&
+                attendanceStatusData?.data[0]?.attendance
+              ) {
                 modifiedTitle += `                           - ${attendanceStatusData?.data[0]?.attendance}`;
               }
 
