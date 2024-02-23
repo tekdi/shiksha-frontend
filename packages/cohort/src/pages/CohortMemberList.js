@@ -41,6 +41,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
   const [width, height] = useWindowSize();
   const [loading, setLoading] = React.useState(true);
   const [cohortDetails, setCohortDetails] = React.useState({});
+  const [cohortParentDetails, setCohortParentDetails] = React.useState(true);
   const [attendanceStatusData, setAttendanceStatusData] = React.useState();
   let newAvatar = localStorage.getItem("firstName");
 
@@ -55,6 +56,14 @@ export default function CohortMemberList({ footerLinks, appName }) {
         },
       }
     : {};
+  let getInitials = function (string) {
+    let names = string.split(' '), initials = names[0].substring(0, 1).toUpperCase();
+    
+    if (names.length > 1) {
+        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+    }
+    return initials;
+  };
   useEffect(() => {
     let ignore = false;
     const getData = async () => {
@@ -124,6 +133,17 @@ export default function CohortMemberList({ footerLinks, appName }) {
           setMembers(results[0]);
         }
         setCohortDetails(results[1][0]);
+        const parentResult = await cohortRegistryService.getCohortDetails(
+          {
+            cohortId: results[1][0].parentId,
+          },
+          {
+            tenantid: process.env.REACT_APP_TENANT_ID,
+          }
+        );
+        if (parentResult.length) {
+          setCohortParentDetails(parentResult[0]);
+        }
         setLoading(false);
       }
     };
@@ -144,7 +164,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
     >
       <Layout
         _header={{
-          title: cohortDetails?.name,
+          title: loading ? "" : cohortParentDetails?.name + ", "  + " Level " + cohortDetails?.name,
           subHeading: moment().format("hh:mm A"),
           iconComponent: (
             <Pressable>
@@ -157,7 +177,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
                   size="50px"
                 />
               ) : (
-                <Avatar>{newAvatar?.toUpperCase().substr(0, 2)}</Avatar>
+                <Avatar>{getInitials(newAvatar)}</Avatar>
               )}
             </Pressable>
           ),
@@ -191,10 +211,10 @@ export default function CohortMemberList({ footerLinks, appName }) {
                     rounded={"lg"}
                     key={index}
                     style={{
-                      background:
-                        index % 2 === 0
-                          ? "linear-gradient(281.03deg, #FC5858 -21.15%, #F8AF5A 100.04%)"
-                          : "linear-gradient(102.88deg, #D7BEE6 -5.88%, #B143F3 116.6%)",
+                      background: "linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)"
+                        // index % 2 === 0
+                        //   ? "linear-gradient(281.03deg, #FC5858 -21.15%, #F8AF5A 100.04%)"
+                        //   : "linear-gradient(102.88deg, #D7BEE6 -5.88%, #B143F3 116.6%)",
                     }}
                     _text={{
                       fontSize: "md",
