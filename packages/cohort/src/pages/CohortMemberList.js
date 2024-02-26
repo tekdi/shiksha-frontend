@@ -44,7 +44,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
   const [cohortParentDetails, setCohortParentDetails] = React.useState(true);
   const [attendanceStatusData, setAttendanceStatusData] = React.useState();
   let newAvatar = localStorage.getItem("firstName");
-
+  let captureLocation = "false";
   const [members, setMembers] = useState([]);
   const teacherId = localStorage.getItem("id");
   const { cohortId } = useParams();
@@ -57,10 +57,11 @@ export default function CohortMemberList({ footerLinks, appName }) {
       }
     : {};
   let getInitials = function (string) {
-    let names = string.split(' '), initials = names[0].substring(0, 1).toUpperCase();
-    
+    let names = string.split(" "),
+      initials = names[0].substring(0, 1).toUpperCase();
+
     if (names.length > 1) {
-        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+      initials += names[names.length - 1].substring(0, 1).toUpperCase();
     }
     return initials;
   };
@@ -160,11 +161,17 @@ export default function CohortMemberList({ footerLinks, appName }) {
         userId,
         setUserId,
         members,
+        captureLocation, // parameter for captureLocation
       }}
     >
       <Layout
         _header={{
-          title: loading ? "" : cohortParentDetails?.name + ", "  + " Level " + cohortDetails?.name,
+          title: loading
+            ? ""
+            : cohortParentDetails?.name +
+              ", " +
+              " Level " +
+              cohortDetails?.name,
           subHeading: moment().format("hh:mm A"),
           iconComponent: (
             <Pressable>
@@ -211,10 +218,11 @@ export default function CohortMemberList({ footerLinks, appName }) {
                     rounded={"lg"}
                     key={index}
                     style={{
-                      background: "linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)"
-                        // index % 2 === 0
-                        //   ? "linear-gradient(281.03deg, #FC5858 -21.15%, #F8AF5A 100.04%)"
-                        //   : "linear-gradient(102.88deg, #D7BEE6 -5.88%, #B143F3 116.6%)",
+                      background:
+                        "linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)",
+                      // index % 2 === 0
+                      //   ? "linear-gradient(281.03deg, #FC5858 -21.15%, #F8AF5A 100.04%)"
+                      //   : "linear-gradient(102.88deg, #D7BEE6 -5.88%, #B143F3 116.6%)",
                     }}
                     _text={{
                       fontSize: "md",
