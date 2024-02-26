@@ -76,4 +76,4 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY_DG }}
           script: |
             cd /home/prasad
-            tar -xvf shiksha-ui.tar -C /var/www/invigorate.onebillionliterates.org.conf/public
+            tar -xvf shiksha-ui.tar -C /var/www/invigorate.onebillionliterates.org/public
