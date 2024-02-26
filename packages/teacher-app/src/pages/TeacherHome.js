@@ -44,6 +44,14 @@ function Home({ footerLinks, appName, setAlert }) {
         },
       }
     : {};
+  let getInitials = function (string) {
+    let names = string.split(' '), initials = names[0].substring(0, 1).toUpperCase();
+    
+    if (names.length > 1) {
+        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+    }
+    return initials;
+  };
 
   const widgetData = [
     {
@@ -192,7 +200,7 @@ function Home({ footerLinks, appName, setAlert }) {
                   size="50px"
                 />
               ) : (
-                <Avatar>{newAvatar?.toUpperCase().substr(0, 2)}</Avatar>
+                <Avatar>{getInitials(newAvatar)}</Avatar>
               )}
               {selfAttendance?.attendance ? (
                 <IconByName

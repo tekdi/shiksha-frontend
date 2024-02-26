@@ -5,6 +5,7 @@ const interfaceData = {
   // id: 'ProgramId',
   id: 'cohortId',
   // schoolId: 'schoolId',
+  parentId: 'parentId',
   type: 'type',
   name: 'name',
   section: 'section',
@@ -30,10 +31,10 @@ export const getAll = async (params = {}, header = {}) => {
     {
       limit: '',
       page: 0,
-      filters: {}
+      filters: {},
+      ...params
     },
     {
-      ...params,
       headers
     }
   )
@@ -55,13 +56,19 @@ export const getCohortDetails = async (params = {}, header = {}) => {
     ...header,
     Authorization: 'Bearer ' + localStorage.getItem('token')
   }
-  const result = await get(
-    `${process.env.REACT_APP_API_URL}/cohort/${params.cohortId}`, {headers}
-  )
-  if (result.data) {
-    return result.data.data;
-  } else {
-    return [];
+  try {
+    const result = await get(
+      `${process.env.REACT_APP_API_URL}/cohort/${params.cohortId}`,
+      { headers }
+    )
+    if (result.data) {
+      return result.data.data
+    } else {
+      return []
+    }
+  } catch (error) {
+    console.error('Error fetching cohort details:', error)
+    return [] // Handle error by returning empty array or re-throw the error
   }
 }
 
@@ -84,19 +91,25 @@ export const getCohortMembers = async (data = {}, header = {}) => {
         userId: { _in: memberData.map((e) => e.userId) }
       }
     }
-    let users = await post(`${process.env.REACT_APP_API_URL}/user/search`, body, { headers });
+    let users = await post(
+      `${process.env.REACT_APP_API_URL}/user/search`,
+      body,
+      { headers }
+    )
     users = users.data.data
 
-    memberData = memberData.map((memberInfo, index) => {
-      const user = users.find((user) => user.userId === memberInfo.userId)
-      if (user) {
-        return {
-          ...memberInfo,
-          userDetails: user
+    memberData = memberData
+      .map((memberInfo, index) => {
+        const user = users.find((user) => user.userId === memberInfo.userId)
+        if (user) {
+          return {
+            ...memberInfo,
+            userDetails: user
+          }
         }
-      }
-      return false;
-    }).filter(item => !!item.userDetails);
+        return false
+      })
+      .filter((item) => !!item.userDetails)
     // const memberDetailsPromises = memberData.map((member) => {
     //   return post(
     //     `${process.env.REACT_APP_API_URL}/user/search`,
@@ -122,8 +135,6 @@ export const getCohortMembers = async (data = {}, header = {}) => {
     //   return memberInfo
     // })
 
-
-
     // .map((e) => mapInterfaceData(e, interfaceData))
     return memberData
     // .sort(function (a, b) {
@@ -141,15 +152,11 @@ export const create = async (data, header = {}) => {
     Authorization: 'Bearer ' + localStorage.getItem('token')
   }
 
-  const result = await post(
-    process.env.REACT_APP_API_URL + '/cohort',
-    data,
-    {
-      headers
-    }
-  )
+  const result = await post(process.env.REACT_APP_API_URL + '/cohort', data, {
+    headers
+  })
   if (result.data) {
-    return result.data?.data;
+    return result.data?.data
   } else {
     return false
   }

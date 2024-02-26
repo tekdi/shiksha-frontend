@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.uniteframework.shiksha.twa",
+        "sha256_cert_fingerprints": ["5D:27:14:88:B0:06:02:E1:20:BB:4E:41:88:76:FD:32:0F:A4:26:EC:FE:BD:DA:C1:70:88:89:8C:50:C8:E9:F3"]
+      }
+    }]

@@ -23,9 +23,9 @@ import {
   Stack,
   VStack,
 } from "native-base";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Camera from "./Camera";
 import moment from "moment";
 
@@ -132,6 +132,7 @@ export default function SelfAttendanceSheet({
   const [loding, setLoding] = React.useState(false);
   const [config, setConfig] = React.useState({});
   const [selfAttendance, setSelfAttendance] = React.useState({});
+  const { cohortId } = useParams();
   const navigate = useNavigate();
 
   const handleTelemetry = (newAttedance) => {
@@ -172,7 +173,7 @@ export default function SelfAttendanceSheet({
       setCameraUrl(image);
       let newAttedance = {
         ...selfAttendance,
-        image: image,
+        // image: image,
       };
       handleMarkAttendance(newAttedance);
     } else {
@@ -189,6 +190,8 @@ export default function SelfAttendanceSheet({
             id: newAttedance.id,
             attendance: newAttedance.attendance,
             remark: newAttedance.remark,
+            contextId: cohortId,
+            contextType: "class",
           },
           {
             onlyParameter: [
@@ -206,6 +209,8 @@ export default function SelfAttendanceSheet({
               "latitude",
               "longitude",
               "image",
+              "contextId",
+              "contextType",
             ],
           }
         )
@@ -225,6 +230,8 @@ export default function SelfAttendanceSheet({
         ...newAttedance,
         date: moment().format("YYYY-MM-DD"),
         studentId: userId || localStorage.getItem("id"),
+        contextId: cohortId,
+        contextType: "class",
       };
       setSelfAttendance(newAttedance);
       attendanceRegistryService
@@ -244,6 +251,8 @@ export default function SelfAttendanceSheet({
             "latitude",
             "longitude",
             "image",
+            "contextId",
+            "contextType",
           ],
           tenantid: process.env.REACT_APP_TENANT_ID,
         })
@@ -335,6 +344,7 @@ export default function SelfAttendanceSheet({
     setLocationModal(false);
     setShowModal(false);
     setCameraUrl();
+    window.location.reload();
   };
 
   const setAttendanceMark = (e) => {
@@ -438,7 +448,7 @@ export default function SelfAttendanceSheet({
                   >
                     {t("CLOSE")}
                   </Button>
-                  <Button
+                  {/* <Button
                     flex="1"
                     mr="5px"
                     colorScheme="button"
@@ -449,7 +459,7 @@ export default function SelfAttendanceSheet({
                     }}
                   >
                     {t("GO_TO_PROFILE")}
-                  </Button>
+                  </Button> */}
                 </Button.Group>
               )}
             </VStack>
@@ -694,7 +704,7 @@ export default function SelfAttendanceSheet({
             </Button>
           ) : (
             <Button.Group m="5">
-              <Button
+              {/* <Button
                 flex="1"
                 mr="5px"
                 colorScheme="button"
@@ -703,7 +713,7 @@ export default function SelfAttendanceSheet({
                 _text={{ textTransform: "uppercase" }}
               >
                 {t("GO_TO_PROFILE")}
-              </Button>
+              </Button> */}
               <Button
                 flex="1"
                 ml="5px"
@@ -821,7 +831,7 @@ export default function SelfAttendanceSheet({
             </Button>
           ) : (
             <Button.Group m="5">
-              <Button
+              {/* <Button
                 flex="1"
                 mr="5px"
                 colorScheme="button"
@@ -829,7 +839,7 @@ export default function SelfAttendanceSheet({
                 onPress={(e) => navigate("/profile")}
               >
                 {t("GO_TO_PROFILE")}
-              </Button>
+              </Button> */}
               <Button
                 flex="1"
                 ml="5px"

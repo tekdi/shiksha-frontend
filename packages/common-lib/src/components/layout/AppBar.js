@@ -170,7 +170,7 @@ export default function AppBar({
                     )
                   }}
                 >
-                  {languages?.map((e, index) => (
+                  {/* {languages?.map((e, index) => (
                     <Menu.Item
                       key={index}
                       label={e.title}
@@ -179,7 +179,7 @@ export default function AppBar({
                     >
                       {e.title}
                     </Menu.Item>
-                  ))}
+                  ))} */}
                   <Menu.Item onPress={(item) => setLang('logout')}>
                     Logout
                   </Menu.Item>

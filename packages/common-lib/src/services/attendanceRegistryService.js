@@ -19,7 +19,9 @@ const interfaceData = {
   longitude: 'longitude',
   image: 'image',
   updatedAt: 'updatedAt',
-  parentName: 'parentName'
+  parentName: 'parentName',
+  contextId: 'contextId',
+  contextType: 'contextType'
 }
 
 let only = Object.keys(interfaceData)
@@ -164,5 +166,28 @@ const addFile = (newData) => {
     return form_data
   } else {
     return newData
+  }
+}
+// search attendendance by filter
+export const searchAttendance = async (data = {}, header = {}) => {
+  let headers = {
+    ...header,
+    Authorization: 'Bearer ' + localStorage.getItem('token')
+  }
+
+  try {
+    const result = await post(
+      process.env.REACT_APP_API_URL + '/attendance/search',
+      data,
+      { headers }
+    )
+    if (result.data) {
+      return result.data
+    } else {
+      return {}
+    }
+  } catch (error) {
+    console.error(error)
+    return {}
   }
 }
