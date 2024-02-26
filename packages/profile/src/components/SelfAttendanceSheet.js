@@ -121,7 +121,6 @@ export default function SelfAttendanceSheet({
   captureLocation,
 }) {
   const { t } = useTranslation();
-  console.log("setAttendance==", captureLocation);
   const [specialDutyModal, setSpecialDutyModal] = React.useState(false);
   const [markList, setMarkList] = React.useState([]);
   const [specialDutyList, setSpecialDutyList] = React.useState([]);
