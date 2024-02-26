@@ -46,18 +46,18 @@ jobs:
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY-dg }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS-dg }}
-          REMOTE_USER: ${{ secrets.USERNAME-dg }}
-          TARGET: ${{ secrets.TARGET_DIR-dg }}
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY_dg }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS_dg }}
+          REMOTE_USER: ${{ secrets.USERNAME_dg }}
+          TARGET: ${{ secrets.TARGET_DIR_dg }}
 
       - name: Set up SSH key
         run: | 
          mkdir -p ~/.ssh
-         echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+         echo "${{ secrets.EC2_SSH_KEY_dg }}" > ~/.ssh/id_rsa
          chmod 600 ~/.ssh/id_rsa
          # Add the SSH key to the known_hosts file (replace hostname with your actual hostname)
-         ssh-keyscan -H ${{ secrets.HOST_DNS }} >> ~/.ssh/known_hosts
+         ssh-keyscan -H ${{ secrets.HOST_DNS_dg }} >> ~/.ssh/known_hosts
 
 
     # - name: Deploy with rsync
@@ -66,14 +66,14 @@ jobs:
       
            
       - name: Copy Build Artifact using Rsync
-        run: rsync -avz -e "ssh -p ${{ secrets.PORT }}" shiksha-ui.tar ${{ secrets.USERNAME-dg }}@${{ secrets.HOST_DNS-dg }}:/home/prasad
+        run: rsync -avz -e "ssh -p ${{ secrets.PORT }}" shiksha-ui.tar ${{ secrets.USERNAME_dg }}@${{ secrets.HOST_DNS_dg }}:/home/prasad
       
       - name: Unzip Artifact to Correct Locations to Deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DNS-dg }}
-          username: ${{ secrets.USERNAME-dg }}
-          key: ${{ secrets.EC2_SSH_KEY-dg }}
+          host: ${{ secrets.HOST_DNS_dg }}
+          username: ${{ secrets.USERNAME_dg }}
+          key: ${{ secrets.EC2_SSH_KEY_dg }}
           script: |
             cd /home/prasad
             tar -xvf shiksha-ui.tar -C /var/www/shiksha.uniteframework.io/new
