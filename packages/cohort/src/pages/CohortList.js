@@ -121,10 +121,11 @@ export default function CohortList() {
           data={classes.map((item, index) => {
             return {
               title:
-                (item?.parentName ? item?.parentName + ", " : "") + " Level " +
+                (item?.parentName ? item?.parentName + ", " : "") +
+                " Level " +
                 (item?.name ? item?.name : "") +
                 (item?.section ? " • Sec " + item?.section : ""),
-              subTitle: t("CLASS_TEACHER"),
+              //subTitle: t("CLASS_TEACHER"),
               link: generatePath(item.id, { ...{ id: item.id } }),
               _box: {
                 style: {
