@@ -118,8 +118,10 @@ export default function SelfAttendanceSheet({
   appName,
   setAlert,
   userId,
+  captureLocation,
 }) {
   const { t } = useTranslation();
+  console.log("setAttendance==", captureLocation);
   const [specialDutyModal, setSpecialDutyModal] = React.useState(false);
   const [markList, setMarkList] = React.useState([]);
   const [specialDutyList, setSpecialDutyList] = React.useState([]);
@@ -363,7 +365,7 @@ export default function SelfAttendanceSheet({
       setDone(true);
       setCameraModal(false);
       handleMarkAttendance(selfAttendance);
-    } else if (config && config["captureLocation"] === "true") {
+    } else if (captureLocation === "true") {
       setLocationModal(true);
     } else if (config && config["capture_selfie"] === "true") {
       setCameraModal(true);
