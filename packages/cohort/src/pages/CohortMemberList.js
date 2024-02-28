@@ -349,12 +349,12 @@ export default function CohortMemberList({ footerLinks, appName }) {
               );
               let changedRecord = selectedAttendance?.records?.find(
                 (record) => record?.userId === item?.userId
-               );
-              let memberAttendance = ''
-              if (changedRecord && changedRecord.userId) {
-                memberAttendance = changedRecord.attendance;
+              );
+              let memberAttendance = "";
+              if (changedRecord && changedRecord?.userId) {
+                memberAttendance = changedRecord?.attendance;
               } else {
-                memberAttendance = attendanceRecord.attendance;
+                memberAttendance = attendanceRecord?.attendance;
               }
 
               return (
@@ -380,14 +380,14 @@ export default function CohortMemberList({ footerLinks, appName }) {
                           {attendanceRecord.attendance}
                         </Button>
                       ) : null}
-                
+
                       <HStack w={130} justifyContent="space-between">
                         <Flex>
                           <TouchableOpacity>
                             <IconByName
                               name="CheckboxCircleLineIcon"
                               color={
-                                (memberAttendance === "Present")
+                                memberAttendance === "Present"
                                   ? "profile.present"
                                   : "gray"
                               }
@@ -412,7 +412,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
                             <IconByName
                               name="CheckboxCircleLineIcon"
                               color={
-                                (memberAttendance === "Absent")
+                                memberAttendance === "Absent"
                                   ? "profile.absent"
                                   : "gray"
                               }
