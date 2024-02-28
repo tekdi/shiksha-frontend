@@ -12,7 +12,7 @@ import {
 } from "native-base";
 import { TouchableOpacity, Modal, View } from "react-native";
 import { useTranslation } from "react-i18next";
-import { generatePath, useParams } from "react-router-dom";
+import { generatePath, useParams, useNavigate } from "react-router-dom";
 import {
   Layout,
   overrideColorTheme,
@@ -45,6 +45,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
     records: [],
   });
   const [checkedAllAs, setcheckedAllAs] = React.useState(true);
+  const navigate = useNavigate();
   let cameraUrl = "";
   let avatarUrlObject = cameraUrl
     ? {
@@ -104,7 +105,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
       type: status,
       records: updatedAttendanceRecords,
     });
-    setcheckedAllAs('');
+    setcheckedAllAs("");
   };
 
   // Event handler for selecting all as Present
@@ -323,10 +324,8 @@ export default function CohortMemberList({ footerLinks, appName }) {
                     <IconByName
                       name="CheckboxCircleLineIcon"
                       color={
-                        (checkedAllAs == "Present")
-                          ? "profile.present"
-                          : "gray"
-                        }
+                        checkedAllAs == "Present" ? "profile.present" : "gray"
+                      }
                       _icon={{
                         size: "25px",
                       }}
@@ -340,10 +339,8 @@ export default function CohortMemberList({ footerLinks, appName }) {
                     <IconByName
                       name="CloseCircleLineIcon"
                       color={
-                        (checkedAllAs == "Absent")
-                          ? "profile.absent"
-                          : "gray"
-                        }
+                        checkedAllAs == "Absent" ? "profile.absent" : "gray"
+                      }
                       _icon={{
                         size: "25px",
                       }}
@@ -454,8 +451,8 @@ export default function CohortMemberList({ footerLinks, appName }) {
               <Button
                 flex={1}
                 variant="outline"
-                onPress={() => {
-                  setSelectedAttendance({});
+                onPress={(e) => {
+                  navigate(`/cohorts/${cohortId}`);
                 }}
               >
                 {t("CANCEL")}
