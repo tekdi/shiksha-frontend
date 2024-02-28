@@ -347,6 +347,16 @@ export default function CohortMemberList({ footerLinks, appName }) {
               let attendanceRecord = attendanceStatusData?.find(
                 (record) => record?.userId === item?.userId
               );
+              let changedRecord = selectedAttendance?.records?.find(
+                (record) => record?.userId === item?.userId
+               );
+              let memberAttendance = ''
+              if (changedRecord && changedRecord.userId) {
+                memberAttendance = changedRecord.attendance;
+              } else {
+                memberAttendance = attendanceRecord.attendance;
+              }
+
               return (
                 <Box
                   p="2"
@@ -370,16 +380,14 @@ export default function CohortMemberList({ footerLinks, appName }) {
                           {attendanceRecord.attendance}
                         </Button>
                       ) : null}
+                
                       <HStack w={130} justifyContent="space-between">
                         <Flex>
                           <TouchableOpacity>
                             <IconByName
                               name="CheckboxCircleLineIcon"
                               color={
-                                (attendanceRecord &&
-                                  attendanceRecord.attendance === "Present") ||
-                                (!attendanceRecord &&
-                                  selectedAttendance.type === "Present")
+                                (memberAttendance === "Present")
                                   ? "profile.present"
                                   : "gray"
                               }
@@ -404,10 +412,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
                             <IconByName
                               name="CheckboxCircleLineIcon"
                               color={
-                                (attendanceRecord &&
-                                  attendanceRecord.attendance === "Absent") ||
-                                (!attendanceRecord &&
-                                  selectedAttendance.type === "Absent")
+                                (memberAttendance === "Absent")
                                   ? "profile.absent"
                                   : "gray"
                               }
