@@ -124,7 +124,7 @@ export const update = async (data = {}, headers = {}) => {
   }
 }
 
-export const multipal = async (data = {}, header = {}) => {
+export const multiple = async (data = {}, header = {}) => {
   let headers = {
     ...header,
     Authorization: 'Bearer ' + localStorage.getItem('token')
