@@ -76,7 +76,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
     {
       data: [
         {
-          title: t("View Students"),
+          title: t("Mark Student Attendance"),
           link: `/cohorts/${cohortId}/students`,
           icon: "ParentLineIcon",
           _box: {

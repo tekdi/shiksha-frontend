@@ -177,7 +177,7 @@ export const MultipalAttendance = ({
         attendanceData,
       };
 
-      const result = await attendanceRegistryService.multipal(allData);
+      const result = await attendanceRegistryService.multiple(allData);
       if (getAttendance) {
         getAttendance();
       }
