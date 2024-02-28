@@ -36,7 +36,6 @@ export default function CohortMemberList({ footerLinks, appName }) {
   const [cohortParentDetails, setCohortParentDetails] = React.useState(true);
   const [attendanceStatusData, setAttendanceStatusData] = React.useState();
   let newAvatar = localStorage.getItem("fullName");
-  let captureLocation = "false";
   const [successLayout, setsuccessLayout] = React.useState("false");
   const [members, setMembers] = useState([]);
   const teacherId = localStorage.getItem("id");
@@ -86,28 +85,31 @@ export default function CohortMemberList({ footerLinks, appName }) {
       );
     } else {
       // Add or update the member with the new status in the selectedAttendance
-      updatedAttendanceRecords = selectedAttendance.records.filter(
-        (record) => record.userId !== memberId
-      );
-      updatedAttendanceRecords.push({
-        userId: memberId,
-        attendance: status,
-        contextType: "class",
-        contextId: cohortId,
-        attendanceDate: moment().format("YYYY-MM-DD"),
-      });
+      updatedAttendanceRecords = [
+        ...selectedAttendance.records.filter(
+          (record) => record.userId !== memberId
+        ),
+        {
+          userId: memberId,
+          attendance: status,
+          contextType: "class",
+          contextId: cohortId,
+          attendanceDate: moment().format("YYYY-MM-DD"),
+        },
+      ];
     }
 
-    // Update selectedAttendance.type based on the status
-    setSelectedAttendance((prevState) => ({
-      ...prevState,
+    // Update selectedAttendance state
+    setSelectedAttendance({
       type: status,
-    }));
+      records: updatedAttendanceRecords,
+    });
   };
 
   // Event handler for selecting all as Present
   const handleSelectAllPresent = () => {
     setSelectedAttendance({});
+    setAttendanceStatusData();
     let updatedAttendanceRecords = [];
     members.forEach((member) => {
       let updatedAttendance = {
@@ -128,6 +130,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
   // Event handler for selecting all as Absent
   const handleSelectAllAbsent = () => {
     setSelectedAttendance({});
+    setAttendanceStatusData();
     let updatedAttendanceRecords = [];
     members.forEach((member) => {
       let updatedAttendance = {
@@ -374,18 +377,24 @@ export default function CohortMemberList({ footerLinks, appName }) {
                               name="CheckboxCircleLineIcon"
                               color={
                                 (attendanceRecord &&
-                                  attendanceRecord?.attendance === "Present") ||
+                                  attendanceRecord.attendance === "Present") ||
                                 (!attendanceRecord &&
-                                  selectedAttendance?.type === "Present")
+                                  selectedAttendance.type === "Present")
                                   ? "profile.present"
                                   : "gray"
                               }
                               _icon={{
                                 size: "25px",
                               }}
-                              onPress={() =>
-                                handleToggleAttendance(item.userId, "Present")
-                              }
+                              onPress={() => {
+                                handleToggleAttendance(item.userId, "Present");
+                                // Update color status for Present icon only
+                                // based on the current selected status
+                                setSelectedAttendance((prevState) => ({
+                                  ...prevState,
+                                  type: "Present",
+                                }));
+                              }}
                             />
                           </TouchableOpacity>
                           <Text textAlign={"center"}>Present</Text>
@@ -405,9 +414,15 @@ export default function CohortMemberList({ footerLinks, appName }) {
                               _icon={{
                                 size: "25px",
                               }}
-                              onPress={() =>
-                                handleToggleAttendance(item.userId, "Absent")
-                              }
+                              onPress={() => {
+                                handleToggleAttendance(item.userId, "Absent");
+                                // Update color status for Absent icon only
+                                // based on the current selected status
+                                setSelectedAttendance((prevState) => ({
+                                  ...prevState,
+                                  type: "Absent",
+                                }));
+                              }}
                             />
                           </TouchableOpacity>
                           <Text textAlign={"center"}>Absent</Text>
