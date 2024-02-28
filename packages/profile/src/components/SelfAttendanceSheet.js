@@ -119,6 +119,7 @@ export default function SelfAttendanceSheet({
   setAlert,
   userId,
   captureLocation,
+  successLayout,
 }) {
   const { t } = useTranslation();
   const [specialDutyModal, setSpecialDutyModal] = React.useState(false);
@@ -484,7 +485,7 @@ export default function SelfAttendanceSheet({
       </Box>
     );
   }
-  if (done) {
+  if (done || successLayout === "true") {
     return (
       <Box
         position="fixed"
