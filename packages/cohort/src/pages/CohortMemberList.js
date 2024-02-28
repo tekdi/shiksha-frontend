@@ -44,6 +44,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
     type: "", // or initialize with "Present" or "Absent" based on your initial state requirement
     records: [],
   });
+  const [checkedAllAs, setcheckedAllAs] = React.useState(true);
   let cameraUrl = "";
   let avatarUrlObject = cameraUrl
     ? {
@@ -98,12 +99,12 @@ export default function CohortMemberList({ footerLinks, appName }) {
         },
       ];
     }
-
     // Update selectedAttendance state
     setSelectedAttendance({
       type: status,
       records: updatedAttendanceRecords,
     });
+    setcheckedAllAs('');
   };
 
   // Event handler for selecting all as Present
@@ -125,6 +126,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
       type: "Present",
       records: updatedAttendanceRecords,
     });
+    setcheckedAllAs("Present");
   };
 
   // Event handler for selecting all as Absent
@@ -146,6 +148,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
       type: "Absent",
       records: updatedAttendanceRecords,
     });
+    setcheckedAllAs("Absent");
   };
 
   useEffect(() => {
@@ -319,7 +322,11 @@ export default function CohortMemberList({ footerLinks, appName }) {
                   <TouchableOpacity>
                     <IconByName
                       name="CheckboxCircleLineIcon"
-                      color={"profile.present"}
+                      color={
+                        (checkedAllAs == "Present")
+                          ? "profile.present"
+                          : "gray"
+                        }
                       _icon={{
                         size: "25px",
                       }}
@@ -332,7 +339,11 @@ export default function CohortMemberList({ footerLinks, appName }) {
                   <TouchableOpacity>
                     <IconByName
                       name="CloseCircleLineIcon"
-                      color={"profile.absent"}
+                      color={
+                        (checkedAllAs == "Absent")
+                          ? "profile.absent"
+                          : "gray"
+                        }
                       _icon={{
                         size: "25px",
                       }}
@@ -410,7 +421,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
                         <Flex>
                           <TouchableOpacity>
                             <IconByName
-                              name="CheckboxCircleLineIcon"
+                              name="CloseCircleLineIcon"
                               color={
                                 (memberAttendance === "Absent")
                                   ? "profile.absent"
