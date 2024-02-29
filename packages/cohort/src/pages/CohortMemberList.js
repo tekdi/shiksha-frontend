@@ -157,7 +157,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
     const getData = async () => {
       const currentDate = new Date().toLocaleDateString("en-CA"); // Format: "yyyy-mm-dd"
       const searchData = {
-        limit: "string",
+        limit: 100,
         page: 0,
         filters: {
           contextId: { _eq: cohortId },
