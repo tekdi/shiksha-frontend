@@ -157,7 +157,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
     const getData = async () => {
       const currentDate = new Date().toLocaleDateString("en-CA"); // Format: "yyyy-mm-dd"
       const searchData = {
-        limit: 300,
+        limit: 200,
         page: 0,
         filters: {
           contextId: { _eq: cohortId },
@@ -171,7 +171,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
         const results = await Promise.all([
           cohortRegistryService.getCohortMembers(
             {
-              limit: 300,
+              limit: 200,
               page: 0,
               filters: {
                 cohortId: { _eq: cohortId },
