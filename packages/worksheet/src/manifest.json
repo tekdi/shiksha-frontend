@@ -94,6 +94,6 @@
     }
   ],
 
-  "auth_url": "https://shiksha.uniteframework.io/auth/realms/Hasura/protocol/openid-connect/token",
+  "auth_url": "https://shiksha.uniteframework.io/api/v1/auth/login",
   "maxWidth": "1080"
 }

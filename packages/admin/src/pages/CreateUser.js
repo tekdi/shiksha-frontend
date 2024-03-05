@@ -4,6 +4,7 @@ import {
   overrideColorTheme,
   fieldsRegistryService,
   userRegistryService,
+  Loading,
 } from "@shiksha/common-lib";
 import React, { useCallback, useEffect, useState } from "react";
 import manifest from "../manifest.json";
@@ -11,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import Form from "@rjsf/core";
 import validator from "@rjsf/validator-ajv8";
 import { Box, Container, useToast } from "native-base";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 let schema = {
   title: "Add Users",
@@ -59,7 +60,7 @@ let schema = {
 let uiSchema = {
   name: {
     "ui:classNames": "custom-class-name",
-    "ui:placeholder": ""
+    "ui:placeholder": "",
   },
   password: {
     "ui:widget": "password",
@@ -78,8 +79,9 @@ function CreateUser({ footerLinks, appName }) {
   });
   const [fields, setFields] = useState([]);
   const [fieldResponse, setFieldResponse] = useState({});
-  let userIdentifier = localStorage.getItem("id");
-
+  const [isEditForm, setIsEditForm] = useState(false);
+  const [loading, isLoading] = useState(true);
+  const { state } = useLocation();
   useEffect(() => {
     fieldsRegistryService
       .getFields(
@@ -92,9 +94,7 @@ function CreateUser({ footerLinks, appName }) {
           },
         },
         {
-          tenantid:
-            "31d1cc30-da56-4c6a-90d7-8bc4fc51bc70" ||
-            process.env.REACT_APP_TENANT_ID,
+          tenantid: process.env.REACT_APP_TENANT_ID,
         }
       )
       .then((response) => {
@@ -109,6 +109,13 @@ function CreateUser({ footerLinks, appName }) {
         });
         setFields(extraFields);
         setFieldResponse(fieldRes);
+        if (state) {
+          setFormData((prev) => {
+            return { ...prev, ...state };
+          });
+          setIsEditForm(true);
+        }
+        isLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -156,49 +163,79 @@ function CreateUser({ footerLinks, appName }) {
   });
 
   const handleSubmit = (data) => {
-    console.log("data", data);
     const fieldKeys = fields.map((obj) => Object.keys(obj)[0]);
     let corePayload = {};
     let fieldsPayload = "";
     for (let key in data) {
       if (fieldKeys.includes(key)) {
+        let customFieldValueKey = fieldResponse[key].fieldId;
+        if (data.fields?.length) {
+          const extractedField = data.fields.find(item => item.name === key);
+          if (extractedField?.fieldValues?.length) {
+            customFieldValueKey = extractedField.fieldValues[0].fieldValuesId;
+          }
+          // delete data.fields;
+        }
+
         if (fieldsPayload === "") {
-          fieldsPayload = `${fieldResponse[key].fieldId}:${data[key]}`;
+          fieldsPayload = `${customFieldValueKey}:${data[key]}`;
         } else {
-          fieldsPayload = `${fieldsPayload}|${fieldResponse[key].fieldId}:${data[key]}`;
+          fieldsPayload = `${fieldsPayload}|${customFieldValueKey}:${data[key]}`;
         }
       } else {
         corePayload[key] = data[key];
       }
     }
-    corePayload["password"] = data["password"];
+    // corePayload["password"] = data["password"];
     corePayload["fieldValues"] = fieldsPayload;
-    userRegistryService
-      .create(corePayload, {
-        tenantid:
-          "31d1cc30-da56-4c6a-90d7-8bc4fc51bc70" ||
-          process.env.REACT_APP_TENANT_ID,
-      })
-      .then((response) => {
-        console.log("response", response);
-        if (!toast.isActive("user-created")) {
-          toast.show({
-            id: "user-created",
-            title: "User created successfully!",
-          });
-        }
-        navigate("/admin");
-      });
+    delete corePayload["fields"]; //todo: optimize this
+
+    if (isEditForm) {
+      userRegistryService
+        .update(corePayload, {
+          tenantid: process.env.REACT_APP_TENANT_ID,
+        })
+        .then((response) => {
+          console.log("response", response);
+          if (!toast.isActive("user-updated")) {
+            toast.show({
+              id: "user-updated",
+              title: t("USER_UPDATED_SUCCESSFULLY"),
+            });
+          }
+          navigate("/admin");
+        });
+    } else {
+      userRegistryService
+        .create(corePayload, {
+          tenantid: process.env.REACT_APP_TENANT_ID,
+        })
+        .then((response) => {
+          console.log("response", response);
+          if (!toast.isActive("user-created")) {
+            toast.show({
+              id: "user-created",
+              title: t("USER_CREATED_SUCCESSFULLY"),
+            });
+          }
+          navigate("/admin");
+        });
+    }
   };
   const colors = overrideColorTheme();
+
+  if (loading) {
+    return <Loading message={t("LOADING")} />;
+  }
+
   return (
     <Layout
       _header={{
-        title: "Create New User",
+        title: t("CREATE_NEW_USER"),
       }}
       _appBar={{ languages: manifest.languages }}
       subHeader={
-        <H3 textTransform="none">{t("Submit the below given form")}</H3>
+        <H3 textTransform="none">{t("SUBMIT_FORM")}</H3>
       }
       _subHeader={{
         bg: colors?.cardBg,
@@ -211,7 +248,7 @@ function CreateUser({ footerLinks, appName }) {
       _footer={footerLinks}
     >
       {showForm && (
-        <Box mx={"30px"}>
+        <Box m={"30px"}>
           <Form
             schema={formSchema.schema}
             uiSchema={formSchema.uiSchema}
@@ -220,6 +257,7 @@ function CreateUser({ footerLinks, appName }) {
             onChange={(e) => handleChange(e.formData)}
             onSubmit={(e) => handleSubmit(e.formData)}
             onError={log("errors")}
+            showErrorList={false}
           />
         </Box>
       )}

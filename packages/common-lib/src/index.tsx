@@ -38,6 +38,7 @@ import { getApiConfig } from './services/configApiRegistryService'
 import * as workHistoryRegistryService from './services/workHistoryRegistryService'
 import * as schoolRegistryService from './services/schoolRegistryService'
 import * as dbService from './services/dbService'
+import * as util from './Util/util';
 import {
   getAllForUser,
   sendReadReceipt
@@ -93,7 +94,8 @@ export {
   schoolRegisteryService,
   dbService,
   StarRating,
-  InfiniteScroll
+  InfiniteScroll,
+  util
 }
 
 export * from './services/Auth'
