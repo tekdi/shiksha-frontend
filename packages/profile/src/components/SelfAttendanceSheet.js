@@ -281,7 +281,11 @@ export default function SelfAttendanceSheet({
       const todayAttendanceResult = await attendanceRegistryService.getAll({
         fromDate: moment().format("YYYY-MM-DD"),
         toDate: moment().format("YYYY-MM-DD"),
-        userId: userId || localStorage.getItem("id"),
+        filters: {
+        userId: {
+            eq: userId || localStorage.getItem("id")
+          }
+        }
       });
       const todayAttendance = todayAttendanceResult.find((e) =>
         [PRESENT, ABSENT, UNMARKED].includes(e.attendance)

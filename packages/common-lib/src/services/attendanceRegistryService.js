@@ -27,13 +27,19 @@ let only = Object.keys(interfaceData)
 export const getAll = async (params = {}, header = {}) => {
   let headers = {
     ...header,
+    tenantid: process.env.REACT_APP_TENANT_ID,
     Authorization: 'Bearer ' + localStorage.getItem('token')
   }
 
-  const result = await get(process.env.REACT_APP_API_URL + '/attendance', {
-    params: { ...params },
-    headers
-  })
+  // const result = await get(process.env.REACT_APP_API_URL + '/attendance', {
+  //   params: { ...params },
+  //   headers
+  // })
+  const result = await post(
+    process.env.REACT_APP_API_URL + '/attendance/bydate',
+    params,
+    { headers }
+  )
   if (result.data.data) {
     return result.data.data.map((e) => mapInterfaceData(e, interfaceData))
   } else {
