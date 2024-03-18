@@ -1,8 +1,8 @@
-name: Deploy to oblf-21stFeb
+name: Deploy to oblf-21stFeb on digi ocean
 on: 
   push: 
     branches:
-      - oblf-21stFeb
+      - prod-oblf-latest
 jobs:
   build:
     name: Generate Build and Deploy to DEV
@@ -46,18 +46,18 @@ jobs:
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY_DG }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS_DG }}
+          REMOTE_USER: ${{ secrets.USERNAME_DG }}
+          TARGET: ${{ secrets.TARGET_DIR_DG }}
 
       - name: Set up SSH key
         run: | 
          mkdir -p ~/.ssh
-         echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+         echo "${{ secrets.EC2_SSH_KEY_DG }}" > ~/.ssh/id_rsa
          chmod 600 ~/.ssh/id_rsa
          # Add the SSH key to the known_hosts file (replace hostname with your actual hostname)
-         ssh-keyscan -H ${{ secrets.HOST_DNS }} >> ~/.ssh/known_hosts
+         ssh-keyscan -H ${{ secrets.HOST_DNS_DG }} >> ~/.ssh/known_hosts
 
 
     # - name: Deploy with rsync
@@ -66,14 +66,14 @@ jobs:
       
            
       - name: Copy Build Artifact using Rsync
-        run: rsync -avz -e "ssh -p ${{ secrets.PORT }}" shiksha-ui.tar ${{ secrets.USERNAME }}@${{ secrets.HOST_DNS }}:/home/prasad
+        run: rsync -avz -e "ssh -p ${{ secrets.PORT }}" shiksha-ui.tar ${{ secrets.USERNAME_DG }}@${{ secrets.HOST_DNS_DG }}:/home/prasad
       
       - name: Unzip Artifact to Correct Locations to Deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DNS }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS_DG }}
+          username: ${{ secrets.USERNAME_DG }}
+          key: ${{ secrets.EC2_SSH_KEY_DG }}
           script: |
             cd /home/prasad
-            tar -xvf shiksha-ui.tar -C /var/www/shiksha.uniteframework.io/new
+            tar -xvf shiksha-ui.tar -C /var/www/invigorate.onebillionliterates.org/public
