@@ -93,7 +93,7 @@
       "code": "hi"
     }
   ],
-  "api_url": "https://shiksha.uniteframework.io",
-  "auth_url": "https://shiksha.uniteframework.io/auth/realms/Hasura/protocol/openid-connect/token",
+  "api_url": "https://invigorate.onebillionliterates.org",
+  "auth_url": "https://invigorate.onebillionliterates.org/auth/realms/Hasura/protocol/openid-connect/token",
   "maxWidth": "1080"
 }
