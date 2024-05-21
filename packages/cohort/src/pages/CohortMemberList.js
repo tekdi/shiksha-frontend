@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import DialogMsg from "../components/Dialog/DialogMsg";
 import {
   Box,
   HStack,
@@ -64,11 +65,11 @@ export default function CohortMemberList({ footerLinks, appName }) {
     return initials;
   };
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [showModal, setShowModal] = React.useState(false);
+  const [modalMsg, setModalMsg] = React.useState("");
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
-
   const handleToggleAttendance = (memberId, status) => {
     // Check if the member is already selected with the same status
     const isSelected =
@@ -476,8 +477,8 @@ export default function CohortMemberList({ footerLinks, appName }) {
                       }
                     );
                     if (result?.data?.statusCode === 200) {
-                      window.location.reload();
-                      setSuccessLayout("true");
+                      setModalMsg("Attendance marked successfully");
+                      setShowModal(true);
                     }
                   }
                 }}
@@ -488,6 +489,19 @@ export default function CohortMemberList({ footerLinks, appName }) {
           </VStack>
         </Box>
       )}
+      <DialogMsg
+        modalShow={showModal}
+        modalClose={() => {
+          setShowModal(false);
+        }}
+        title={"Message"}
+        message={modalMsg}
+        description={"You have successfully marked student(s) attendance for the day."}
+        clickOk={() => {
+		  setShowModal(false);
+		}}
+		showCancel={false}
+      />
     </Layout>
   );
 }
