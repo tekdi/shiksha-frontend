@@ -120,6 +120,7 @@ export default function SelfAttendanceSheet({
   userId,
   captureLocation,
   successLayout,
+  scope,
 }) {
   const { t } = useTranslation();
   const [specialDutyModal, setSpecialDutyModal] = React.useState(false);
@@ -193,6 +194,7 @@ export default function SelfAttendanceSheet({
             attendance: newAttedance.attendance,
             remark: newAttedance.remark,
             contextId: cohortId,
+            scope: scope,
             contextType: "class",
           },
           {
@@ -213,6 +215,7 @@ export default function SelfAttendanceSheet({
               "image",
               "contextId",
               "contextType",
+              "scope",
             ],
           }
         )
@@ -233,6 +236,7 @@ export default function SelfAttendanceSheet({
         date: moment().format("YYYY-MM-DD"),
         studentId: userId || localStorage.getItem("id"),
         contextId: cohortId,
+        scope: scope,
         contextType: "class",
       };
       setSelfAttendance(newAttedance);
@@ -255,6 +259,7 @@ export default function SelfAttendanceSheet({
             "image",
             "contextId",
             "contextType",
+            "scope",
           ],
           tenantid: process.env.REACT_APP_TENANT_ID,
         })
