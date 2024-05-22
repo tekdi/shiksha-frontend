@@ -228,7 +228,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   // Convert self_attendance_start to use a colon if it uses a dot
   if (cohortDetails?.params != undefined) {
     let selfAttendanceStart =
-      cohortDetails?.params?.self_attendace_start.replace(".", ":");
+      cohortDetails?.params?.self_attendance_start.replace(".", ":");
     // Get current time
     const currentTime = new Date();
     const currentHours = currentTime.getHours().toString().padStart(2, "0");
@@ -256,11 +256,11 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
       (formattedCurrentTime >= fiveMinutesBeforeStart &&
         formattedCurrentTime < selfAttendanceStart) ||
       (formattedCurrentTime >= selfAttendanceStart &&
-        formattedCurrentTime <= cohortDetails?.params?.self_attendace_end);
+        formattedCurrentTime <= cohortDetails?.params?.self_attendance_end);
 
     // Check if current time is past self_attendance_end and allow late marking is 1
     const isLateMarkingAllowed =
-      formattedCurrentTime > cohortDetails?.params?.self_attendace_end &&
+      formattedCurrentTime > cohortDetails?.params?.self_attendance_end &&
       cohortDetails?.params?.allow_late_marking == "true";
 
     // Determine if the widget should be disabled
