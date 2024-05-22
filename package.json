@@ -7,15 +7,12 @@
       "packages/core",
       "packages/admin",
       "packages/attendance",
-      "packages/assessment",
       "packages/classes",
       "packages/student",
       "packages/profile",
       "packages/schools",
       "packages/teacher-app",
-      "packages/cohort",
-      "packages/observation",
-      "packages/mylearning"
+      "packages/cohort"
     ]
   },
   "scripts": {
