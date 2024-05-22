@@ -288,11 +288,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
       >
         <Layout
           _header={{
-            title:
-              cohortParentDetails?.name +
-              ", " +
-              " Level " +
-              cohortDetails?.name,
+            title: cohortParentDetails?.name + ", " + cohortDetails?.name,
             subHeading: moment().format("hh:mm A"),
             iconComponent: (
               <Pressable>
@@ -360,6 +356,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
                 attendanceStatusData?.data[0]?.attendance
               ) {
                 modifiedTitle += `                           - ${attendanceStatusData?.data[0]?.attendance}`;
+                isDisabled = true;
               }
               return (
                 <Widget
