@@ -70,6 +70,12 @@ export default function CohortMemberList({ footerLinks, appName }) {
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
+
+  const handleOk = () => {
+    setShowModal(false);
+    navigate(`/cohorts/${cohortId}`);
+  };
+
   const handleToggleAttendance = (memberId, status) => {
     // Check if the member is already selected with the same status
     const isSelected =
@@ -483,7 +489,9 @@ export default function CohortMemberList({ footerLinks, appName }) {
                   }
                 }}
               >
-                {t("MARK_ATTENDANCE")}
+                {attendanceStatusData
+                  ? t("UPDATE_ATTENDANCE")
+                  : t("MARK_ATTENDANCE")}
               </Button>
             </Button.Group>
           </VStack>
@@ -496,11 +504,11 @@ export default function CohortMemberList({ footerLinks, appName }) {
         }}
         title={"Message"}
         message={modalMsg}
-        description={"You have successfully marked student(s) attendance for the day."}
-        clickOk={() => {
-		  setShowModal(false);
-		}}
-		showCancel={false}
+        description={
+          "You have successfully marked student(s) attendance for the day."
+        }
+        clickOk={handleOk}
+        showCancel={false}
       />
     </Layout>
   );

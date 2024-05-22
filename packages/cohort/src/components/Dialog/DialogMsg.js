@@ -31,8 +31,8 @@ export default function DialogMsg(props) {
               />{" "}
             </Box>
 
-            <Box style={{ alignItems: "center", color: "red" }}>
-              {props.message}
+            <Box style={{ alignItems: "center", color: "green" }}>
+              <span>{props.message}</span>
             </Box>
             <Box style={{ marginTop: "15px", alignItems: "center" }}>
               <span>{props.description}</span>

@@ -29,7 +29,7 @@ const PressableNew = ({ route, children, ...prop }) => {
   )
 }
 
-function Widget({ data, title, onpress }) {
+function Widget({ data, title, onpress, disabled }) {
   const newData = chunk(data ? data : [], 2)
   const rotate = {
     bottom: '-25px',
@@ -43,8 +43,7 @@ function Widget({ data, title, onpress }) {
   }
   return (
     <Stack space={2}>
-      <H3 pb='4px'>{title}</H3>
-      <TouchableOpacity {...(onpress && { onPress: onpress })}>
+      <TouchableOpacity {...(onpress && { onPress: onpress })} disabled={disabled}>
         <VStack space={3}>
           {newData.map((subData, index) => (
             <HStack

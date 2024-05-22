@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   Pressable,
@@ -46,7 +46,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   const [userId, setUserId] = React.useState();
   const { cohortId } = useParams();
   const [attendanceStatusData, setAttendanceStatusData] = React.useState();
-
+  let isDisabled = false;
   let captureLocation = "true";
   let cameraUrl = "";
   let avatarUrlObject = cameraUrl
@@ -58,36 +58,28 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
     : {};
   const widgetData = [
     {
-      data: [
-        {
-          title: t("Mark My Attendance"),
-          //link: "/classes",
-          icon: "ParentLineIcon",
-          _box: {
-            bg: "widgetColor.500",
-          },
-          _icon: {
-            color: "iconColor.500",
-          },
-          _text: { color: "warmGray.700" },
-        },
-      ],
+      title: t("Mark My Attendance"),
+      //link: "/classes",
+      icon: "ParentLineIcon",
+      _box: {
+        bg: "widgetColor.500",
+      },
+      _icon: {
+        color: "iconColor.500",
+      },
+      _text: { color: "warmGray.700" },
     },
     {
-      data: [
-        {
-          title: t("Mark Student Attendance"),
-          link: `/cohorts/${cohortId}/students`,
-          icon: "ParentLineIcon",
-          _box: {
-            bg: "widgetColor.600",
-          },
-          _icon: {
-            color: "iconColor.600",
-          },
-          _text: { color: "warmGray.700" },
-        },
-      ],
+      title: t("Mark Student Attendance"),
+      link: `/cohorts/${cohortId}/students`,
+      icon: "ParentLineIcon",
+      _box: {
+        bg: "widgetColor.600",
+      },
+      _icon: {
+        color: "iconColor.600",
+      },
+      _text: { color: "warmGray.700" },
     },
     // commented the below code (not required for OBLF for now)
     // {
@@ -232,6 +224,51 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
     capture("PAGE");
   }, [cohortId]);
 
+  /* Start - Check for allowing to self mark attendance on the basis of slot allowed to mark the attendance against the respective cohort & also check for late mark attendance */
+  // Convert self_attendance_start to use a colon if it uses a dot
+  if (cohortDetails?.params != undefined) {
+    let selfAttendanceStart =
+      cohortDetails?.params?.self_attendace_start.replace(".", ":");
+    // Get current time
+    const currentTime = new Date();
+    const currentHours = currentTime.getHours().toString().padStart(2, "0");
+    const currentMinutes = currentTime.getMinutes().toString().padStart(2, "0");
+    const formattedCurrentTime = `${currentHours}:${currentMinutes}`;
+
+    // Calculate 5 minutes before self_attendance_start
+    const [startHours, startMinutes] = selfAttendanceStart
+      ?.split(":")
+      .map(Number);
+    let fiveMinutesBeforeHours = startHours;
+    let fiveMinutesBeforeMinutes = startMinutes - 5;
+    if (fiveMinutesBeforeMinutes < 0) {
+      fiveMinutesBeforeHours -= 1;
+      fiveMinutesBeforeMinutes += 60;
+    }
+    const fiveMinutesBeforeStart = `${fiveMinutesBeforeHours
+      .toString()
+      .padStart(2, "0")}:${fiveMinutesBeforeMinutes
+      .toString()
+      .padStart(2, "0")}`;
+
+    // Check if current time is within the attendance window or 5 minutes before start
+    const isWithinAttendanceWindow =
+      (formattedCurrentTime >= fiveMinutesBeforeStart &&
+        formattedCurrentTime < selfAttendanceStart) ||
+      (formattedCurrentTime >= selfAttendanceStart &&
+        formattedCurrentTime <= cohortDetails?.params?.self_attendace_end);
+
+    // Check if current time is past self_attendance_end and allow late marking is 1
+    const isLateMarkingAllowed =
+      formattedCurrentTime > cohortDetails?.params?.self_attendace_end &&
+      cohortDetails?.params?.allow_late_marking == "true";
+
+    // Determine if the widget should be disabled
+    isDisabled = !(isWithinAttendanceWindow || isLateMarkingAllowed);
+  }
+
+  /* End - Check for allowing to self mark attendance on the basis of slot allowed to mark the attendance against the respective cohort & also check for late mark attendance */
+
   if (loading) {
     return <Loading />;
   } else {
@@ -313,31 +350,36 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
           )}
           <VStack space={2}>
             {widgetData.map((item, index) => {
-              // Check if the title is "Mark My Attendance"
-              const isMarkMyAttendance =
-                item.data[0].title === t("Mark My Attendance");
+              const isMarkMyAttendance = item.title === t("Mark My Attendance");
 
-              // Modify the title based on the attendance status
-              let modifiedTitle = item?.data[0]?.title;
+              let modifiedTitle = item?.title;
               if (
                 isMarkMyAttendance &&
                 attendanceStatusData?.data[0]?.attendance
               ) {
                 modifiedTitle += `                           - ${attendanceStatusData?.data[0]?.attendance}`;
               }
-
-              // Assign onPress handler only to "Mark My Attendance" widget
               return (
                 <Widget
                   {...item}
                   key={index}
                   data={[
                     {
-                      ...item.data[0],
+                      ...item,
                       title: modifiedTitle, // Updated title
+                      _box: {
+                        bg:
+                          item?.title === "Mark My Attendance" &&
+                          isDisabled === true
+                            ? "#f2f2f2"
+                            : item?.title !== "Mark My Attendance"
+                            ? "widgetColor.600"
+                            : "widgetColor.500",
+                      },
                     },
                   ]}
                   {...(isMarkMyAttendance && { onpress: handleOnPress })} // Fixed typo: 'onpress' to 'onPress'
+                  disabled={isDisabled}
                 />
               );
             })}
