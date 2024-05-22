@@ -47,6 +47,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   const { cohortId } = useParams();
   const [attendanceStatusData, setAttendanceStatusData] = React.useState();
   let isDisabled = false;
+  let scope = "self";
   let captureLocation = "true";
   let cameraUrl = "";
   let avatarUrlObject = cameraUrl
@@ -282,6 +283,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
           userId,
           setUserId,
           captureLocation, // parameter for captureLocation
+          scope,
         }}
       >
         <Layout
