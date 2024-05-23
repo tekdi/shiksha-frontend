@@ -122,7 +122,6 @@ export default function CohortList() {
             return {
               title:
                 (item?.parentName ? item?.parentName + ", " : "") +
-                " Level " +
                 (item?.name ? item?.name : "") +
                 (item?.section ? " • Sec " + item?.section : ""),
               //subTitle: t("CLASS_TEACHER"),
