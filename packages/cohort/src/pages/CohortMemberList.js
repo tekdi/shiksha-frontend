@@ -249,7 +249,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
       _header={{
         title: loading
           ? ""
-          : cohortParentDetails?.name + ", " + " Level " + cohortDetails?.name,
+          : cohortParentDetails?.name + ", " + cohortDetails?.name,
         subHeading: moment().format("hh:mm A"),
         iconComponent: (
           <Pressable>
@@ -387,12 +387,22 @@ export default function CohortMemberList({ footerLinks, appName }) {
                 >
                   <HStack justifyContent="space-between">
                     <VStack>
-                      <H4>{item?.userDetails?.name}</H4>
+                      <H4 mt={5}>{item?.userDetails?.name}</H4>
                     </VStack>
                     <HStack space={2}>
                       {attendanceRecord ? (
-                        <Button colorScheme="primary">
-                          {attendanceRecord.attendance}
+                        <Button colorScheme="primary" mt={5}>
+                          <div
+                            style={{
+                              color:
+                                attendanceRecord.attendance === "Present"
+                                  ? "green"
+                                  : "red",
+                              paddingRight: "26px",
+                            }}
+                          >
+                            {attendanceRecord.attendance}
+                          </div>
                         </Button>
                       ) : null}
 
