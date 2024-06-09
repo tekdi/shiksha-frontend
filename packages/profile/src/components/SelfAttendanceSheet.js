@@ -22,8 +22,13 @@ import {
   Pressable,
   Stack,
   VStack,
+  NativeBaseProvider,
+  Select,
+  CheckIcon,
+  Text,
 } from "native-base";
 import React, { useEffect } from "react";
+import DialogMsg from "../components/Dialog/DialogMsg";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import Camera from "./Camera";
@@ -137,6 +142,10 @@ export default function SelfAttendanceSheet({
   const [selfAttendance, setSelfAttendance] = React.useState({});
   const { cohortId } = useParams();
   const navigate = useNavigate();
+  const [showDialogModal, setShowDialogModal] = React.useState(false);
+  const [modalMsg, setModalMsg] = React.useState("");
+  const [selectedReason, setSelectedReason] = React.useState("");
+  const [error, setError] = React.useState("");
 
   const handleTelemetry = (newAttedance) => {
     const telemetryData = telemetryFactory.interact({
@@ -193,6 +202,7 @@ export default function SelfAttendanceSheet({
             id: newAttedance.id,
             attendance: newAttedance.attendance,
             remark: newAttedance.remark,
+            absentReason: newAttedance.absentReason,
             contextId: cohortId,
             scope: scope,
             contextType: "class",
@@ -216,6 +226,7 @@ export default function SelfAttendanceSheet({
               "contextId",
               "contextType",
               "scope",
+              "absentReason",
             ],
           }
         )
@@ -237,6 +248,7 @@ export default function SelfAttendanceSheet({
         studentId: userId || localStorage.getItem("id"),
         contextId: cohortId,
         scope: scope,
+        absentReason: newAttedance.absentReason,
         contextType: "class",
       };
       setSelfAttendance(newAttedance);
@@ -260,6 +272,7 @@ export default function SelfAttendanceSheet({
             "contextId",
             "contextType",
             "scope",
+            "absentReason",
           ],
           tenantid: process.env.REACT_APP_TENANT_ID,
         })
@@ -345,6 +358,20 @@ export default function SelfAttendanceSheet({
     };
   }, []);
 
+  const handleOk = (selfAttendance, selectedReason) => {
+    if (!selectedReason) {
+      setError("Please select a reason.");
+      return;
+    }
+    setError(""); // Clear any previous errors
+    const updatedAttendance = {
+      ...selfAttendance,
+      absentReason: selectedReason,
+    };
+    setShowDialogModal(false);
+    handleMarkAttendance(updatedAttendance);
+  };
+
   const handleGoBack = () => {
     setDone(false);
     setCameraModal(false);
@@ -357,10 +384,11 @@ export default function SelfAttendanceSheet({
   const setAttendanceMark = (e) => {
     if (selfAttendance.attendance == ABSENT) {
       setLocationModal(false);
-      setShowModal(true);
-      setDone(true);
       setCameraModal(false);
-      handleMarkAttendance(selfAttendance);
+      setModalMsg(
+        "Please select the reason for marking the attendance as absent:"
+      );
+      setShowDialogModal(true);
     } else if (
       selfAttendance.attendance == PRESENT &&
       selfAttendance.name === selfAttendance.remark
@@ -407,7 +435,85 @@ export default function SelfAttendanceSheet({
     }
     return data;
   };
+  if (showDialogModal == true) {
+    const absentReasonOptions = [
+      { label: "Illness", value: "Illness" },
+      { label: "Personal Leave", value: "Personal Leave" },
+      { label: "Vacation", value: "Vacation" },
+      { label: "Family Emergency", value: "Family Emergency" },
+      { label: "Medical Appointment", value: "Medical Appointment" },
+      { label: "Bereavement", value: "Bereavement" },
+      { label: "Jury Duty", value: "Jury Duty" },
+      { label: "Weather Conditions", value: "Weather Conditions" },
+      { label: "Transportation Issues", value: "Transportation Issues" },
+      { label: "Other", value: "Other" },
+    ];
 
+    return (
+      <>
+        <NativeBaseProvider>
+          {showDialogModal && (
+            <DialogMsg
+              modalShow={showDialogModal}
+              modalClose={() => {
+                setShowDialogModal(false);
+              }}
+              title={"Message"}
+              message={modalMsg}
+              description={
+                <>
+                  <Text>
+                    Please select the reason for marking the attendance as
+                    absent:
+                  </Text>
+                  <Select
+                    selectedValue={selectedReason}
+                    minWidth={200}
+                    accessibilityLabel="Select a reason"
+                    placeholder="Select a reason"
+                    _selectedItem={{
+                      bg: "teal.600",
+                      endIcon: <CheckIcon size="5" />,
+                    }}
+                    mt={1}
+                    mb={3}
+                    _popover={{
+                      transform: [{ translateX: -10 }], // Adjust the value (-10) to set the amount of padding
+                      alignItems: "flex-start",
+                    }}
+                    onValueChange={(value) => {
+                      setSelectedReason(value);
+                      if (value) {
+                        setError("");
+                      } else {
+                        setError("Please select a reason.");
+                      }
+                    }}
+                    labelStyle={{ paddingLeft: 10 }} // Apply padding here
+                  >
+                    {absentReasonOptions.map((option, index) => (
+                      <Select.Item
+                        key={index}
+                        label={option.label}
+                        value={option.value}
+                      />
+                    ))}
+                  </Select>
+                  {error && (
+                    <Text color="red.500" mt={2}>
+                      {error}
+                    </Text>
+                  )}
+                </>
+              }
+              clickOk={() => handleOk(selfAttendance, selectedReason)}
+              showCancel={true}
+            />
+          )}
+        </NativeBaseProvider>
+      </>
+    );
+  }
   if (showModal && config && config["captureSelfAttendace"] === "false") {
     return (
       <>
