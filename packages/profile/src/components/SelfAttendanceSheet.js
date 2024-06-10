@@ -437,16 +437,18 @@ export default function SelfAttendanceSheet({
   };
   if (showDialogModal == true) {
     const absentReasonOptions = [
-      { label: "Illness", value: "Illness" },
-      { label: "Personal Leave", value: "Personal Leave" },
-      { label: "Vacation", value: "Vacation" },
-      { label: "Family Emergency", value: "Family Emergency" },
-      { label: "Medical Appointment", value: "Medical Appointment" },
-      { label: "Bereavement", value: "Bereavement" },
-      { label: "Jury Duty", value: "Jury Duty" },
-      { label: "Weather Conditions", value: "Weather Conditions" },
-      { label: "Transportation Issues", value: "Transportation Issues" },
-      { label: "Other", value: "Other" },
+      { label: "Paid leave - Half day", value: "Paid leave - Half day" },
+      { label: "Paid leave - Full day", value: "Paid leave - Full day" },
+      { label: "Unpaid leave - Half day", value: "Unpaid leave - Half day" },
+      { label: "Unpaid leave - Full day", value: "Unpaid leave - Full day" },
+      {
+        label: "Menstrual leave - Half day",
+        value: "Menstrual leave - Half day",
+      },
+      {
+        label: "Menstrual leave - Full day",
+        value: "Menstrual leave - Full day",
+      },
     ];
 
     return (
