@@ -22,7 +22,8 @@ const interfaceData = {
   parentName: 'parentName',
   contextId: 'contextId',
   contextType: 'contextType',
-  scope: 'scope'
+  scope: 'scope',
+  absentReason: 'absentReason'
 }
 
 let only = Object.keys(interfaceData)
