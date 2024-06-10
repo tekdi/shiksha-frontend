@@ -11,7 +11,7 @@ import {
   Flex,
   Text,
 } from "native-base";
-import { TouchableOpacity, Modal, View } from "react-native";
+import { TouchableOpacity, Modal, View, TextInput } from "react-native";
 import { useTranslation } from "react-i18next";
 import { generatePath, useParams, useNavigate } from "react-router-dom";
 import {
@@ -46,6 +46,11 @@ export default function CohortMemberList({ footerLinks, appName }) {
     records: [],
   });
   const [checkedAllAs, setcheckedAllAs] = React.useState(true);
+
+  // State variables for search text and filtered members
+  const [searchText, setSearchText] = useState("");
+  const [filteredMembers, setFilteredMembers] = useState([]);
+
   const navigate = useNavigate();
   let cameraUrl = "";
   let avatarUrlObject = cameraUrl
@@ -244,6 +249,24 @@ export default function CohortMemberList({ footerLinks, appName }) {
     getData();
   }, [teacherId]);
 
+  // Function to handle search text change
+  const handleSearch = (text) => {
+    setSearchText(text);
+  };
+
+  // Function to clear search text
+  const handleClearSearch = () => {
+    setSearchText("");
+  };
+
+  // Effect hook to filter members based on search text
+  useEffect(() => {
+    const filtered = members.filter((member) =>
+      member.userDetails.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredMembers(filtered);
+  }, [searchText, members]);
+
   return (
     <Layout
       _header={{
@@ -315,196 +338,260 @@ export default function CohortMemberList({ footerLinks, appName }) {
               </View>
             </View>
           </Modal>
-          <VStack space={2}>
-            <HStack
-              px={4}
-              justifyContent="space-between"
-              bg={colors?.lightGray6}
-              p={2}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              width: "100%",
+              marginBottom: "25px",
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                paddingHorizontal: 10,
+                width: "300px",
+              }}
             >
-              <Flex mt={5}>
-                <Text>Mark All As</Text>
-              </Flex>
-              <HStack w={130} justifyContent="space-between">
-                <Flex>
-                  <TouchableOpacity>
-                    <IconByName
-                      name="CheckboxCircleLineIcon"
-                      color={
-                        checkedAllAs == "Present" ? "profile.present" : "gray"
-                      }
-                      _icon={{
-                        size: "25px",
-                      }}
-                      onPress={handleSelectAllPresent}
-                    />
-                  </TouchableOpacity>
-                  <Text textAlign={"center"}>Present</Text>
-                </Flex>
-                <Flex>
-                  <TouchableOpacity>
-                    <IconByName
-                      name="CloseCircleLineIcon"
-                      color={
-                        checkedAllAs == "Absent" ? "profile.absent" : "gray"
-                      }
-                      _icon={{
-                        size: "25px",
-                      }}
-                      onPress={handleSelectAllAbsent}
-                    />
-                  </TouchableOpacity>
-                  <Text textAlign={"center"}>Absent</Text>
-                </Flex>
-              </HStack>
-            </HStack>
-            {members.map((item, index) => {
-              let attendanceRecord = attendanceStatusData?.find(
-                (record) => record?.userId === item?.userId
-              );
-              let changedRecord = selectedAttendance?.records?.find(
-                (record) => record?.userId === item?.userId
-              );
-              let memberAttendance = "";
-              if (changedRecord && changedRecord?.userId) {
-                memberAttendance = changedRecord?.attendance;
-              } else {
-                memberAttendance = attendanceRecord?.attendance;
-              }
-
-              return (
-                <Box
-                  p="2"
-                  m="2"
-                  rounded={"lg"}
-                  key={index}
-                  _text={{
-                    fontSize: "md",
-                    fontWeight: "medium",
-                    color: "black",
+              <TextInput
+                style={{
+                  flex: 1,
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  padding: 8,
+                  borderRadius: 5,
+                }}
+                value={searchText}
+                onChangeText={handleSearch}
+                placeholder="Search student(s)"
+              />
+              {searchText !== "" && (
+                <IconByName
+                  name="DeleteBinFillIcon"
+                  color={"profile.absent"}
+                  _icon={{
+                    size: "25px",
                   }}
-                  shadow={2}
+                  onPress={handleClearSearch}
+                  style={{ backgroundColor: "transparent !important" }}
+                />
+              )}
+            </View>
+          </div>
+          {filteredMembers.length === 0 ? (
+            <Text
+              style={{
+                textAlign: "center",
+                color: "#ed4337",
+                marginTop: 20,
+                textTransform: "none",
+              }}
+            >
+              No result(s) found. Please modify your search term and try again.
+            </Text>
+          ) : (
+            <>
+              <VStack space={2}>
+                <HStack
+                  px={4}
+                  justifyContent="space-between"
+                  bg={colors?.lightGray6}
+                  p={2}
                 >
-                  <HStack justifyContent="space-between">
-                    <VStack>
-                      <H4 mt={5}>{item?.userDetails?.name}</H4>
-                    </VStack>
-                    <HStack space={2}>
-                      {attendanceRecord ? (
-                        <Button colorScheme="primary" mt={5}>
-                          <div
-                            style={{
-                              color:
-                                attendanceRecord.attendance === "Present"
-                                  ? "green"
-                                  : "red",
-                              paddingRight: "26px",
-                            }}
-                          >
-                            {attendanceRecord.attendance}
-                          </div>
-                        </Button>
-                      ) : null}
-
-                      <HStack w={130} justifyContent="space-between">
-                        <Flex>
-                          <TouchableOpacity>
-                            <IconByName
-                              name="CheckboxCircleLineIcon"
-                              color={
-                                memberAttendance === "Present"
-                                  ? "profile.present"
-                                  : "gray"
-                              }
-                              _icon={{
-                                size: "25px",
-                              }}
-                              onPress={() => {
-                                handleToggleAttendance(item.userId, "Present");
-                                // Update color status for Present icon only
-                                // based on the current selected status
-                                setSelectedAttendance((prevState) => ({
-                                  ...prevState,
-                                  type: "Present",
-                                }));
-                              }}
-                            />
-                          </TouchableOpacity>
-                          <Text textAlign={"center"}>Present</Text>
-                        </Flex>
-                        <Flex>
-                          <TouchableOpacity>
-                            <IconByName
-                              name="CloseCircleLineIcon"
-                              color={
-                                memberAttendance === "Absent"
-                                  ? "profile.absent"
-                                  : "gray"
-                              }
-                              _icon={{
-                                size: "25px",
-                              }}
-                              onPress={() => {
-                                handleToggleAttendance(item.userId, "Absent");
-                                // Update color status for Absent icon only
-                                // based on the current selected status
-                                setSelectedAttendance((prevState) => ({
-                                  ...prevState,
-                                  type: "Absent",
-                                }));
-                              }}
-                            />
-                          </TouchableOpacity>
-                          <Text textAlign={"center"}>Absent</Text>
-                        </Flex>
-                      </HStack>
-                    </HStack>
+                  <Flex mt={5}>
+                    <Text>Mark All As</Text>
+                  </Flex>
+                  <HStack w={130} justifyContent="space-between">
+                    <Flex>
+                      <TouchableOpacity>
+                        <IconByName
+                          name="CheckboxCircleLineIcon"
+                          color={
+                            checkedAllAs == "Present"
+                              ? "profile.present"
+                              : "gray"
+                          }
+                          _icon={{
+                            size: "25px",
+                          }}
+                          onPress={handleSelectAllPresent}
+                        />
+                      </TouchableOpacity>
+                      <Text textAlign={"center"}>Present</Text>
+                    </Flex>
+                    <Flex>
+                      <TouchableOpacity>
+                        <IconByName
+                          name="CloseCircleLineIcon"
+                          color={
+                            checkedAllAs == "Absent" ? "profile.absent" : "gray"
+                          }
+                          _icon={{
+                            size: "25px",
+                          }}
+                          onPress={handleSelectAllAbsent}
+                        />
+                      </TouchableOpacity>
+                      <Text textAlign={"center"}>Absent</Text>
+                    </Flex>
                   </HStack>
-                </Box>
-              );
-            })}
-            {/* Clear and Finish buttons */}
-            <Button.Group space={2}>
-              <Button
-                flex={1}
-                variant="outline"
-                onPress={(e) => {
-                  navigate(`/cohorts/${cohortId}`);
-                }}
-              >
-                {t("CANCEL")}
-              </Button>
-              <Button
-                flex={1}
-                _text={{ color: "profile.white" }}
-                onPress={async () => {
-                  if (
-                    !selectedAttendance?.records ||
-                    selectedAttendance.records.length === 0
-                  ) {
-                    // If no records are selected, show the modal alert
-                    toggleModal();
+                </HStack>
+                {filteredMembers.map((item, index) => {
+                  let attendanceRecord = attendanceStatusData?.find(
+                    (record) => record?.userId === item?.userId
+                  );
+                  let changedRecord = selectedAttendance?.records?.find(
+                    (record) => record?.userId === item?.userId
+                  );
+                  let memberAttendance = "";
+                  if (changedRecord && changedRecord?.userId) {
+                    memberAttendance = changedRecord?.attendance;
                   } else {
-                    // If records are selected, proceed with marking attendance
-                    const result = await attendanceRegistryService.multiple(
-                      selectedAttendance.records,
-                      {
-                        tenantid: process.env.REACT_APP_TENANT_ID,
-                      }
-                    );
-                    if (result?.data?.statusCode === 200) {
-                      setModalMsg("Attendance marked successfully");
-                      setShowModal(true);
-                    }
+                    memberAttendance = attendanceRecord?.attendance;
                   }
-                }}
-              >
-                {attendanceStatusData
-                  ? t("UPDATE_ATTENDANCE")
-                  : t("MARK_ATTENDANCE")}
-              </Button>
-            </Button.Group>
-          </VStack>
+
+                  return (
+                    <Box
+                      p="2"
+                      m="2"
+                      rounded={"lg"}
+                      key={index}
+                      _text={{
+                        fontSize: "md",
+                        fontWeight: "medium",
+                        color: "black",
+                      }}
+                      shadow={2}
+                    >
+                      <HStack justifyContent="space-between">
+                        <VStack>
+                          <H4 mt={5}>{item?.userDetails?.name}</H4>
+                        </VStack>
+                        <HStack space={2}>
+                          {attendanceRecord ? (
+                            <Button colorScheme="primary" mt={5}>
+                              <div
+                                style={{
+                                  color:
+                                    attendanceRecord.attendance === "Present"
+                                      ? "green"
+                                      : "red",
+                                  paddingRight: "26px",
+                                }}
+                              >
+                                {attendanceRecord.attendance}
+                              </div>
+                            </Button>
+                          ) : null}
+
+                          <HStack w={130} justifyContent="space-between">
+                            <Flex>
+                              <TouchableOpacity>
+                                <IconByName
+                                  name="CheckboxCircleLineIcon"
+                                  color={
+                                    memberAttendance === "Present"
+                                      ? "profile.present"
+                                      : "gray"
+                                  }
+                                  _icon={{
+                                    size: "25px",
+                                  }}
+                                  onPress={() => {
+                                    handleToggleAttendance(
+                                      item.userId,
+                                      "Present"
+                                    );
+                                    // Update color status for Present icon only
+                                    // based on the current selected status
+                                    setSelectedAttendance((prevState) => ({
+                                      ...prevState,
+                                      type: "Present",
+                                    }));
+                                  }}
+                                />
+                              </TouchableOpacity>
+                              <Text textAlign={"center"}>Present</Text>
+                            </Flex>
+                            <Flex>
+                              <TouchableOpacity>
+                                <IconByName
+                                  name="CloseCircleLineIcon"
+                                  color={
+                                    memberAttendance === "Absent"
+                                      ? "profile.absent"
+                                      : "gray"
+                                  }
+                                  _icon={{
+                                    size: "25px",
+                                  }}
+                                  onPress={() => {
+                                    handleToggleAttendance(
+                                      item.userId,
+                                      "Absent"
+                                    );
+                                    // Update color status for Absent icon only
+                                    // based on the current selected status
+                                    setSelectedAttendance((prevState) => ({
+                                      ...prevState,
+                                      type: "Absent",
+                                    }));
+                                  }}
+                                />
+                              </TouchableOpacity>
+                              <Text textAlign={"center"}>Absent</Text>
+                            </Flex>
+                          </HStack>
+                        </HStack>
+                      </HStack>
+                    </Box>
+                  );
+                })}
+              </VStack>
+              {/* Clear and Finish buttons */}
+              <Button.Group space={2}>
+                <Button
+                  flex={1}
+                  variant="outline"
+                  onPress={(e) => {
+                    navigate(`/cohorts/${cohortId}`);
+                  }}
+                >
+                  {t("CANCEL")}
+                </Button>
+                <Button
+                  flex={1}
+                  _text={{ color: "profile.white" }}
+                  onPress={async () => {
+                    if (
+                      !selectedAttendance?.records ||
+                      selectedAttendance.records.length === 0
+                    ) {
+                      // If no records are selected, show the modal alert
+                      toggleModal();
+                    } else {
+                      // If records are selected, proceed with marking attendance
+                      const result = await attendanceRegistryService.multiple(
+                        selectedAttendance.records,
+                        {
+                          tenantid: process.env.REACT_APP_TENANT_ID,
+                        }
+                      );
+                      if (result?.data?.statusCode === 200) {
+                        setModalMsg("Attendance marked successfully");
+                        setShowModal(true);
+                      }
+                    }
+                  }}
+                >
+                  {attendanceStatusData
+                    ? t("UPDATE_ATTENDANCE")
+                    : t("MARK_ATTENDANCE")}
+                </Button>
+              </Button.Group>
+            </>
+          )}
         </Box>
       )}
       <DialogMsg
