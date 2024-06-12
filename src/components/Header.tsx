@@ -114,6 +114,17 @@ const Header: React.FC = () => {
     setLogout(true);
   };
 
+  const getMessage = () => {
+    if (logout) return 'Are you sure you want to Logout?';
+    return '';
+  };
+
+  const handleAction = () => {
+    if (logout) {
+      handleLogoutClick();
+    }
+  };
+
   return (
     <Box sx={{ marginBottom: '4rem' }}>
       <Box
@@ -215,6 +226,8 @@ const Header: React.FC = () => {
             logout={logout}
             handleLogoutClick={handleLogoutClick}
             setLogout={setLogout}
+            message={getMessage()}
+            handleAction={handleAction}
           />
         </Stack>
       </Box>

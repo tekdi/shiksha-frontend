@@ -315,6 +315,22 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
     setState({ ...state, openModal: false });
   };
 
+  const getMessage = () => {
+    if (updateAttendance)
+      return 'Are you sure you want to update this attendance?';
+    if (confirmation) return 'Are you sure you want to close?';
+    return '';
+  };
+
+  const handleAction = () => {
+    if (updateAttendance) {
+      handleSave();
+    } else if (confirmation) {
+      onClose();
+    }
+    onClose();
+  };
+
   return (
     <Box>
       <Modal
@@ -376,6 +392,8 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                     onClose={onClose}
                     confirmation={confirmation}
                     setConfirmation={setConfirmation}
+                    message={getMessage()}
+                    handleAction={handleAction}
                   />
                 </Box>
                 <Box>

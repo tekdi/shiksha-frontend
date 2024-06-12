@@ -54,7 +54,9 @@
     "FROM_TO_DATE": "पासून - पर्यंत तारीख",
     "REMOVE": "काढून टाका",
     "MARK_DROP_OUT": "ड्रॉप आउट म्हणून चिन्हांकित करा",
-    "SOMETHING_WENT_WRONG": "काहीतरी चूक झाली"
+    "SOMETHING_WENT_WRONG": "काहीतरी चूक झाली",
+    "NO_GO_BACK":"नाही, परत जा",
+    "YES":"होय"
   },
   "LOGIN_PAGE": {
     "USERNAME": "वापरकर्तानाव",

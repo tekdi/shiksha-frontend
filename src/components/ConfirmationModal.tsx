@@ -5,29 +5,29 @@ import Button from '@mui/material/Button';
 import { Divider } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'next-i18next';
 
 interface ConfirmationModalProps {
   updateAttendance: boolean;
   setUpdateAttendance: React.Dispatch<React.SetStateAction<boolean>>;
-  handleSave: () => void;
-  onClose: () => void;
   confirmation: boolean;
   setConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
   logout: boolean;
   handleLogoutClick: () => void;
   setLogout: React.Dispatch<React.SetStateAction<boolean>>;
+  message: string;
+  handleAction: () => void;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   updateAttendance,
   setUpdateAttendance,
-  handleSave,
-  onClose,
   confirmation,
   setConfirmation,
   logout,
-  handleLogoutClick,
   setLogout,
+  message,
+  handleAction,
 }) => {
   const theme = useTheme();
 
@@ -44,6 +44,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       width: '350px',
     },
   };
+  const { t } = useTranslation();
 
   const handleClose = () => {
     if (setUpdateAttendance) {
@@ -66,10 +67,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     >
       <Box sx={style}>
         <Box sx={{ p: 3 }} id="confirmation-modal-title">
-          {updateAttendance &&
-            'Are you sure you want to update this attendance?'}
-          {confirmation && 'Are you sure you want to close?'}
-          {logout && 'Are you sure you want to Logout?'}
+          {message}
         </Box>
         <Divider />
         <Box
@@ -94,7 +92,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             variant="outlined"
             onClick={handleClose}
           >
-            No, go back
+            {t('COMMON.NO_GO_BACK')}
           </Button>
           <Button
             sx={{
@@ -106,13 +104,11 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             variant="contained"
             color="primary"
             onClick={() => {
-              if (updateAttendance) handleSave();
-              if (confirmation) onClose();
-              if (logout) handleLogoutClick();
+              handleAction();
               handleClose();
             }}
           >
-            Yes
+            {t('COMMON.YES')}
           </Button>
         </Box>
       </Box>
