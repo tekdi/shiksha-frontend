@@ -321,7 +321,7 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
-        onClose={onClose}
+        // onClose={onClose}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
