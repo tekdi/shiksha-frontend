@@ -42,13 +42,13 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
   const { t } = useTranslation();
   const theme = useTheme<any>();
 
-  const [open1, setOpen1] = React.useState(false);
-  const [open2, setOpen2] = React.useState(false);
+  const [updateAttendance, setUpdateAttendance] = React.useState(false);
+  const [confirmation, setConfirmation] = React.useState(false);
   const handleOpen1 = () => {
-    setOpen1(true);
+    setUpdateAttendance(true);
   };
   const handleOpen2 = () => {
-    setOpen2(true);
+    setConfirmation(true);
   };
   const [loading, setLoading] = React.useState(false);
   //   const [open, setOpen] = React.useState(false);
@@ -370,12 +370,12 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                     {getDayMonthYearFormat(shortDateFormat(selectedDate))}
                   </Typography>
                   <ConfirmationModal
-                    open1={open1}
-                    setOpen1={setOpen1}
+                    updateAttendance={updateAttendance}
+                    setUpdateAttendance={setUpdateAttendance}
                     handleSave={handleSave}
                     onClose={onClose}
-                    open2={open2}
-                    setOpen2={setOpen2}
+                    confirmation={confirmation}
+                    setConfirmation={setConfirmation}
                   />
                 </Box>
                 <Box>

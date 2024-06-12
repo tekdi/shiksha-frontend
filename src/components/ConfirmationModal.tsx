@@ -7,24 +7,24 @@ import Modal from '@mui/material/Modal';
 import { useTheme } from '@mui/material/styles';
 
 interface ConfirmationModalProps {
-  open1: boolean;
-  setOpen1: React.Dispatch<React.SetStateAction<boolean>>;
+  updateAttendance: boolean;
+  setUpdateAttendance: React.Dispatch<React.SetStateAction<boolean>>;
   handleSave: () => void;
   onClose: () => void;
-  open2: boolean;
-  setOpen2: React.Dispatch<React.SetStateAction<boolean>>;
+  confirmation: boolean;
+  setConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
   logout: boolean;
   handleLogoutClick: () => void;
   setLogout: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
-  open1,
-  setOpen1,
+  updateAttendance,
+  setUpdateAttendance,
   handleSave,
   onClose,
-  open2,
-  setOpen2,
+  confirmation,
+  setConfirmation,
   logout,
   handleLogoutClick,
   setLogout,
@@ -46,11 +46,11 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   };
 
   const handleClose = () => {
-    if (setOpen1) {
-      setOpen1(false);
+    if (setUpdateAttendance) {
+      setUpdateAttendance(false);
     }
-    if (setOpen2) {
-      setOpen2(false);
+    if (setConfirmation) {
+      setConfirmation(false);
     }
     if (setLogout) {
       setLogout(false);
@@ -59,15 +59,16 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
 
   return (
     <Modal
-      open={open1 || open2 || logout}
+      open={updateAttendance || confirmation || logout}
       onClose={handleClose}
       aria-labelledby="confirmation-modal-title"
       aria-describedby="confirmation-modal-description"
     >
       <Box sx={style}>
         <Box sx={{ p: 3 }} id="confirmation-modal-title">
-          {open1 && 'Are you sure you want to update this attendance?'}
-          {open2 && 'Are you sure you want to close?'}
+          {updateAttendance &&
+            'Are you sure you want to update this attendance?'}
+          {confirmation && 'Are you sure you want to close?'}
           {logout && 'Are you sure you want to Logout?'}
         </Box>
         <Divider />
@@ -75,7 +76,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            gap: '20px',
+            gap: '18px',
             p: 2,
           }}
         >
@@ -85,6 +86,10 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
               color: theme.palette.secondary.main,
               fontSize: '14px',
               fontWeight: '500',
+              '&:hover': {
+                border: 'none',
+                backgroundColor: 'transparent',
+              },
             }}
             variant="outlined"
             onClick={handleClose}
@@ -101,8 +106,8 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             variant="contained"
             color="primary"
             onClick={() => {
-              if (open1) handleSave();
-              if (open2) onClose();
+              if (updateAttendance) handleSave();
+              if (confirmation) onClose();
               if (logout) handleLogoutClick();
               handleClose();
             }}
