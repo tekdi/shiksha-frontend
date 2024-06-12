@@ -15,6 +15,7 @@ import { AttendanceStatusListProps } from '../utils/Interfaces';
 import AttendanceStatusListView from './AttendanceStatusListView';
 import Backdrop from '@mui/material/Backdrop';
 import CloseIcon from '@mui/icons-material/Close';
+import ConfirmationModal from './ConfirmationModal';
 import Loader from './Loader';
 import { getMyCohortMemberList } from '@/services/MyClassDetailsService';
 import { useTheme } from '@mui/material/styles';
@@ -40,6 +41,15 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
 }) => {
   const { t } = useTranslation();
   const theme = useTheme<any>();
+
+  const [open1, setOpen1] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
+  const handleOpen1 = () => {
+    setOpen1(true);
+  };
+  const handleOpen2 = () => {
+    setOpen2(true);
+  };
   const [loading, setLoading] = React.useState(false);
   //   const [open, setOpen] = React.useState(false);
   const [showUpdateButton, setShowUpdateButton] = React.useState(false);
@@ -359,13 +369,22 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                   >
                     {getDayMonthYearFormat(shortDateFormat(selectedDate))}
                   </Typography>
+                  <ConfirmationModal
+                    open1={open1}
+                    setOpen1={setOpen1}
+                    handleSave={handleSave}
+                    onClose={onClose}
+                    open2={open2}
+                    setOpen2={setOpen2}
+                  />
                 </Box>
-                <Box onClick={() => onClose()}>
+                <Box>
                   <CloseIcon
                     sx={{
                       cursor: 'pointer',
                       color: theme.palette.warning['A200'],
                     }}
+                    onClick={handleOpen2}
                   />
                 </Box>
               </Box>
@@ -487,7 +506,7 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                         alignItems: 'center',
                       }}
                       disabled={isAllAttendanceMarked ? false : true}
-                      onClick={handleSave}
+                      onClick={handleOpen1}
                     >
                       {presentCount == 0 && absentCount == 0
                         ? t('COMMON.MARK')
