@@ -56,8 +56,7 @@
     "MARK_DROP_OUT": "Mark as Drop Out",
     "SOMETHING_WENT_WRONG": "Something went wrong",
     "NO_GO_BACK":"No, go back",
-    "YES":"Yes",
-    "UPDATE_THIS_ATTENDANCE":"Are you sure you want to update this attendance?"
+    "YES":"Yes"
   },
   "LOGIN_PAGE": {
     "USERNAME": "Username",
