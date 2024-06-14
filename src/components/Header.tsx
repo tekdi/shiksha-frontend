@@ -8,69 +8,86 @@ import { usePathname, useRouter } from 'next/navigation';
 import ConfirmationModal from './ConfirmationModal';
 import Image from 'next/image';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import MenuDrawer from './MenuDrawer';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import accountIcon from './../assets/images/account.svg';
 import dynamic from 'next/dynamic';
+import { logEvent } from '@/utils/googleAnalytics';
 import logoLight from '../../public/images/logo-light.png';
 import menuIcon from '../assets/images/menuIcon.svg';
 import { useTranslation } from 'next-i18next';
-
-const MenuDrawer = dynamic(() => import('./MenuDrawer'), {
-  ssr: false,
-});
-
-const StyledMenu = styled((props: MenuProps) => (
-  <Menu
-    elevation={0}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'right',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}
-    {...props}
-  />
-))(({ theme }) => ({
-  '& .MuiPaper-root': {
-    borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 180,
-    color:
-      theme.palette.mode === 'light'
-        ? 'rgb(55, 65, 81)'
-        : theme.palette.grey[300],
-    boxShadow: `
-      rgb(255, 255, 255) 0px 0px 0px 0px,
-      rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,
-      rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
-      rgba(0, 0, 0, 0.05) 0px 4px 6px -2px
-    `,
-    '& .MuiMenu-list': {
-      padding: '4px 0',
-    },
-    '& .MuiMenuItem-root': {
-      '& .MuiSvgIcon-root': {
-        fontSize: 18,
-        color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
-      },
-      '&:active': {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          theme.palette.action.selectedOpacity
-        ),
-      },
-    },
-  },
-}));
 
 const Header: React.FC = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const pathname = usePathname();
-  const theme = useTheme();
+  const theme = useTheme<any>();
+
+  const StyledMenu = styled((props: MenuProps) => (
+    <Menu
+      elevation={0}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      {...props}
+    />
+  ))(({ theme }) => ({
+    '& .MuiPaper-root': {
+      borderRadius: 6,
+      marginTop: theme.spacing(1),
+      minWidth: 180,
+      color:
+        theme.palette.mode === 'light'
+          ? 'rgb(55, 65, 81)'
+          : theme.palette.grey[300],
+      boxShadow: `
+      rgb(255, 255, 255) 0px 0px 0px 0px,
+      rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,
+      rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+      rgba(0, 0, 0, 0.05) 0px 4px 6px -2px
+    `,
+      '& .MuiMenu-list': {
+        padding: '4px 0',
+      },
+      '& .MuiMenuItem-root': {
+        '& .MuiSvgIcon-root': {
+          fontSize: 18,
+          color: theme.palette.text.secondary,
+          marginRight: theme.spacing(1.5),
+        },
+        '&:active': {
+          backgroundColor: alpha(
+            theme.palette.primary.main,
+            theme.palette.action.selectedOpacity
+          ),
+        },
+      },
+    },
+  }));
+
+  const handleProfileClick = () => {
+    if (pathname !== '/profile') {
+      router.push('/profile');
+      logEvent({
+        action: 'my-profile-clicked-header',
+        category: 'Dashboard',
+        label: 'Profile Clicked',
+      });
+    }
+  };
+  const handleLogoutClick = () => {
+    router.replace('/logout');
+    logEvent({
+      action: 'logout-clicked-header',
+      category: 'Dashboard',
+      label: 'Logout Clicked',
+    });
+  };
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -85,18 +102,6 @@ const Header: React.FC = () => {
       }
     }
   }, []);
-
-  const handleProfileClick = () => {
-    if (pathname !== '/profile') {
-      router.push('/profile');
-    }
-    handleClose();
-  };
-
-  const handleLogoutClick = (): void => {
-    router.replace('/logout');
-    handleClose();
-  };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
