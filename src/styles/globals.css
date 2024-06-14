@@ -40,6 +40,9 @@ body {
 .fs-22 {
   font-size: 22px !important;
 }
+.text-1E {
+  color: #1e1b16;
+}
 .text-4D {
   color: #4d4639;
 }
@@ -353,6 +356,9 @@ main {
 
 .linerGradient {
   background-image: var(--custom-gradient);
+}
+.p-10 {
+  padding: 10px;
 }
 .icon_holder svg {
   color: #1e1b16 !important;
