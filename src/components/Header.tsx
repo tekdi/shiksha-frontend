@@ -132,6 +132,13 @@ const Header: React.FC = () => {
     // setLogoutModal(false);
     setModalOpen(false);
   };
+  let hasSeenTutorial = false;
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const storedValue = localStorage.getItem('hasSeenTutorial');
+    if (storedValue !== null) {
+      hasSeenTutorial = storedValue === 'true'; // Convert string 'true' or 'false' to boolean
+    }
+  }
 
   return (
     <Box sx={{ marginBottom: '4rem' }}>
@@ -139,7 +146,7 @@ const Header: React.FC = () => {
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          position: 'fixed',
+          position: hasSeenTutorial ? 'fixed' : 'relative',
           top: '0px',
           zIndex: '999',
           width: '100%',

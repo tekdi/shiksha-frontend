@@ -17,7 +17,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
-import customTheme from '../styles/customStyles';
+import customTheme from '../styles/customTheme';
 import { telemetryFactory } from '../utils/telemetry';
 import { useRouter } from 'next/router';
 import { initGA, logPageView } from '../utils/googleAnalytics';
@@ -87,7 +87,6 @@ function App({ Component, pageProps }: AppProps) {
       telemetryFactory.impression(telemetryImpression);
 
       logPageView(url);
-      
     };
 
     // Log initial page load
@@ -125,7 +124,11 @@ function App({ Component, pageProps }: AppProps) {
         {/* <ModeToggle /> */}
         <Container maxWidth="md" style={{ padding: 0 }}>
           <Component {...pageProps} />
-          <ToastContainer position="bottom-left" autoClose={3000} stacked={false} />
+          <ToastContainer
+            position="bottom-left"
+            autoClose={3000}
+            stacked={false}
+          />
         </Container>
       </CssVarsProvider>
     </>
