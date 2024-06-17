@@ -9,29 +9,27 @@ import { useTranslation } from 'next-i18next';
 
 interface ConfirmationModalProps {
   updateAttendance: boolean;
-  setUpdateAttendance: React.Dispatch<React.SetStateAction<boolean>>;
   confirmation: boolean;
-  setConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
-  logout: boolean;
-  handleLogoutClick: () => void;
-  setLogout: React.Dispatch<React.SetStateAction<boolean>>;
+  logoutModal: boolean;
   message: string;
   handleAction: () => void;
-  PrimaryButtonName: string;
-  seconderyButtonName: string;
+  buttonNames: ButtonNames;
+  handleCloseModel: () => void;
+}
+
+interface ButtonNames {
+  primary: string;
+  secondary: string;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   updateAttendance,
-  setUpdateAttendance,
   confirmation,
-  setConfirmation,
-  logout,
-  setLogout,
+  logoutModal,
   message,
   handleAction,
-  PrimaryButtonName,
-  seconderyButtonName,
+  buttonNames,
+  handleCloseModel,
 }) => {
   const theme = useTheme();
 
@@ -50,22 +48,10 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   };
   const { t } = useTranslation();
 
-  const handleClose = () => {
-    if (setUpdateAttendance) {
-      setUpdateAttendance(false);
-    }
-    if (setConfirmation) {
-      setConfirmation(false);
-    }
-    if (setLogout) {
-      setLogout(false);
-    }
-  };
-
   return (
     <Modal
-      open={updateAttendance || confirmation || logout}
-      onClose={handleClose}
+      open={updateAttendance || confirmation || logoutModal}
+      onClose={handleCloseModel}
       aria-labelledby="confirmation-modal-title"
       aria-describedby="confirmation-modal-description"
     >
@@ -94,9 +80,9 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
               },
             }}
             variant="outlined"
-            onClick={handleClose}
+            onClick={handleCloseModel}
           >
-            {seconderyButtonName}
+            {buttonNames.secondary}
           </Button>
           <Button
             sx={{
@@ -109,10 +95,10 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             color="primary"
             onClick={() => {
               handleAction();
-              handleClose();
+              handleCloseModel();
             }}
           >
-            {PrimaryButtonName}
+            {buttonNames.primary}
           </Button>
         </Box>
       </Box>

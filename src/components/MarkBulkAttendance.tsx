@@ -326,6 +326,11 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
     onClose();
   };
 
+  const handleCloseModel = () => {
+    setUpdateAttendance(false);
+    setConfirmation(false);
+  };
+
   return (
     <Box>
       <Modal
@@ -382,13 +387,15 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                   </Typography>
                   <ConfirmationModal
                     updateAttendance={updateAttendance}
-                    setUpdateAttendance={setUpdateAttendance}
                     confirmation={confirmation}
                     setConfirmation={setConfirmation}
                     message={getMessage()}
                     handleAction={handleAction}
-                    PrimaryButtonName={'Yes'}
-                    seconderyButtonName={'No, go back'}
+                    handleCloseModel={handleCloseModel}
+                    buttonNames={{
+                      primary: 'Yes',
+                      secondary: 'No, go back',
+                    }}
                   />
                 </Box>
                 <Box>
