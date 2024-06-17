@@ -1,9 +1,18 @@
+import { Button, Typography } from '@mui/material';
+
+import AddIcon from '@mui/icons-material/Add';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Box from '@mui/material/Box';
+import CenterList from '@/components/CenterList';
 import Header from '@/components/Header';
+import KeyboardBackspaceOutlinedIcon from '@mui/icons-material/KeyboardBackspaceOutlined';
 import React from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import { logEvent } from '@/utils/googleAnalytics';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'next-i18next';
 
 const teacherCenterDetail = () => {
   const [value, setValue] = React.useState('one');
@@ -11,12 +20,53 @@ const teacherCenterDetail = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const handleBackEvent = () => {
+    window.history.back();
+    logEvent({
+      action: 'back-button-clicked-attendance-overview',
+      category: 'Attendance Overview Page',
+      label: 'Back Button Clicked',
+    });
+  };
+
+  const { t } = useTranslation();
+
+  const theme = useTheme<any>();
+
   return (
     <>
-      <Header />{' '}
+      <Header />
+      <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'left',
+            // alignItems: 'center',
+            color: '#4D4639',
+            padding: '15px 17px 5px',
+          }}
+          width={'100%'}
+          onClick={handleBackEvent}
+        >
+          <KeyboardBackspaceOutlinedIcon
+            cursor={'pointer'}
+            sx={{ color: theme.palette.warning['A200'], marginTop: '15px' }}
+          />
+          <Box m={'1rem 1rem 0.5rem'}>
+            <Typography textAlign={'left'} fontSize={'22px'}>
+              Khapari Dharmu
+            </Typography>
+            <Box>
+              <Typography textAlign={'left'} fontSize={'11px'} fontWeight={500}>
+                Chimur, Chandrapur
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
       <Box sx={{ width: '100%' }}>
         <Tabs
-          className="shreyas"
           value={value}
           onChange={handleChange}
           textColor="inherit" // Use "inherit" to apply custom color
@@ -24,14 +74,18 @@ const teacherCenterDetail = () => {
           sx={{
             fontSize: '14px',
             borderBottom: '1px solid #EBE1D4',
+
             '& .MuiTab-root': {
               color: '#4D4639',
+              padding: '0 20px',
             },
             '& .Mui-selected': {
               color: '#4D4639',
             },
             '& .MuiTabs-indicator': {
-              backgroundColor: '#FDBE16',
+              display: 'flex',
+              justifyContent: 'center',
+              backgroundColor: theme.palette.primary.main,
               borderRadius: '100px',
               height: '3px',
             },
@@ -40,12 +94,49 @@ const teacherCenterDetail = () => {
             },
           }}
         >
-          <Tab value="one" label="Item One" />
-          <Tab value="two" label="Item Two" />
-          <Tab value="three" label="Item Three" />
+          <Tab value="one" label="Center Sessions" />
+          <Tab value="two" label="Online Recordings" />
+          <Tab value="three" label="Learners List" />
         </Tabs>
       </Box>
-      <Box>{value === 'one' && <Box>sam</Box>}</Box>
+      <Box>
+        {value === 'one' && (
+          <>
+            <Box mt={3} px={'18px'}>
+              <Button
+                sx={{
+                  border: '1px solid #1E1B16',
+                  borderRadius: '100px',
+                  height: '40px',
+                  width: '126px',
+                }}
+                className="text-1E"
+                endIcon={<AddIcon />}
+              >
+                {t('COMMON.ADD_NEW')}
+              </Button>
+            </Box>
+            <Box
+              px={'18px'}
+              mt={2}
+              sx={{ display: 'flex', gap: '4px', alignItems: 'center' }}
+            >
+              <Box
+                sx={{ color: theme.palette.secondary.main }}
+                className="fs-14 fw-500"
+              >
+                {t('COMMON.REVIEW_ATTENDANCE')}
+              </Box>
+              <ArrowForwardIcon
+                sx={{ fontSize: '18px', color: theme.palette.secondary.main }}
+              />
+            </Box>
+            <Box>
+              <CenterList />
+            </Box>
+          </>
+        )}
+      </Box>
     </>
   );
 };

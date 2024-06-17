@@ -17,6 +17,8 @@ interface ConfirmationModalProps {
   setLogout: React.Dispatch<React.SetStateAction<boolean>>;
   message: string;
   handleAction: () => void;
+  PrimaryButtonName: string;
+  seconderyButtonName: string;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
@@ -28,6 +30,8 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   setLogout,
   message,
   handleAction,
+  PrimaryButtonName,
+  seconderyButtonName,
 }) => {
   const theme = useTheme();
 
@@ -92,7 +96,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             variant="outlined"
             onClick={handleClose}
           >
-            {t('COMMON.NO_GO_BACK')}
+            {seconderyButtonName}
           </Button>
           <Button
             sx={{
@@ -108,7 +112,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
               handleClose();
             }}
           >
-            {t('COMMON.YES')}
+            {PrimaryButtonName}
           </Button>
         </Box>
       </Box>

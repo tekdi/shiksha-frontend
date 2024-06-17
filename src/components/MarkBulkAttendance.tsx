@@ -1,6 +1,5 @@
 import { Box, Button, Fade, Modal, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
-import ToastMessage from '@/components/ToastMessage';
 import {
   attendanceStatusList,
   bulkAttendance,
@@ -17,10 +16,11 @@ import Backdrop from '@mui/material/Backdrop';
 import CloseIcon from '@mui/icons-material/Close';
 import ConfirmationModal from './ConfirmationModal';
 import Loader from './Loader';
+import ToastMessage from '@/components/ToastMessage';
 import { getMyCohortMemberList } from '@/services/MyClassDetailsService';
+import { showToastMessage } from './Toastify';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'next-i18next';
-import { showToastMessage } from './Toastify';
 
 interface MarkBulkAttendanceProps {
   open: boolean;
@@ -286,7 +286,7 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
             } else {
               onSaveSuccess(true);
             }
-            
+
             onClose();
           }
         } catch (error) {
@@ -381,12 +381,12 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                   <ConfirmationModal
                     updateAttendance={updateAttendance}
                     setUpdateAttendance={setUpdateAttendance}
-                    handleSave={handleSave}
-                    onClose={onClose}
                     confirmation={confirmation}
                     setConfirmation={setConfirmation}
                     message={getMessage()}
                     handleAction={handleAction}
+                    PrimaryButtonName={'Yes'}
+                    seconderyButtonName={'No, go back'}
                   />
                 </Box>
                 <Box>

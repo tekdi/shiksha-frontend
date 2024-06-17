@@ -233,6 +233,8 @@ const Header: React.FC = () => {
             setLogout={setLogout}
             message={getMessage()}
             handleAction={handleAction}
+            PrimaryButtonName={'Log Out'}
+            seconderyButtonName={'Cancel'}
           />
         </Stack>
       </Box>

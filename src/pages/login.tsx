@@ -10,7 +10,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import ReactGA from 'react-ga4';
 
 import Checkbox from '@mui/material/Checkbox';
 import CloseIcon from '@mui/icons-material/Close';
@@ -18,17 +17,18 @@ import Image from 'next/image';
 import Link from '@mui/material/Link';
 import Loader from '../components/Loader';
 import MenuItem from '@mui/material/MenuItem';
+import ReactGA from 'react-ga4';
 import ToastMessage from '@/components/ToastMessage';
 import appLogo from '../../public/images/appLogo.png';
 import config from '../../config.json';
 import { getUserId } from '../services/ProfileService';
+import { logEvent } from '@/utils/googleAnalytics';
 import { login } from '../services/LoginService';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { telemetryFactory } from '@/utils/telemetry';
 import { useRouter } from 'next/router';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'next-i18next';
-import { telemetryFactory } from '@/utils/telemetry';
-import { logEvent } from '@/utils/googleAnalytics';
 
 interface State extends SnackbarOrigin {
   openModal: boolean;
@@ -156,8 +156,6 @@ const LoginPage = () => {
             subtype: '',
             pageid: 'sign-in',
             uid: localStorage.getItem('userId') || 'Anonymous',
-          
-
           },
         };
         telemetryFactory.interact(telemetryInteract);

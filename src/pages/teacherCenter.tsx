@@ -38,13 +38,12 @@ const teacherCenter = () => {
             className="text-1E"
             endIcon={<AddIcon />}
           >
-            Add
+            {t('COMMON.ADD')}
           </Button>
           <Box sx={{ display: 'flex', gap: '5px' }}>
-            <Box>
-              <ErrorOutlineIcon style={{ fontSize: '15px' }} />
-            </Box>
-            <Box className="fs-12 fw-500 ">Add Centers to your view</Box>
+            <ErrorOutlineIcon style={{ fontSize: '15px' }} />
+
+            <Box className="fs-12 fw-500 ">{t('COMMON.ADD_CENTER')}</Box>
           </Box>
         </Box>
         <Box
