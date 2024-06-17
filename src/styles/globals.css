@@ -708,3 +708,6 @@ main {
 .modal-bottom div:nth-child(1) {
   position: unset !important;
 }
+.textCD {
+  color: #cdc5bd !important;
+}

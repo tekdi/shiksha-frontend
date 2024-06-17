@@ -55,8 +55,14 @@
     "REMOVE": "काढून टाका",
     "MARK_DROP_OUT": "ड्रॉप आउट म्हणून चिन्हांकित करा",
     "SOMETHING_WENT_WRONG": "काहीतरी चूक झाली",
-    "NO_GO_BACK":"नाही, परत जा",
-    "YES":"होय"
+    "NO_GO_BACK": "नाही, परत जा",
+    "YES": "होय",
+    "REVIEW_ATTENDANCE": "उपस्थिती पुनरावलोकन",
+    "ADD_NEW": "नवीन जोडा",
+    "ADD": "जोडा",
+    "ADD_CENTER": "तुमच्या दृश्यात केंद्रे जोडा",
+    "REMOVE_FROM_CENTER": "केंद्रातून काढून टाका",
+    "DROP_OUT": "गैरहजर"
   },
   "LOGIN_PAGE": {
     "USERNAME": "वापरकर्तानाव",

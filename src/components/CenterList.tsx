@@ -5,6 +5,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from 'react';
 import Woman2Icon from '@mui/icons-material/Woman2';
+import { useTheme } from '@mui/material/styles';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
@@ -26,6 +27,7 @@ const CenterList = () => {
 
       setState({ ...state, [anchor]: open });
     };
+  const theme = useTheme<any>();
 
   return (
     <>
@@ -41,10 +43,16 @@ const CenterList = () => {
         >
           <Box sx={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
             <Box className="box_shadow_center">
-              <Woman2Icon sx={{ fontSize: '24px', color: '#1F1B13' }} />
+              <Woman2Icon
+                sx={{ fontSize: '24px', color: theme.palette.warning['300'] }}
+              />
             </Box>
             <Box>
-              <Box sx={{ fontSize: '16px', color: '#1F1B13' }}>Aanya Gupta</Box>
+              <Box
+                sx={{ fontSize: '16px', color: theme.palette.warning['300'] }}
+              >
+                Aanya Gupta
+              </Box>
               <Box
                 sx={{
                   display: 'flex',
@@ -53,11 +61,18 @@ const CenterList = () => {
                   justifyContent: 'center',
                 }}
               >
-                <Box sx={{ fontSize: '12px', color: '#7C766F' }}>19 y/o</Box>
+                <Box
+                  sx={{ fontSize: '12px', color: theme.palette.warning['400'] }}
+                >
+                  19 y/o
+                </Box>
                 <FiberManualRecordIcon
-                  sx={{ fontSize: '9px', color: '#CDC5BD' }}
+                  sx={{ fontSize: '9px' }}
+                  className="textCD"
                 />
-                <Box sx={{ fontSize: '12px', color: '#7C766F' }}>
+                <Box
+                  sx={{ fontSize: '12px', color: theme.palette.warning['400'] }}
+                >
                   1102929282
                 </Box>
               </Box>
@@ -65,7 +80,7 @@ const CenterList = () => {
           </Box>
           <MoreVertIcon
             onClick={toggleDrawer('bottom', true)}
-            sx={{ fontSize: '24px', color: '#1F1B13' }}
+            sx={{ fontSize: '24px', color: theme.palette.warning['300'] }}
           />
         </Box>
       </Box>
@@ -82,10 +97,16 @@ const CenterList = () => {
         >
           <Box sx={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
             <Box className="box_shadow_center">
-              <Woman2Icon sx={{ fontSize: '24px', color: '#1F1B13' }} />
+              <Woman2Icon
+                sx={{ fontSize: '24px', color: theme.palette.warning['300'] }}
+              />
             </Box>
             <Box>
-              <Box sx={{ fontSize: '16px', color: '#1F1B13' }}>Aanya Gupta</Box>
+              <Box
+                sx={{ fontSize: '16px', color: theme.palette.warning['300'] }}
+              >
+                Aanya Gupta
+              </Box>
               <Box
                 sx={{
                   display: 'flex',
@@ -94,15 +115,20 @@ const CenterList = () => {
                   justifyContent: 'center',
                 }}
               >
-                <Box sx={{ fontSize: '12px', color: '#7C766F' }}>19 y/o</Box>
+                <Box
+                  sx={{ fontSize: '12px', color: theme.palette.warning['300'] }}
+                >
+                  19 y/o
+                </Box>
                 <FiberManualRecordIcon
-                  sx={{ fontSize: '9px', color: '#CDC5BD' }}
+                  sx={{ fontSize: '9px' }}
+                  className="textCD"
                 />
                 <Box
                   sx={{
                     fontSize: '12px',
-                    color: '#1F1B13',
-                    background: '#FFDAD6',
+                    color: theme.palette.warning['300'],
+                    background: theme.palette.error.light,
                     fontWeight: '500',
                     borderRadius: '8px',
                     display: 'flex',
@@ -120,7 +146,7 @@ const CenterList = () => {
           </Box>
           <MoreVertIcon
             onClick={toggleDrawer('bottom', true)}
-            sx={{ fontSize: '24px', color: '#1F1B13' }}
+            sx={{ fontSize: '24px', color: theme.palette.warning['300'] }}
           />
         </Box>
         <BottomDrawer

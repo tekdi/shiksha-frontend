@@ -1,15 +1,16 @@
 import * as React from 'react';
 
 import Box from '@mui/material/Box';
-import ChildModal from './ChildModal';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Drawer from '@mui/material/Drawer';
+import DropOutModal from './ChildModal';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import NoAccountsIcon from '@mui/icons-material/NoAccounts';
+import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'next-i18next';
 
 type Anchor = 'bottom';
@@ -30,6 +31,7 @@ export default function AnchorTemporaryDrawer({
 }: AnchorTemporaryDrawerProps) {
   const [showModal, setShowModal] = React.useState(false);
   const { t } = useTranslation();
+  const theme = useTheme<any>();
   const list = (anchor: Anchor) => (
     <Box
       sx={{
@@ -61,14 +63,18 @@ export default function AnchorTemporaryDrawer({
                   borderBottom: '1px solid #D0C5B4',
                   padding: '20px',
                   fontSize: '14px',
-                  color: '#1F1B13',
+                  color: theme.palette.warning['300'],
                 }}
               >
                 <ListItemIcon>
                   {index % 2 === 0 ? (
-                    <NoAccountsIcon sx={{ color: '#1F1B13' }} />
+                    <NoAccountsIcon
+                      sx={{ color: theme.palette.warning['300'] }}
+                    />
                   ) : (
-                    <DeleteOutlineIcon sx={{ color: '#1F1B13' }} />
+                    <DeleteOutlineIcon
+                      sx={{ color: theme.palette.warning['300'] }}
+                    />
                   )}
                 </ListItemIcon>
                 <ListItemText primary={text} />
@@ -82,7 +88,7 @@ export default function AnchorTemporaryDrawer({
 
   return (
     <div>
-      <ChildModal open={showModal} onClose={() => setShowModal(false)} />
+      <DropOutModal open={showModal} onClose={() => setShowModal(false)} />
       {(['bottom'] as Anchor[]).map((anchor) => (
         <React.Fragment key={anchor}>
           <Drawer anchor={anchor} open={state[anchor]} className="modal-bottom">
