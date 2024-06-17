@@ -100,7 +100,7 @@ const teacherCenterDetail = () => {
         </Tabs>
       </Box>
       <Box>
-        {value === 'one' && (
+        {value === 'three' && (
           <>
             <Box mt={3} px={'18px'}>
               <Button
