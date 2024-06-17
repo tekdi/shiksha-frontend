@@ -5,16 +5,13 @@ import Button from '@mui/material/Button';
 import { Divider } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import { useTheme } from '@mui/material/styles';
-import { useTranslation } from 'next-i18next';
 
 interface ConfirmationModalProps {
-  updateAttendance: boolean;
-  confirmation: boolean;
-  logoutModal: boolean;
   message: string;
   handleAction: () => void;
   buttonNames: ButtonNames;
   handleCloseModel: () => void;
+  modalOpen: boolean;
 }
 
 interface ButtonNames {
@@ -23,9 +20,7 @@ interface ButtonNames {
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
-  updateAttendance,
-  confirmation,
-  logoutModal,
+  modalOpen,
   message,
   handleAction,
   buttonNames,
@@ -46,11 +41,10 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       width: '350px',
     },
   };
-  const { t } = useTranslation();
 
   return (
     <Modal
-      open={updateAttendance || confirmation || logoutModal}
+      open={modalOpen}
       onClose={handleCloseModel}
       aria-labelledby="confirmation-modal-title"
       aria-describedby="confirmation-modal-description"

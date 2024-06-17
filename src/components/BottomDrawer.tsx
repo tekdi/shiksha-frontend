@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import DropOutModal from './ChildModal';
+import DropOutModal from './DropOutModal';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -20,9 +20,8 @@ interface BottomDrawerProps {
   ) => (event: React.MouseEvent) => void;
   state: { [key in Anchor]?: boolean };
   text: {
-    listName: string; // Type for the listName string
-    icon: React.ReactNode; // Type for the icon, ReactNode allows any valid React child
-    id: number;
+    listName: string;
+    icon: React.ReactNode;
   }[];
 }
 
@@ -58,7 +57,7 @@ export default function BottomDrawer({
         <Box className="bg-grey"></Box>
       </Box>
       <List>
-        {text.map(({ listName, icon, id }, index) => (
+        {text.map(({ listName, icon }, index) => (
           <ListItem disablePadding key={index}>
             <ListItemButton
               sx={{

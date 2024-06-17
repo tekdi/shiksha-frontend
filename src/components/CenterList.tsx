@@ -28,7 +28,7 @@ const CenterList = () => {
         return;
       }
 
-      setState({ ...state, [anchor]: open });
+      setState({ ...state, bottom: open });
     };
   const theme = useTheme<any>();
   const { t } = useTranslation();

@@ -42,11 +42,14 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
 
   const [updateAttendance, setUpdateAttendance] = React.useState(false);
   const [confirmation, setConfirmation] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
   const handleOpen1 = () => {
     setUpdateAttendance(true);
+    setModalOpen(true);
   };
   const handleOpen2 = () => {
     setConfirmation(true);
+    setModalOpen(true);
   };
   const [loading, setLoading] = React.useState(false);
   const [showUpdateButton, setShowUpdateButton] = React.useState(false);
@@ -329,6 +332,7 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
   const handleCloseModel = () => {
     setUpdateAttendance(false);
     setConfirmation(false);
+    setModalOpen(false);
   };
 
   return (
@@ -386,9 +390,6 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                     {getDayMonthYearFormat(shortDateFormat(selectedDate))}
                   </Typography>
                   <ConfirmationModal
-                    updateAttendance={updateAttendance}
-                    confirmation={confirmation}
-                    setConfirmation={setConfirmation}
                     message={getMessage()}
                     handleAction={handleAction}
                     handleCloseModel={handleCloseModel}
@@ -396,6 +397,7 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                       primary: 'Yes',
                       secondary: 'No, go back',
                     }}
+                    modalOpen={modalOpen}
                   />
                 </Box>
                 <Box>

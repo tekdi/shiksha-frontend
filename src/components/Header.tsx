@@ -91,7 +91,7 @@ const Header: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [logoutModal, setLogoutModal] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -115,22 +115,22 @@ const Header: React.FC = () => {
   };
 
   const logoutOpen = () => {
-    setLogoutModal(true);
+    // setLogoutModal(true);
+    setModalOpen(true);
   };
 
   const getMessage = () => {
-    if (logoutModal) return 'Are you sure you want to Logout?';
+    if (modalOpen) return 'Are you sure you want to Logout?';
     return '';
   };
 
   const handleAction = () => {
-    if (logoutModal) {
-      handleLogoutClick();
-    }
+    handleLogoutClick();
   };
 
   const handleCloseModel = () => {
-    setLogoutModal(false);
+    // setLogoutModal(false);
+    setModalOpen(false);
   };
 
   return (
@@ -231,7 +231,6 @@ const Header: React.FC = () => {
           </StyledMenu>
 
           <ConfirmationModal
-            logoutModal={logoutModal}
             message={getMessage()}
             handleAction={handleAction}
             buttonNames={{
@@ -239,6 +238,7 @@ const Header: React.FC = () => {
               secondary: 'Cancel',
             }}
             handleCloseModel={handleCloseModel}
+            modalOpen={modalOpen}
           />
         </Stack>
       </Box>
