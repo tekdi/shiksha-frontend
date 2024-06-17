@@ -313,9 +313,8 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
   // };
 
   const getMessage = () => {
-    if (updateAttendance)
-      return 'Are you sure you want to update this attendance?';
-    if (confirmation) return 'Are you sure you want to close?';
+    if (updateAttendance) return t('COMMON.SURE_UPDATE');
+    if (confirmation) return t('COMMON.SURE_CLOSE');
     return '';
   };
 
@@ -393,8 +392,8 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                     handleAction={handleAction}
                     handleCloseModel={handleCloseModel}
                     buttonNames={{
-                      primary: 'Yes',
-                      secondary: 'No, go back',
+                      primary: t('COMMON.YES'),
+                      secondary: t('COMMON.NO_GO_BACK'),
                     }}
                     modalOpen={modalOpen}
                   />

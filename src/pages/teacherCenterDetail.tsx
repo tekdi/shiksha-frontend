@@ -94,13 +94,13 @@ const teacherCenterDetail = () => {
             },
           }}
         >
-          <Tab value="one" label="Center Sessions" />
-          <Tab value="two" label="Online Recordings" />
-          <Tab value="three" label="Learners List" />
+          {/* <Tab value="one" label="Center Sessions" />
+          <Tab value="two" label="Online Recordings" /> */}
+          <Tab value="one" label="Learners List" />
         </Tabs>
       </Box>
       <Box>
-        {value === 'three' && (
+        {value === 'one' && (
           <>
             <Box mt={3} px={'18px'}>
               <Button

@@ -62,7 +62,8 @@
     "ADD": "जोड़ें",
     "ADD_CENTER": "अपने दृश्य में केंद्र जोड़ें",
     "REMOVE_FROM_CENTER": "केंद्र से हटाएं",
-    "DROP_OUT": "छोड़ दें"
+    "DROP_OUT": "छोड़ दें",
+    "REASON_FOR_DROPOUT":"ड्रॉपआउट का कारण"
   },
   "LOGIN_PAGE": {
     "USERNAME": "उपयोगकर्ता नाम",

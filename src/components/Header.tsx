@@ -120,7 +120,7 @@ const Header: React.FC = () => {
   };
 
   const getMessage = () => {
-    if (modalOpen) return 'Are you sure you want to Logout?';
+    if (modalOpen) return t('COMMON.SURE_LOGOUT');
     return '';
   };
 
@@ -241,8 +241,8 @@ const Header: React.FC = () => {
             message={getMessage()}
             handleAction={handleAction}
             buttonNames={{
-              primary: 'Log Out',
-              secondary: 'Cancel',
+              primary: t('COMMON.LOGOUT'),
+              secondary: t('COMMON.CANCEL'),
             }}
             handleCloseModel={handleCloseModel}
             modalOpen={modalOpen}

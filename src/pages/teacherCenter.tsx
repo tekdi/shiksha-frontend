@@ -59,6 +59,7 @@ const teacherCenter = () => {
             sx={{ cursor: 'pointer' }}
           >
             <Box>Khapari Dharmu, Chimur, Chandrapur</Box>
+            {/* will come from API */}
             <Box
               sx={{
                 display: 'flex',
@@ -93,6 +94,7 @@ const teacherCenter = () => {
                 }}
               >
                 <Box>Khapari Dharmu</Box>
+                {/* will come from API */}
 
                 <ChevronRightIcon />
               </Box>
@@ -100,7 +102,9 @@ const teacherCenter = () => {
           </Box>
 
           <Box mt={3}>
-            <Box>Bhiwapur, Nagpur (Remote)</Box>
+            <Box sx={{ fontSize: '16px', color: theme.palette.warning['300'] }}>
+              Bhiwapur, Nagpur (Remote)
+            </Box>
             <Box
               sx={{
                 display: 'flex',
@@ -134,7 +138,11 @@ const teacherCenter = () => {
                   padding: '0 10px',
                 }}
               >
-                <Box>Bhivapur</Box>
+                <Box
+                  sx={{ fontSize: '16px', color: theme.palette.warning['300'] }}
+                >
+                  Bhivapur
+                </Box>
 
                 <ChevronRightIcon />
               </Box>

@@ -62,7 +62,8 @@
     "ADD": "जोडा",
     "ADD_CENTER": "तुमच्या दृश्यात केंद्रे जोडा",
     "REMOVE_FROM_CENTER": "केंद्रातून काढून टाका",
-    "DROP_OUT": "गैरहजर"
+    "DROP_OUT": "गैरहजर",
+    "REASON_FOR_DROPOUT":"बाहेर पडण्याचे कारण"
   },
   "LOGIN_PAGE": {
     "USERNAME": "वापरकर्तानाव",

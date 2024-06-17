@@ -89,7 +89,7 @@ function DropOutModal({ open, onClose }: DropOutModalProps) {
                 sx={{ fontSize: '16px', color: theme.palette.warning['300'] }}
                 id="demo-multiple-name-label"
               >
-                Reason for Dropout
+                {t('COMMON.REASON_FOR_DROPOUT')}
               </InputLabel>
               <Select
                 labelId="demo-multiple-name-label"
@@ -105,7 +105,7 @@ function DropOutModal({ open, onClose }: DropOutModalProps) {
                     color: theme.palette.warning['300'],
                   }}
                 >
-                  Unable to cope with studies
+                  Unable to cope with studies {/* come from API   */}
                 </MenuItem>
                 <MenuItem
                   value="Family responsibilities"
@@ -114,7 +114,7 @@ function DropOutModal({ open, onClose }: DropOutModalProps) {
                     color: theme.palette.warning['300'],
                   }}
                 >
-                  Family responsibilities
+                  Family responsibilities {/* come from API   */}
                 </MenuItem>
               </Select>
             </FormControl>
