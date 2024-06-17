@@ -11,7 +11,6 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import MenuDrawer from './MenuDrawer';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import accountIcon from './../assets/images/account.svg';
-import dynamic from 'next/dynamic';
 import { logEvent } from '@/utils/googleAnalytics';
 import logoLight from '../../public/images/logo-light.png';
 import menuIcon from '../assets/images/menuIcon.svg';

@@ -22,6 +22,7 @@ interface BottomDrawerProps {
   text: {
     listName: string; // Type for the listName string
     icon: React.ReactNode; // Type for the icon, ReactNode allows any valid React child
+    id: number;
   }[];
 }
 
@@ -33,6 +34,12 @@ export default function BottomDrawer({
   const [showModal, setShowModal] = React.useState(false);
   const { t } = useTranslation();
   const theme = useTheme<any>();
+
+  const handleAction = {
+    [t('COMMON.MARK_DROP_OUT')]: () => setShowModal(true),
+    [t('COMMON.REMOVE_FROM_CENTER')]: () => {},
+  };
+
   const list = (anchor: Anchor) => (
     <Box
       sx={{
@@ -51,7 +58,7 @@ export default function BottomDrawer({
         <Box className="bg-grey"></Box>
       </Box>
       <List>
-        {text.map(({ listName, icon }, index) => (
+        {text.map(({ listName, icon, id }, index) => (
           <ListItem disablePadding key={index}>
             <ListItemButton
               sx={{
@@ -60,11 +67,7 @@ export default function BottomDrawer({
                 fontSize: '14px',
                 color: theme.palette.warning['300'],
               }}
-              onClick={() => {
-                if (listName === 'Mark as Drop Out') {
-                  setShowModal(true);
-                }
-              }}
+              onClick={() => handleAction[listName]?.()}
             >
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={listName} />
@@ -78,13 +81,9 @@ export default function BottomDrawer({
   return (
     <div>
       <DropOutModal open={showModal} onClose={() => setShowModal(false)} />
-      {(['bottom'] as Anchor[]).map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Drawer anchor={anchor} open={state[anchor]} className="modal-bottom">
-            {list(anchor)}
-          </Drawer>
-        </React.Fragment>
-      ))}
+      <Drawer anchor="bottom" open={state.bottom} className="modal-bottom">
+        {list('bottom')}
+      </Drawer>
     </div>
   );
 }
