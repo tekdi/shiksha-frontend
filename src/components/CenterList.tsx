@@ -1,13 +1,16 @@
 import BottomDrawer from './BottomDrawer';
 import { Box } from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 import React from 'react';
 import Woman2Icon from '@mui/icons-material/Woman2';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'next-i18next';
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
+type Anchor = 'bottom';
 
 const CenterList = () => {
   const [state, setState] = React.useState({
@@ -28,6 +31,7 @@ const CenterList = () => {
       setState({ ...state, [anchor]: open });
     };
   const theme = useTheme<any>();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -152,7 +156,22 @@ const CenterList = () => {
         <BottomDrawer
           toggleDrawer={toggleDrawer}
           state={state}
-          setState={setState}
+          text={[
+            {
+              listName: t('COMMON.MARK_DROP_OUT'),
+              icon: (
+                <NoAccountsIcon sx={{ color: theme.palette.warning['300'] }} />
+              ),
+            },
+            {
+              listName: t('COMMON.REMOVE_FROM_CENTER'),
+              icon: (
+                <DeleteOutlineIcon
+                  sx={{ color: theme.palette.warning['300'] }}
+                />
+              ),
+            },
+          ]}
         />
       </Box>
     </>
