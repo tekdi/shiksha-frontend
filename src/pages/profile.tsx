@@ -33,7 +33,6 @@ import Image from 'next/image';
 import Loader from '@/components/Loader';
 import Modal from '@mui/material/Modal';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
-import ToastMessage from '@/components/ToastMessage';
 import { getLabelForValue } from '@/utils/Helper';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
@@ -41,6 +40,7 @@ import { useTranslation } from 'next-i18next';
 import userPicture from '@/assets/images/imageOne.jpg';
 import user_placeholder from '../assets/images/user_placeholder.png';
 import { logEvent } from '@/utils/googleAnalytics';
+import { showToastMessage } from '@/components/Toastify';
 
 interface FieldOption {
   name: string;
@@ -66,7 +66,8 @@ const TeacherProfile = () => {
   const router = useRouter();
   const theme = useTheme<any>();
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {setOpen(true)
+  const handleOpen = () => {
+    setOpen(true);
     logEvent({
       action: 'edit-teacher-profile-modal-open',
       category: 'Profile Page',
@@ -181,6 +182,7 @@ const TeacherProfile = () => {
       } catch (error) {
         setLoading(false);
         setIsError(true);
+        showToastMessage(t('COMMON.SOMETHING_WENT_WRONG'), 'error');
         console.error('Error fetching  user details:', error);
       }
     }
@@ -238,11 +240,6 @@ const TeacherProfile = () => {
   //fields  for view profile by order
   const filteredSortedForView = [...customFieldsData]
     ?.filter((field) => field.order !== 0 && field.name !== 'main_subject')
-    ?.sort((a, b) => a.order - b.order);
-
-  //fields  for edit popup by order
-  const filteredSortedForEdit = [...customFieldsData]
-    ?.filter((field) => field.order !== 0 && field.isEditable)
     ?.sort((a, b) => a.order - b.order);
 
   // fields for showing in  basic details
@@ -319,10 +316,15 @@ const TeacherProfile = () => {
     // setHasErrors(!sanitizedValue.trim());
   };
 
+  //fields  for edit popup by order
+  const filteredSortedForEdit = [...customFieldsData]
+    ?.filter((field) => field.isEditable)
+    ?.sort((a, b) => a.order - b.order);
+
   const validateFields = () => {
     const newErrors: { [key: string]: boolean } = {};
 
-    customFieldsData.forEach((field) => {
+    filteredSortedForEdit?.forEach((field) => {
       const value =
         formData?.customFields?.find((f) => f.fieldId === field.fieldId)
           ?.value[0] || '';
@@ -440,9 +442,9 @@ const TeacherProfile = () => {
     try {
       if (userId) {
         const response = await editEditUser(userId, userDetails);
-        ReactGA.event("edit-teacher-profile-successful", { userId: userId});
+        ReactGA.event('edit-teacher-profile-successful', { userId: userId });
         if (response.responseCode !== 200 || response.params.err) {
-          ReactGA.event("edit-teacher-profile-error", { userId: userId});
+          ReactGA.event('edit-teacher-profile-error', { userId: userId });
           throw new Error(
             response.params.errmsg ||
               'An error occurred while updating the user.'
@@ -458,6 +460,7 @@ const TeacherProfile = () => {
       }
     } catch (error) {
       setIsError(true);
+      showToastMessage(t('COMMON.SOMETHING_WENT_WRONG'), 'error');
       console.error('Error:', error);
     }
 
@@ -1144,7 +1147,6 @@ const TeacherProfile = () => {
           </Box>
         )}{' '}
       </Box>
-      {isError && <ToastMessage message={t('COMMON.SOMETHING_WENT_WRONG')} />}
     </>
   );
 };
