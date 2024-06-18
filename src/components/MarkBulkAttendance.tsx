@@ -43,11 +43,11 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
   const [updateAttendance, setUpdateAttendance] = React.useState(false);
   const [confirmation, setConfirmation] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
-  const handleOpen1 = () => {
+  const attendanceUpdate = () => {
     setUpdateAttendance(true);
     setModalOpen(true);
   };
-  const handleOpen2 = () => {
+  const confirmationOpen = () => {
     setConfirmation(true);
     setModalOpen(true);
   };
@@ -404,7 +404,7 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                       cursor: 'pointer',
                       color: theme.palette.warning['A200'],
                     }}
-                    onClick={handleOpen2}
+                    onClick={confirmationOpen}
                   />
                 </Box>
               </Box>
@@ -526,7 +526,7 @@ const MarkBulkAttendance: React.FC<MarkBulkAttendanceProps> = ({
                         alignItems: 'center',
                       }}
                       disabled={isAllAttendanceMarked ? false : true}
-                      onClick={handleOpen1}
+                      onClick={attendanceUpdate}
                     >
                       {presentCount == 0 && absentCount == 0
                         ? t('COMMON.MARK')
