@@ -34,7 +34,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
   const [width, height] = useWindowSize();
   const [loading, setLoading] = React.useState(true);
   const [cohortDetails, setCohortDetails] = React.useState({});
-  const [cohortParentDetails, setCohortParentDetails] = React.useState(true);
+  //const [cohortParentDetails, setCohortParentDetails] = React.useState(true);
   const [attendanceStatusData, setAttendanceStatusData] = React.useState();
   let newAvatar = localStorage.getItem("fullName");
   const [successLayout, setsuccessLayout] = React.useState("false");
@@ -232,7 +232,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
           setMembers(results[0]);
         }
         setCohortDetails(results[1][0]);
-        const parentResult = await cohortRegistryService.getCohortDetails(
+        /*const parentResult = await cohortRegistryService.getCohortDetails(
           {
             cohortId: results[1][0].parentId,
           },
@@ -242,7 +242,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
         );
         if (parentResult.length) {
           setCohortParentDetails(parentResult[0]);
-        }
+        }*/
         setLoading(false);
       }
     };
@@ -272,7 +272,7 @@ export default function CohortMemberList({ footerLinks, appName }) {
       _header={{
         title: loading
           ? ""
-          : cohortParentDetails?.name + ", " + cohortDetails?.name,
+          : cohortDetails?.name,
         subHeading: moment().format("hh:mm A"),
         iconComponent: (
           <Pressable>
