@@ -217,7 +217,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   // Convert self_attendance_start to use a colon if it uses a dot
   if (cohortDetails?.params != undefined) {
     let selfAttendanceStart =
-      cohortDetails?.params?.self_attendace_start?.replace(".", ":");
+      cohortDetails?.params?.self_attendance_start?.replace(".", ":");
 
     // Function to parse time safely
     const parseTime = (timeString) => {
