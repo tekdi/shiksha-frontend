@@ -251,7 +251,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
 
     // Get end time safely
     const selfAttendanceEnd =
-      cohortDetails?.params?.self_attendace_end ?? "23:59";
+      cohortDetails?.params?.self_attendance_end ?? "23:59";
 
     // Check if current time is within the attendance window or 5 minutes before start
     const isWithinAttendanceWindow =
