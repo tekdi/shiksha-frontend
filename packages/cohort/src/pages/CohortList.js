@@ -83,9 +83,9 @@ export default function CohortList() {
             }
           );
         }
-
+        setClasses(classesData);
         // Fetch parent data for each class and add parent name to each class object
-        const updatedClassesData = await Promise.all(
+        /*const updatedClassesData = await Promise.all(
           classesData?.map(async (classItem) => {
             const parentData = await cohortRegistryService.getCohortDetails(
               {
@@ -100,7 +100,7 @@ export default function CohortList() {
             return { ...classItem, parentName };
           })
         );
-        setClasses(updatedClassesData);
+        setClasses(updatedClassesData);*/
         setLoading(false);
       }
     };
@@ -121,7 +121,6 @@ export default function CohortList() {
           data={classes.map((item, index) => {
             return {
               title:
-                (item?.parentName ? item?.parentName + ", " : "") +
                 (item?.name ? item?.name : "") +
                 (item?.section ? " • Sec " + item?.section : ""),
               //subTitle: t("CLASS_TEACHER"),
