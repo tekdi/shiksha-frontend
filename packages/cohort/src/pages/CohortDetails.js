@@ -38,7 +38,6 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   const [selfAttendance, setSelfAttendance] = React.useState({});
   const [showModal, setShowModal] = React.useState(false);
   const [cohortDetails, setCohortDetails] = React.useState({});
-  const [cohortParentDetails, setCohortParentDetails] = React.useState(true);
   const [toggleDetails, setToggleDetails] = React.useState(true);
   const [fields, setFields] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -207,17 +206,6 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
           getFieldValues(result[0].fields);
           setSelfAttendance(result[0]);
         }
-        const parentResult = await cohortRegistryService.getCohortDetails(
-          {
-            cohortId: result[0].parentId,
-          },
-          {
-            tenantid: process.env.REACT_APP_TENANT_ID,
-          }
-        );
-        if (parentResult.length) {
-          setCohortParentDetails(parentResult[0]);
-        }
       }
       setLoading(false);
     };
@@ -301,7 +289,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
       >
         <Layout
           _header={{
-            title: cohortParentDetails?.name + ", " + cohortDetails?.name,
+            title: cohortDetails?.name,
             subHeading: moment().format("hh:mm A"),
             iconComponent: (
               <Pressable>
