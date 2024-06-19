@@ -206,7 +206,6 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
           getFieldValues(result[0].fields);
           setSelfAttendance(result[0]);
         }
-
       }
       setLoading(false);
     };
@@ -218,7 +217,18 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   // Convert self_attendance_start to use a colon if it uses a dot
   if (cohortDetails?.params != undefined) {
     let selfAttendanceStart =
-      cohortDetails?.params?.self_attendance_start.replace(".", ":");
+      cohortDetails?.params?.self_attendance_start?.replace(".", ":");
+
+    // Function to parse time safely
+    const parseTime = (timeString) => {
+      if (!timeString) return [0, 0]; // Handle null, undefined, and empty string
+
+      const parts = timeString.split(":").map(Number);
+      if (parts.length !== 2 || parts.some(isNaN)) return [0, 0]; // Invalid format or NaN check
+
+      return parts;
+    };
+
     // Get current time
     const currentTime = new Date();
     const currentHours = currentTime.getHours().toString().padStart(2, "0");
@@ -226,9 +236,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
     const formattedCurrentTime = `${currentHours}:${currentMinutes}`;
 
     // Calculate 5 minutes before self_attendance_start
-    const [startHours, startMinutes] = selfAttendanceStart
-      ?.split(":")
-      .map(Number);
+    const [startHours, startMinutes] = parseTime(selfAttendanceStart);
     let fiveMinutesBeforeHours = startHours;
     let fiveMinutesBeforeMinutes = startMinutes - 5;
     if (fiveMinutesBeforeMinutes < 0) {
@@ -241,20 +249,24 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
       .toString()
       .padStart(2, "0")}`;
 
+    // Get end time safely
+    const selfAttendanceEnd =
+      cohortDetails?.params?.self_attendance_end ?? "23:59";
+
     // Check if current time is within the attendance window or 5 minutes before start
     const isWithinAttendanceWindow =
       (formattedCurrentTime >= fiveMinutesBeforeStart &&
         formattedCurrentTime < selfAttendanceStart) ||
       (formattedCurrentTime >= selfAttendanceStart &&
-        formattedCurrentTime <= cohortDetails?.params?.self_attendance_end);
+        formattedCurrentTime <= selfAttendanceEnd);
 
     // Check if current time is past self_attendance_end and allow late marking is 1
     const isLateMarkingAllowed =
-      formattedCurrentTime > cohortDetails?.params?.self_attendance_end &&
+      formattedCurrentTime > selfAttendanceEnd &&
       cohortDetails?.params?.allow_late_marking == "true";
 
     // Determine if the widget should be disabled
-    isDisabled = !(isWithinAttendanceWindow || isLateMarkingAllowed);
+    const isDisabled = !(isWithinAttendanceWindow || isLateMarkingAllowed);
   }
 
   /* End - Check for allowing to self mark attendance on the basis of slot allowed to mark the attendance against the respective cohort & also check for late mark attendance */

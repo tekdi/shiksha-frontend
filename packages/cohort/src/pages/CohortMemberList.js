@@ -264,7 +264,27 @@ export default function CohortMemberList({ footerLinks, appName }) {
     const filtered = members.filter((member) =>
       member.userDetails.name.toLowerCase().includes(searchText.toLowerCase())
     );
-    setFilteredMembers(filtered);
+
+    // Check if filtered has data and sort only if it does
+    const sorted =
+      filtered.length > 0
+        ? filtered.sort((a, b) => {
+            const nameA = a.userDetails.name.toUpperCase(); // ignore upper and lowercase
+            const nameB = b.userDetails.name.toUpperCase(); // ignore upper and lowercase
+
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+
+            // names must be equal
+            return 0;
+          })
+        : filtered;
+
+    setFilteredMembers(sorted);
   }, [searchText, members]);
 
   return (
