@@ -53,12 +53,14 @@ import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'next-i18next';
 import { logEvent } from '@/utils/googleAnalytics';
 import { showToastMessage } from '@/components/Toastify';
+import useStore from '@/stores/store';
 
 interface AttendanceOverviewProps {
   //   buttonText: string;
 }
 
 const AttendanceOverview: React.FC<AttendanceOverviewProps> = () => {
+  const store = useStore();
   const router = useRouter();
   const { t } = useTranslation();
   const { push } = useRouter();
@@ -77,7 +79,9 @@ const AttendanceOverview: React.FC<AttendanceOverviewProps> = () => {
   const [isFromDate, setIsFromDate] = useState(
     formatSelectedDate(new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000))
   );
+  const setFromDate = useStore((state) => state.setFromDate);
   const [isToDate, setIsToDate] = useState(getTodayDate());
+  const setToDate = useStore((state) => state.setToDate);
   const [displayStudentList, setDisplayStudentList] = React.useState<
     Array<any>
   >([]);
@@ -111,6 +115,7 @@ const AttendanceOverview: React.FC<AttendanceOverviewProps> = () => {
   useEffect(() => {
     setSelectedValue(currentDayMonth);
   }, []);
+
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -254,7 +259,9 @@ const AttendanceOverview: React.FC<AttendanceOverviewProps> = () => {
   const handleDateRangeSelected = ({ fromDate, toDate }: any) => {
     console.log('Date Range Selected:', { fromDate, toDate });
     setIsFromDate(fromDate);
+    setFromDate(fromDate);
     setIsToDate(toDate);
+    setToDate(toDate);
     // Handle the date range values as needed
   };
   //API for getting student list
@@ -279,8 +286,8 @@ const AttendanceOverview: React.FC<AttendanceOverviewProps> = () => {
           // console.log('name..........', nameUserIdArray);
           if (nameUserIdArray) {
             //Write logic to call class missed api
-            let fromDate = isFromDate;
-            let toDate = isToDate;
+            let fromDate = store.isFromDate;
+            let toDate = store.isToDate;
             let filters = {
               contextId: classId,
               fromDate,
@@ -344,8 +351,8 @@ const AttendanceOverview: React.FC<AttendanceOverviewProps> = () => {
               page: 0,
               filters: {
                 scope: 'student',
-                fromDate: isFromDate,
-                toDate: isToDate,
+                fromDate: store.isFromDate,
+                toDate: store.isToDate,
                 contextId: classId,
               },
               facets: ['contextId'],
@@ -375,8 +382,8 @@ const AttendanceOverview: React.FC<AttendanceOverviewProps> = () => {
         const fetchAttendanceData = async (cohortIds: any[]) => {
           const fetchPromises = cohortIds.map(async (cohortId) => {
             const filters = {
-              fromDate: isFromDate,
-              toDate: isToDate,
+              fromDate: store.isFromDate,
+              toDate: store.isToDate,
               scope: 'student',
               contextId: cohortId,
             };
@@ -451,7 +458,7 @@ const AttendanceOverview: React.FC<AttendanceOverviewProps> = () => {
 
   useEffect(() => {
     getCohortMemberList();
-  }, [classId, isToDate, isFromDate]);
+  }, [classId, store.isToDate, store.isFromDate]);
 
   // useEffect(()=>{
   //   setDisplayStudentList(learnerData);
