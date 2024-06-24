@@ -57,6 +57,7 @@ import useDeterminePathColor from '../hooks/useDeterminePathColor';
 import { cohortList } from '../services/CohortServices';
 import { lowLearnerAttendanceLimit } from './../../app.config';
 import GuideTour from '@/components/GuideTour';
+import { useCohortList } from '@/services/queries';
 interface DashboardProps {
   //   buttonText: string;
 }
@@ -94,6 +95,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(currentDate.getDate() - modifyAttendanceLimit);
   const formattedSevenDaysAgo = shortDateFormat(sevenDaysAgo);
+  const [userId, setUserId] = React.useState<string | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -127,65 +129,59 @@ const Dashboard: React.FC<DashboardProps> = () => {
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
       const token = localStorage.getItem('token');
+      const storedUserId = localStorage.getItem('userId');
       setClassId(localStorage.getItem('classId') || '');
       if (token) {
         setIsAuthenticated(true);
       } else {
         router.push('/login');
       }
+      setUserId(storedUserId);
     }
   }, []);
 
+  const limit = 0;
+  const page = 0;
+  const filters = { userId: userId };
+
+  const { data, error, isLoading } = useCohortList(limit, page, filters);
+
+
   // API call to get center list
   useEffect(() => {
-    const fetchCohortList = async () => {
-      const userId = localStorage.getItem('userId');
-      setLoading(true);
-      try {
-        if (userId) {
-          const limit = 0;
-          const page = 0;
-          const filters = { userId: userId };
-          const resp = await cohortList({ limit, page, filters });
+    if (data) {
+      const extractedNames = data?.results?.cohortDetails;
+      localStorage.setItem(
+        'parentCohortId',
+        extractedNames?.[0].cohortData?.parentId
+      );
 
-          const extractedNames = resp?.results?.cohortDetails;
-          localStorage.setItem(
-            'parentCohortId',
-            extractedNames?.[0].cohortData.parentId
-          );
-
-          const filteredData = extractedNames
-            ?.map((item: any) => ({
-              cohortId: item?.cohortData?.cohortId,
-              parentId: item?.cohortData?.parentId,
-              name: item?.cohortData?.name,
-            }))
-            ?.filter(Boolean);
-          setCohortsData(filteredData);
-          if (filteredData.length > 0) {
-            if (typeof window !== 'undefined' && window.localStorage) {
-              const cohort = localStorage.getItem('classId') || '';
-              if (cohort !== '') {
-                setClassId(localStorage.getItem('classId') || '');
-              } else {
-                localStorage.setItem('classId', filteredData?.[0]?.cohortId);
-                setClassId(filteredData?.[0]?.cohortId);
-              }
-            }
-            setManipulatedCohortData(
-              filteredData.concat({ cohortId: 'all', name: 'All Centers' })
-            );
+      const filteredData = extractedNames
+        ?.map((item: any) => ({
+          cohortId: item?.cohortData?.cohortId,
+          parentId: item?.cohortData?.parentId,
+          name: item?.cohortData?.name,
+        }))
+        ?.filter(Boolean);
+      setCohortsData(filteredData);
+      if (filteredData.length > 0) {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          const cohort = localStorage.getItem('classId') || '';
+          if (cohort !== '') {
+            setClassId(localStorage.getItem('classId') || '');
+          } else {
+            localStorage.setItem('classId', filteredData?.[0]?.cohortId);
+            setClassId(filteredData?.[0]?.cohortId);
           }
-          setLoading(false);
         }
-      } catch (error) {
-        console.error('Error fetching  cohort list:', error);
-        showToastMessage(t('COMMON.SOMETHING_WENT_WRONG'), 'error');
-        setLoading(false);
+        setManipulatedCohortData(
+          filteredData.concat({ cohortId: 'all', name: 'All Centers' })
+        );
       }
-    };
-    fetchCohortList();
-  }, []);
+      setLoading(false);
+    }
+  }, [data]);
+
 
   //API for getting student list
   useEffect(() => {
