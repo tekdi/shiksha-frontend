@@ -19,7 +19,6 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import ReactGA from 'react-ga4';
 import {
   debounce,
   getTodayDate,
@@ -37,22 +36,23 @@ import KeyboardBackspaceOutlinedIcon from '@mui/icons-material/KeyboardBackspace
 import Loader from '../components/Loader';
 import MarkBulkAttendance from '@/components/MarkBulkAttendance';
 import MonthCalender from '@/components/MonthCalender';
+import ReactGA from 'react-ga4';
 import SearchIcon from '@mui/icons-material/Search';
 import SortingModal from '../components/SortingModal';
+import { Status } from '@/utils/app.constant';
 import UpDownButton from '@/components/UpDownButton';
 import { attendanceStatusList } from '../services/AttendanceService';
 import { calculatePercentage } from '@/utils/attendanceStats';
 import { cohortList } from '@/services/CohortServices';
 import { cohortMemberList } from '../utils/Interfaces';
 import { getMyCohortMemberList } from '@/services/MyClassDetailsService';
+import { logEvent } from '@/utils/googleAnalytics';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { showToastMessage } from '@/components/Toastify';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'next-i18next';
-import { logEvent } from '@/utils/googleAnalytics';
-import { showToastMessage } from '@/components/Toastify';
-import { Status } from '@/utils/app.constant';
 
 interface user {
   memberStatus: string;
@@ -595,104 +595,122 @@ const UserAttendanceHistory = () => {
           }}
         >
           <Box
-            display={'flex'}
-            flexDirection={'column'}
-            gap={'1rem'}
-            padding={'1rem 20px 0.5rem'}
-            alignItems={'center'}
+            sx={{
+              '@media (min-width: 900px)': {
+                display: 'flex',
+                gap: '10',
+                justifyContent: 'space-between',
+              },
+            }}
           >
             <Box
               display={'flex'}
-              sx={{ color: theme.palette.warning['A200'] }}
-              gap={'10px'}
-              width={'100%'}
-              paddingTop={'10px'}
+              flexDirection={'column'}
+              gap={'1rem'}
+              padding={'1rem 20px 0.5rem'}
+              alignItems={'center'}
             >
               <Box
-                onClick={() => {
-                  window.history.back();
-                  logEvent({
-                    action: 'back-button-clicked-attendance-history-page',
-                    category: 'Attendance History Page',
-                    label: 'Back Button Clicked',
-                  });
-                }}
+                display={'flex'}
+                sx={{ color: theme.palette.warning['A200'] }}
+                gap={'10px'}
+                width={'100%'}
+                paddingTop={'10px'}
               >
-                <Box>
-                  <KeyboardBackspaceOutlinedIcon
-                    cursor={'pointer'}
-                    sx={{ color: theme.palette.warning['A200'] }}
-                  />
-                </Box>
-              </Box>
-
-              <Typography
-                marginBottom={'0px'}
-                fontSize={'22px'}
-                color={theme.palette.warning['A200']}
-              >
-                {t('ATTENDANCE.DAY_WISE_ATTENDANCE')}
-              </Typography>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              minWidth: 120,
-              gap: '15px',
-              paddingBottom: '10px',
-              padding: '0 10px 10px',
-            }}
-            display={'flex'}
-          >
-            {cohortsData?.length > 1 ? (
-              <FormControl
-                className="drawer-select"
-                sx={{ m: 1, width: '100%' }}
-              >
-                <Select
-                  value={classId}
-                  onChange={handleCohortSelection}
-                  displayEmpty
-                  inputProps={{ 'aria-label': 'Without label' }}
-                  // disabled={cohortsData?.length === 1 ? true : false}
-                  className="SelectLanguages fs-14 fw-500"
-                  style={{
-                    borderRadius: '0.5rem',
-                    color: theme.palette.warning['200'],
-                    width: '100%',
-                    marginBottom: '0rem',
+                <Box
+                  onClick={() => {
+                    window.history.back();
+                    logEvent({
+                      action: 'back-button-clicked-attendance-history-page',
+                      category: 'Attendance History Page',
+                      label: 'Back Button Clicked',
+                    });
                   }}
                 >
-                  {cohortsData?.length !== 0 ? (
-                    cohortsData?.map((cohort) => (
-                      <MenuItem key={cohort.cohortId} value={cohort.cohortId}>
-                        {cohort.name}
-                      </MenuItem>
-                    ))
-                  ) : (
-                    <Typography style={{ fontWeight: 'bold' }}>
-                      {t('COMMON.NO_DATA_FOUND')}
-                    </Typography>
-                  )}
-                </Select>
-              </FormControl>
-            ) : (
-              <Typography
-                color={theme.palette.warning['300']}
-                pl={'1rem'}
-                variant="h1"
-              >
-                {cohortsData[0]?.name}
-              </Typography>
-            )}
+                  <Box>
+                    <KeyboardBackspaceOutlinedIcon
+                      cursor={'pointer'}
+                      sx={{ color: theme.palette.warning['A200'] }}
+                    />
+                  </Box>
+                </Box>
+
+                <Typography
+                  marginBottom={'0px'}
+                  fontSize={'22px'}
+                  color={theme.palette.warning['A200']}
+                >
+                  {t('ATTENDANCE.DAY_WISE_ATTENDANCE')}
+                </Typography>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                minWidth: 120,
+                gap: '15px',
+                paddingBottom: '10px',
+                padding: '0 10px 10px',
+                '@media (min-width: 900px)': {
+                  marginTop: '1rem',
+                  '@media (min-width: 900px)': {
+                    width: '40%',
+                  },
+                },
+              }}
+              display={'flex'}
+            >
+              {cohortsData?.length > 1 ? (
+                <FormControl
+                  className="drawer-select"
+                  sx={{ m: 1, width: '100%' }}
+                >
+                  <Select
+                    value={classId}
+                    onChange={handleCohortSelection}
+                    displayEmpty
+                    inputProps={{ 'aria-label': 'Without label' }}
+                    // disabled={cohortsData?.length === 1 ? true : false}
+                    className="SelectLanguages fs-14 fw-500"
+                    style={{
+                      borderRadius: '0.5rem',
+                      color: theme.palette.warning['200'],
+                      width: '100%',
+                      marginBottom: '0rem',
+                    }}
+                  >
+                    {cohortsData?.length !== 0 ? (
+                      cohortsData?.map((cohort) => (
+                        <MenuItem key={cohort.cohortId} value={cohort.cohortId}>
+                          {cohort.name}
+                        </MenuItem>
+                      ))
+                    ) : (
+                      <Typography style={{ fontWeight: 'bold' }}>
+                        {t('COMMON.NO_DATA_FOUND')}
+                      </Typography>
+                    )}
+                  </Select>
+                </FormControl>
+              ) : (
+                <Typography
+                  color={theme.palette.warning['300']}
+                  pl={'1rem'}
+                  variant="h1"
+                >
+                  {cohortsData[0]?.name}
+                </Typography>
+              )}
+            </Box>
           </Box>
+
           <Box
             pl={1}
             borderBottom={1}
             borderTop={1}
             sx={{
               position: 'sticky',
-              top: '62px',
+              top: '65px',
               zIndex: 1000,
               backgroundColor: 'white',
               // boxShadow: '0px 1px 3px 0px #0000004D',
@@ -700,6 +718,9 @@ const UserAttendanceHistory = () => {
               borderTop: '1px solid rgba(0, 0, 0, 0.15)',
               borderBottom: 'unset ',
               padding: '5px 10px',
+              '@media (min-width: 900px)': {
+                top: '0px',
+              },
             }}
           >
             <Box>
@@ -711,12 +732,13 @@ const UserAttendanceHistory = () => {
               />
             </Box>
           </Box>
-
-          <MonthCalender
-            formattedAttendanceData={percentageAttendance}
-            onChange={handleActiveStartDateChange}
-            onDateChange={handleSelectedDateChange}
-          />
+          <Box className="calender-container">
+            <MonthCalender
+              formattedAttendanceData={percentageAttendance}
+              onChange={handleActiveStartDateChange}
+              onDateChange={handleSelectedDateChange}
+            />
+          </Box>
           <Box mt={2}>
             {/*----------------------------search and Sort---------------------------------------*/}
             <Stack mr={1} ml={1}>
@@ -742,10 +764,13 @@ const UserAttendanceHistory = () => {
                       sx={{
                         display: 'flex',
                         alignItems: 'center',
-
+                        width: '100%',
                         borderRadius: '100px',
                         background: theme.palette.warning.A700,
                         boxShadow: 'none',
+                        '@media (min-width: 900px)': {
+                          width: '60% !important',
+                        },
                       }}
                       onFocus={hadleScroolDown}
                     >
@@ -833,6 +858,11 @@ const UserAttendanceHistory = () => {
                 padding: '8px 18px',
                 borderBottom: '1px solid #D0C5B4',
                 bgcolor: '#E6E6E6',
+
+                '@media (min-width: 900px)': {
+                  borderTopLeftRadius: '8px',
+                  borderTopRightRadius: '8px',
+                },
               }}
             >
               <Box

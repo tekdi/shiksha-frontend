@@ -86,7 +86,13 @@ const TeachingCenters = () => {
         </Box> */}
         <Box
           className="linerGradient"
-          sx={{ borderRadius: '16px', mt: 2 }}
+          sx={{
+            borderRadius: '16px',
+            mt: 2,
+            '@media (min-width: 900px)': {
+              borderRadius: '8px',
+            },
+          }}
           padding={'16px 16px 2px'}
         >
           {cohortsData?.map((cohort: any, index) => {

@@ -53,11 +53,12 @@ import { lowLearnerAttendanceLimit } from './../../app.config';
 import { modifyAttendanceLimit } from '../../app.config';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { showToastMessage } from '@/components/Toastify';
+import { useCohortList } from '@/services/queries';
 import useDeterminePathColor from '../hooks/useDeterminePathColor';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'next-i18next';
-import { useCohortList } from '@/services/queries';
+
 interface DashboardProps {
   //   buttonText: string;
 }
@@ -522,7 +523,9 @@ const Dashboard: React.FC<DashboardProps> = () => {
 
             {isAuthenticated && (
               <Box minHeight="100vh">
-                <Header />
+                <Box>
+                  <Header />
+                </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                   <Box
                     display={'flex'}
@@ -532,11 +535,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                     <Typography
                       textAlign={'left'}
                       fontSize={'22px'}
-                      m={
-                        !hasSeenTutorial
-                          ? '1.5rem 1rem 0.8rem'
-                          : '1.5rem 2rem 1rem'
-                      }
+                      m={'1.5rem 1.2rem 0.8rem'}
                       color={theme?.palette?.warning['300']}
                       className="joyride-step-1"
                     >
@@ -555,29 +554,127 @@ const Dashboard: React.FC<DashboardProps> = () => {
                     paddingBottom={'25px'}
                     width={'100%'}
                     className="linerGradient"
+                    sx={{
+                      '@media (min-width: 900px)': {
+                        borderRadius: '8px',
+                      },
+                    }}
                   >
                     <Box
                       display={'flex'}
                       flexDirection={'column'}
-                      padding={'1.5rem 1rem 1rem'}
+                      padding={'1.5rem 1.2rem 1rem'}
                     >
                       <Box display={'flex'} justifyContent={'space-between'}>
-                        <Typography
-                          variant="h2"
-                          sx={{ fontSize: '14px' }}
-                          color={'black'}
-                          fontWeight={'500'}
-                        >
-                          {t('DASHBOARD.DAY_WISE_ATTENDANCE')}
-                        </Typography>
                         <Box
-                          className="calenderTitle flex-center joyride-step-2"
                           display={'flex'}
+                          justifyContent={'space-between'}
+                          alignItems={'center'}
+                          flexBasis={'90%'}
+                          sx={{
+                            '@media (max-width: 900px)': {
+                              flexDirection: 'column',
+                              alignItems: 'start',
+                            },
+                          }}
+                        >
+                          <Typography
+                            variant="h2"
+                            sx={{ fontSize: '14px' }}
+                            color={'black'}
+                            fontWeight={'500'}
+                            flexBasis={'20%'}
+                          >
+                            {t('DASHBOARD.DAY_WISE_ATTENDANCE')}
+                          </Typography>
+                          <Box
+                            sx={{
+                              width: '40%',
+                              '@media (max-width: 900px)': {
+                                width: '111% !important',
+                                marginTop: '16px',
+                              },
+                            }}
+                          >
+                            <Box
+                              sx={{ minWidth: 120, gap: '15px' }}
+                              display={'flex'}
+                              flexBasis={'80%'}
+                            >
+                              {cohortsData?.length > 1 ? (
+                                <FormControl
+                                  className="drawer-select"
+                                  sx={{ m: 0, width: '100%' }}
+                                >
+                                  <Select
+                                    value={classId}
+                                    onChange={handleCohortSelection}
+                                    displayEmpty
+                                    inputProps={{
+                                      'aria-label': 'Without label',
+                                    }}
+                                    className="SelectLanguages fs-14 fw-500 bg-white"
+                                    style={{
+                                      borderRadius: '0.5rem',
+                                      color: theme.palette.warning['200'],
+                                      width: '100%',
+                                      marginBottom: '0rem',
+                                    }}
+                                  >
+                                    {cohortsData?.length !== 0 ? (
+                                      manipulatedCohortData?.map((cohort) => (
+                                        <MenuItem
+                                          key={cohort.cohortId}
+                                          value={cohort.cohortId}
+                                          style={{
+                                            fontWeight: '500',
+                                            fontSize: '14px',
+                                            color: '#4D4639',
+                                          }}
+                                        >
+                                          {cohort.name}
+                                        </MenuItem>
+                                      ))
+                                    ) : (
+                                      <Typography
+                                        style={{
+                                          fontWeight: '500',
+                                          fontSize: '14px',
+                                          color: '#4D4639',
+                                          padding: '0 15px',
+                                        }}
+                                      >
+                                        {t('COMMON.NO_DATA_FOUND')}
+                                      </Typography>
+                                    )}
+                                  </Select>
+                                </FormControl>
+                              ) : (
+                                <Typography
+                                  color={theme.palette.warning['300']}
+                                >
+                                  {cohortsData[0]?.name}
+                                </Typography>
+                              )}
+                            </Box>
+                          </Box>
+                        </Box>
+                        <Box
+                          className="calenderTitle  joyride-step-2"
+                          display={'flex'}
+                          flexBasis={'10%'}
                           sx={{
                             cursor: 'pointer',
                             color: theme.palette.secondary.main,
                             gap: '4px',
                             opacity: classId === 'all' ? 0.5 : 1,
+                            justifyContent: 'end !important',
+                            alignItems: 'center',
+                            '@media (max-width: 900px)': {
+                              position: 'absolute',
+                              right: '20px',
+                              marginTop: '3px',
+                            },
                           }}
                           onClick={viewAttendanceHistory}
                         >
@@ -597,64 +694,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                           />
                         </Box>
                       </Box>
-                      <Box sx={{ mt: 2 }}>
-                        <Box
-                          sx={{ minWidth: 120, gap: '15px' }}
-                          display={'flex'}
-                        >
-                          {cohortsData?.length > 1 ? (
-                            <FormControl
-                              className="drawer-select"
-                              sx={{ m: 0, width: '100%' }}
-                            >
-                              <Select
-                                value={classId}
-                                onChange={handleCohortSelection}
-                                displayEmpty
-                                inputProps={{ 'aria-label': 'Without label' }}
-                                className="SelectLanguages fs-14 fw-500 bg-white"
-                                style={{
-                                  borderRadius: '0.5rem',
-                                  color: theme.palette.warning['200'],
-                                  width: '100%',
-                                  marginBottom: '0rem',
-                                }}
-                              >
-                                {cohortsData?.length !== 0 ? (
-                                  manipulatedCohortData?.map((cohort) => (
-                                    <MenuItem
-                                      key={cohort.cohortId}
-                                      value={cohort.cohortId}
-                                      style={{
-                                        fontWeight: '500',
-                                        fontSize: '14px',
-                                        color: '#4D4639',
-                                      }}
-                                    >
-                                      {cohort.name}
-                                    </MenuItem>
-                                  ))
-                                ) : (
-                                  <Typography
-                                    style={{
-                                      fontWeight: '500',
-                                      fontSize: '14px',
-                                      color: '#4D4639',
-                                      padding: '0 15px',
-                                    }}
-                                  >
-                                    {t('COMMON.NO_DATA_FOUND')}
-                                  </Typography>
-                                )}
-                              </Select>
-                            </FormControl>
-                          ) : (
-                            <Typography color={theme.palette.warning['300']}>
-                              {cohortsData[0]?.name}
-                            </Typography>
-                          )}
-                        </Box>
-                      </Box>
+
                       {/* TODO: Write logic to disable this block on all select */}
                       <Box>
                         <Box sx={{ mt: 1.5, position: 'relative' }}>
@@ -768,19 +808,23 @@ const Dashboard: React.FC<DashboardProps> = () => {
                               )}
                             </Box>
                             <Button
-                              className="joyride-step-4"
+                              className="joyride-step-4 btn-mark-width"
                               variant="contained"
                               color="primary"
-                              style={{
-                                minWidth: '33%',
-                                height: '2.5rem',
-                                padding: theme.spacing(1),
-                                fontWeight: '500',
-                              }}
                               sx={{
                                 '&.Mui-disabled': {
                                   backgroundColor:
                                     theme?.palette?.primary?.main, // Custom disabled text color
+                                },
+                                minWidth: '84px',
+                                height: '2.5rem',
+                                padding: theme.spacing(1),
+                                fontWeight: '500',
+                                '@media (min-width: 500px)': {
+                                  width: '20%',
+                                },
+                                '@media (min-width: 700px)': {
+                                  width: '15%',
                                 },
                               }}
                               onClick={handleModalToggle}
@@ -834,7 +878,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                       display={'flex'}
                       flexDirection={'column'}
                       gap={'1rem'}
-                      padding={'1rem'}
+                      padding={'1rem 1.2rem'}
                     >
                       <Stack
                         direction={'row'}
@@ -902,7 +946,11 @@ const Dashboard: React.FC<DashboardProps> = () => {
                         />
                       )}
                     </Box>
-                    <Box display={'flex'} className="card_overview" mx={'1rem'}>
+                    <Box
+                      display={'flex'}
+                      className="card_overview"
+                      mx={'1.2rem'}
+                    >
                       {classId &&
                       classId !== 'all' &&
                       cohortsData &&

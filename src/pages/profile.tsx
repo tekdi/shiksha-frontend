@@ -37,11 +37,11 @@ import { getLabelForValue } from '@/utils/Helper';
 import { logEvent } from '@/utils/googleAnalytics';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { showToastMessage } from '@/components/Toastify';
+import { useProfileInfo } from '@/services/queries';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import userPicture from '@/assets/images/imageOne.jpg';
 import user_placeholder from '../assets/images/user_placeholder.png';
-import { useProfileInfo } from '@/services/queries';
 
 interface FieldOption {
   name: string;
@@ -575,7 +575,18 @@ const TeacherProfile = () => {
             </Box>
             <Box
               className="linerGradient"
-              sx={{ padding: '10px 16px 21px', mt: 3 }}
+              sx={{
+                padding: '10px 16px 21px',
+                width: '100%',
+                mt: 3,
+                // '@media (min-width: 900px)': {
+                //   borderRadius: '8px',
+                //   display: 'flex',
+                //   gap: '15px',
+                //   alignItems: 'center',
+                //   flexDirection: 'row-reverse',
+                // },
+              }}
             >
               <Button
                 sx={{
@@ -590,6 +601,9 @@ const TeacherProfile = () => {
                   textAlign: 'center',
                   color: theme.palette.warning.A200,
                   border: `1px solid #4D4639`,
+                  '@media (min-width: 900px)': {
+                    minWidth: '40%',
+                  },
                 }}
                 onClick={handleOpen}
               >
@@ -619,6 +633,10 @@ const TeacherProfile = () => {
                   border: '1px solid',
                   borderColor: theme.palette.warning['A100'],
                   padding: '16px',
+                  // '@media (min-width: 900px)': {
+                  //   minWidth: '60%',
+                  //   width: '60%',
+                  // },
                 }}
                 className="bg-white"
                 minWidth={'100%'}
