@@ -219,35 +219,14 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
     let selfAttendanceStart =
       cohortDetails?.params?.self_attendance_start?.replace(".", ":");
 
-    // Function to parse time safely
-    const parseTime = (timeString) => {
-      if (!timeString) return [0, 0]; // Handle null, undefined, and empty string
-
-      const parts = timeString.split(":").map(Number);
-      if (parts.length !== 2 || parts.some(isNaN)) return [0, 0]; // Invalid format or NaN check
-
-      return parts;
-    };
-
     // Get current time
     const currentTime = new Date();
     const currentHours = currentTime.getHours().toString().padStart(2, "0");
     const currentMinutes = currentTime.getMinutes().toString().padStart(2, "0");
     const formattedCurrentTime = `${currentHours}:${currentMinutes}`;
 
-    // Calculate 5 minutes before self_attendance_start
-    const [startHours, startMinutes] = parseTime(selfAttendanceStart);
-    let fiveMinutesBeforeHours = startHours;
-    let fiveMinutesBeforeMinutes = startMinutes - 5;
-    if (fiveMinutesBeforeMinutes < 0) {
-      fiveMinutesBeforeHours -= 1;
-      fiveMinutesBeforeMinutes += 60;
-    }
-    const fiveMinutesBeforeStart = `${fiveMinutesBeforeHours
-      .toString()
-      .padStart(2, "0")}:${fiveMinutesBeforeMinutes
-      .toString()
-      .padStart(2, "0")}`;
+    const fiveMinutesBeforeStart =
+      cohortDetails?.params?.self_attendance_start ?? "00:01";
 
     // Get end time safely
     const selfAttendanceEnd =
@@ -266,7 +245,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
       cohortDetails?.params?.allow_late_marking == "true";
 
     // Determine if the widget should be disabled
-    const isDisabled = !(isWithinAttendanceWindow || isLateMarkingAllowed);
+    isDisabled = !(isWithinAttendanceWindow || isLateMarkingAllowed);
   }
 
   /* End - Check for allowing to self mark attendance on the basis of slot allowed to mark the attendance against the respective cohort & also check for late mark attendance */
