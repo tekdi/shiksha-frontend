@@ -266,7 +266,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
       cohortDetails?.params?.allow_late_marking == "true";
 
     // Determine if the widget should be disabled
-    const isDisabled = !(isWithinAttendanceWindow || isLateMarkingAllowed);
+    isDisabled = !(isWithinAttendanceWindow || isLateMarkingAllowed);
   }
 
   /* End - Check for allowing to self mark attendance on the basis of slot allowed to mark the attendance against the respective cohort & also check for late mark attendance */
