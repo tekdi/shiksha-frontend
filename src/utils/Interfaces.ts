@@ -117,6 +117,15 @@ export interface SessionsCardProps {
   data: Session;
   children?: React.ReactNode;
 }
+
+export interface SessionsModalProps {
+  children?: React.ReactNode;
+  open: boolean;
+  handleClose: () => void;
+  title: string;
+  primary: string;
+}
+
 export interface AttendanceStatusListProps {
   limit: number;
   page: number;
