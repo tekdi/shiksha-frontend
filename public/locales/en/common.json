@@ -95,6 +95,11 @@
     "OBSERVATIONS_FORMS": "Observations and Forms",
     "OTHER_REASON": "Other Reason",
     "OTHER_REASON_PLACEHOLDER": "Enter Other Reason",
+    "BACK": "Back",
+    "SEND_CREDENTIALS": "Send Credentials",
+    "CREDENTIALS_EMAILED": "The login credentials will be emailed to the user at",
+    "NEW": "New {{role}}",
+    "USER_CREDENTIAL_SEND_SUCCESSFULLY": "User Credentials Sent Successfully!",
     "CENTER_SESSIONS": "Center Sessions",
     "SCHEDULE_NEW": "Schedule New",
     "UPCOMING_EXTRA_SESSION": "Upcoming Extra Sessions",
@@ -279,7 +284,11 @@
     "CENTER_TYPE": "Center Type",
     "UNIT_NAME": "Unit Name",
     "NOTE": "Note: This will be the center name",
-    "CENTER_CREATED": "Center Created Successfully!"
+    "CENTER_CREATED": "Center Created Successfully!",
+    "RENAME_CENTER": "Rename Center",
+    "REQUEST_TO_DELETE": "Request to Delete",
+    "RENAME": "Rename",
+    "CENTER_RENAMED": "Center Renamed Successfully!"
   },
   "MANAGE_USERS": {
     "CENTERS_REQUESTED_SUCCESSFULLY": "Center Requested Successfully"

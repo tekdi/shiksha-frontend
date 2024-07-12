@@ -2,7 +2,10 @@ import {
   Button,
   Divider,
   Grid,
+  IconButton,
   InputLabel,
+  ListItemIcon,
+  Menu,
   MenuItem,
   Select,
   Typography,
@@ -17,6 +20,7 @@ import Box from '@mui/material/Box';
 import CenterSessionModal from '@/components/CenterSessionModal';
 import CohortLearnerList from '@/components/CohortLearnerList';
 import { CustomField } from '@/utils/Interfaces';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DeleteSession from '@/components/DeleteSession';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -24,9 +28,12 @@ import FormLabel from '@mui/material/FormLabel';
 import { GetStaticPaths } from 'next';
 import Header from '@/components/Header';
 import KeyboardBackspaceOutlinedIcon from '@mui/icons-material/KeyboardBackspaceOutlined';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PlannedSession from '@/components/PlannedSession';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import RenameCenterModal from '@/components/center/RenameCenterModal';
 import ScheduleModal from '@/components/ScheduleModal';
 import { Session } from '../../utils/Interfaces';
 import SessionCard from '@/components/SessionCard';
@@ -61,6 +68,8 @@ const TeachingCenterDetails = () => {
   const [sessions, setSessions] = React.useState<Session[]>();
   const [percentageAttendanceData, setPercentageAttendanceData] =
     React.useState<any>(null);
+  const [openRenameCenterModal, setOpenRenameCenterModal] =
+    React.useState(false);
 
   useEffect(() => {
     const getCohortData = async () => {
@@ -112,6 +121,20 @@ const TeachingCenterDetails = () => {
     setShowDetails(true);
   };
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuOpen = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleRenameCenterClose = () => {
+    setOpenRenameCenterModal(false);
+  };
+
   return (
     <>
       <Header />
@@ -122,30 +145,73 @@ const TeachingCenterDetails = () => {
             justifyContent: 'left',
             color: '#4D4639',
             padding: '15px 17px 5px',
+            width: '100%',
           }}
-          width={'100%'}
-          onClick={handleBackEvent}
         >
-          <KeyboardBackspaceOutlinedIcon
-            cursor={'pointer'}
-            sx={{ color: theme.palette.warning['A200'], marginTop: '15px' }}
-          />
-          <Box m={'1rem 1rem 0.5rem'} display={'column'} gap={'5px'}>
-            <Typography textAlign={'left'} fontSize={'22px'}>
-              {cohortDetails?.name}
-            </Typography>
-            {cohortDetails?.centerType && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+            onClick={handleBackEvent}
+          >
+            <KeyboardBackspaceOutlinedIcon
+              sx={{ color: theme.palette.warning['A200'], marginTop: '15px' }}
+            />
+            <Box m={'1rem 1rem 0.5rem'} display={'column'} gap={'5px'}>
               <Typography textAlign={'left'} fontSize={'22px'}>
-                {cohortDetails?.centerType}
+                {cohortDetails?.name}
               </Typography>
-            )}
-
-            <Box>
-              <Typography textAlign={'left'} fontSize={'11px'} fontWeight={500}>
-                {cohortDetails?.address}
-              </Typography>
+              {cohortDetails?.centerType && (
+                <Typography textAlign={'left'} fontSize={'22px'}>
+                  {cohortDetails?.centerType}
+                </Typography>
+              )}
+              <Box>
+                <Typography
+                  textAlign={'left'}
+                  fontSize={'11px'}
+                  fontWeight={500}
+                >
+                  {cohortDetails?.address}
+                </Typography>
+              </Box>
             </Box>
           </Box>
+          <IconButton
+            aria-label="more"
+            aria-controls="long-menu"
+            aria-haspopup="true"
+            onClick={handleMenuOpen}
+            sx={{ color: theme.palette.warning['A200'] }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            id="long-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={() => setOpenRenameCenterModal(true)}>
+              <ListItemIcon sx={{ color: theme.palette.warning['A200'] }}>
+                <ModeEditOutlineOutlinedIcon fontSize="small" />
+              </ListItemIcon>
+              {t('CENTERS.RENAME_CENTER')}
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <ListItemIcon sx={{ color: theme.palette.warning['A200'] }}>
+                <DeleteOutlineOutlinedIcon fontSize="small" />
+              </ListItemIcon>
+              {t('CENTERS.REQUEST_TO_DELETE')}
+            </MenuItem>
+          </Menu>
+          <RenameCenterModal
+            open={openRenameCenterModal}
+            handleClose={handleRenameCenterClose}
+          />
         </Box>
       </Box>
       <Box sx={{ width: '100%' }}>

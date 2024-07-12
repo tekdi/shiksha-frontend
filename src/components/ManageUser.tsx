@@ -38,8 +38,10 @@ import LearnersList from '@/components/LearnersList';
 import Link from 'next/link';
 import { styled } from '@mui/system';
 
-import { getFacilitatorList } from '@/services/MyClassDetailsService';
+import { getMyUserList } from '@/services/MyClassDetailsService';
 import DeleteUserModal from './DeleteUserModal';
+import Image from 'next/image';
+import profileALT from '../assets/images/Profile.png';
 interface Cohort {
   cohortId: string;
   parentId: string;
@@ -120,7 +122,7 @@ const manageUsers: React.FC<ManageUsersProps> = ({
     const getFacilitator = async () => {
       setLoading(true);
       try {
-        let cohortId = cohortData
+        const cohortId = cohortData
           .map((block: any) => {
             return block.blockId;
           })
@@ -130,17 +132,25 @@ const manageUsers: React.FC<ManageUsersProps> = ({
           const limit = 0;
           const page = 0;
           const filters = {
-            cohortId: cohortId,
+            state: 'MH',
+            district: 'PN',
+            block: 'BA',
             role: 'Teacher',
           };
+          const fields = ['age'];
 
-          const resp = await getFacilitatorList({ limit, page, filters });
-          const facilitatorList = resp.result?.results?.userDetails;
-          const extractedData = facilitatorList?.map((user: any) => ({
-            userId: user.userId,
-            name: user.name,
-            age: user?.age,
-          }));
+          const resp = await getMyUserList({ limit, page, filters, fields });
+          const facilitatorList = resp.result?.getUserDetails;
+          const extractedData = facilitatorList?.map((user: any) => {
+            const ageField = user.customFields.find(
+              (field: any) => field.name === 'age'
+            );
+            return {
+              userId: user.userId,
+              name: user.name,
+              age: ageField ? ageField.value : null,
+            };
+          });
           console.log(extractedData);
           setTimeout(() => {
             setUsers(extractedData);
@@ -516,16 +526,9 @@ const manageUsers: React.FC<ManageUsersProps> = ({
                           justifyContent={'space-between'}
                           sx={{ cursor: 'pointer' }}
                         >
-                          <Box
-                          // onClick={() => handleModalToggle(user)}
-                          // onClick={() => handleLearnerFullProfile()}
-                          >
-                            <Box
-                              sx={{
-                                fontSize: '16px',
-                                color: theme.palette.warning['300'],
-                              }}
-                            >
+                          <Box display="flex" alignItems="center" gap="5px">
+                            <Image src={profileALT} alt="img" />
+                            <Box>
                               <CustomLink className="word-break" href="#">
                                 <Typography
                                   onClick={() => {
@@ -535,47 +538,23 @@ const manageUsers: React.FC<ManageUsersProps> = ({
                                     textAlign: 'left',
                                     fontSize: '16px',
                                     fontWeight: '400',
+                                    marginTop: '5px',
                                     color: theme.palette.secondary.main,
                                   }}
                                 >
                                   {user.name}
                                 </Typography>
                               </CustomLink>
-
                               <Box
                                 sx={{
                                   fontSize: '12px',
                                   color: theme.palette.warning['400'],
+                                  marginBottom: '10px',
                                 }}
                               >
-                                {user?.age ? user.age + 'y/o' : 'N/A'}
+                                {user?.age ? `${user.age} y/o` : 'N/A'}
                               </Box>
                             </Box>
-
-                            {/* <Box display={'flex'}>
-                              {cohortsData[user.userId] &&
-                                cohortsData[user.userId].map((cohort) => (
-                                  <Box
-                                    key={cohort.cohortId}
-                                    sx={{
-                                      padding: '4px',
-                                      color: theme.palette.success.contrastText,
-                                      fontSize: '12px',
-                                      borderRadius: '8px',
-                                    }}
-                                  >
-                                    <span
-                                      style={{
-                                        color:
-                                          theme.palette.warning.contrastText,
-                                        fontWeight: '500',
-                                      }}
-                                    >
-                                      {cohort.name}
-                                    </span>
-                                  </Box>
-                                ))}
-                            </Box> */}
                           </Box>
                           <Box>
                             <MoreVertIcon
@@ -606,6 +585,7 @@ const manageUsers: React.FC<ManageUsersProps> = ({
                   </Box>
                 </Box>
               </Box>
+
               <ManageUsersModal
                 open={open}
                 onClose={handleClose}
