@@ -295,5 +295,28 @@
   },
   "MANAGE_USERS": {
     "CENTERS_REQUESTED_SUCCESSFULLY": "Center Requested Successfully"
+  },
+  "CENTER_SESSION": {
+    "THIS_SESSION": "This session",
+    "FOLLOWING_SESSIONS": "This and following sessions",
+    "MODE_OF_SESSION": "Mode of Session",
+    "OFFLINE": "Offline",
+    "ONLINE": "Online",
+    "SUBJECT": "Subject",
+    "MEETING_LINK": "Meeting Link",
+    "MEETING_PASSCODE": "Meeting Passcode (if applicable)",
+    "START_TIME": "Start Time",
+    "END_TIME": "End Time",
+    "START_DATE": "Start Date",
+    "END_DATE": "End Date",
+    "REMOVE_THIS_SESSION": "Remove this session",
+    "PLANNED_SESSION": "Planned Session",
+    "FIXES_SUBJECTS": "For fixed subjects in the timetable",
+    "EXTRA_SESSION": "Extra Session",
+    "DOUBT_CLEARING": "For doubt clearing, webinars, etc",
+    "TOPIC": "Topic",
+    "SUBTOPIC": "Sub Topic",
+    "FACILITATORS": " Facilitators Pre-requisites",
+    "TITLE": "Title"
   }
 }
