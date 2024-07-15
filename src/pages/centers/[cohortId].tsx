@@ -16,6 +16,7 @@ import Box from '@mui/material/Box';
 import CenterSessionModal from '@/components/CenterSessionModal';
 import CohortLearnerList from '@/components/CohortLearnerList';
 import { CustomField } from '@/utils/Interfaces';
+import DeleteCenterModal from '@/components/center/DeleteCenterModal';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { GetStaticPaths } from 'next';
 import Header from '@/components/Header';
@@ -58,6 +59,8 @@ const TeachingCenterDetails = () => {
   const [percentageAttendanceData, setPercentageAttendanceData] =
     React.useState<any>(null);
   const [openRenameCenterModal, setOpenRenameCenterModal] =
+    React.useState(false);
+  const [openDeleteCenterModal, setOpenDeleteCenterModal] =
     React.useState(false);
 
   useEffect(() => {
@@ -124,6 +127,10 @@ const TeachingCenterDetails = () => {
     setOpenRenameCenterModal(false);
   };
 
+  const handleDeleteCenterClose = () => {
+    setOpenDeleteCenterModal(false);
+  };
+
   return (
     <>
       <Header />
@@ -184,13 +191,23 @@ const TeachingCenterDetails = () => {
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
           >
-            <MenuItem onClick={() => setOpenRenameCenterModal(true)}>
+            <MenuItem
+              onClick={() => {
+                setOpenRenameCenterModal(true);
+                handleMenuClose();
+              }}
+            >
               <ListItemIcon sx={{ color: theme.palette.warning['A200'] }}>
                 <ModeEditOutlineOutlinedIcon fontSize="small" />
               </ListItemIcon>
               {t('CENTERS.RENAME_CENTER')}
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
+            <MenuItem
+              onClick={() => {
+                setOpenDeleteCenterModal(true);
+                handleMenuClose();
+              }}
+            >
               <ListItemIcon sx={{ color: theme.palette.warning['A200'] }}>
                 <DeleteOutlineOutlinedIcon fontSize="small" />
               </ListItemIcon>
@@ -200,6 +217,10 @@ const TeachingCenterDetails = () => {
           <RenameCenterModal
             open={openRenameCenterModal}
             handleClose={handleRenameCenterClose}
+          />
+          <DeleteCenterModal
+            open={openDeleteCenterModal}
+            handleClose={handleDeleteCenterClose}
           />
         </Box>
       </Box>
