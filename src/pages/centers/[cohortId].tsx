@@ -22,6 +22,7 @@ import Header from '@/components/Header';
 import KeyboardBackspaceOutlinedIcon from '@mui/icons-material/KeyboardBackspaceOutlined';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import PlannedSession from '@/components/PlannedSession';
 import RenameCenterModal from '@/components/center/RenameCenterModal';
 import Schedule from '@/components/Schedule';
 import { Session } from '../../utils/Interfaces';
@@ -259,7 +260,7 @@ const TeachingCenterDetails = () => {
               title={'Schedule'}
               primary={'Next'}
             >
-              <Schedule />
+              <PlannedSession />
             </CenterSessionModal>
           </Box>
           <Box mt={3} px={'18px'}>

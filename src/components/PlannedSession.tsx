@@ -16,14 +16,20 @@ import { ChangeEvent, useState } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { sessionModeConstant } from '@/utils/app.constant';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'next-i18next';
 
+type SessionMode =
+  (typeof sessionModeConstant)[keyof typeof sessionModeConstant];
+
 const PlannedSession = () => {
-  const [sessionMode, setSessionMode] = useState('Offline');
+  const [sessionMode, setSessionMode] = useState<SessionMode>(
+    sessionModeConstant.OFFLINE
+  );
 
   const handleSessionModeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSessionMode(event.target.value);
+    setSessionMode(event.target.value as SessionMode);
   };
 
   const { t } = useTranslation();
@@ -48,7 +54,7 @@ const PlannedSession = () => {
               onChange={handleSessionModeChange}
             >
               <FormControlLabel
-                value="Offline"
+                value={sessionModeConstant.OFFLINE}
                 control={
                   <Radio style={{ color: theme?.palette?.warning['300'] }} />
                 }
@@ -59,7 +65,7 @@ const PlannedSession = () => {
                 }
               />
               <FormControlLabel
-                value="Online"
+                value={sessionModeConstant.ONLINE}
                 control={
                   <Radio style={{ color: theme?.palette?.warning['300'] }} />
                 }
@@ -88,7 +94,7 @@ const PlannedSession = () => {
           </FormControl>
         </Box>
 
-        {sessionMode === 'Online' && (
+        {sessionMode === sessionModeConstant.ONLINE && (
           <>
             <Box sx={{ mt: 2 }}>
               <FormControl fullWidth>
