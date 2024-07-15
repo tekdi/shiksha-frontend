@@ -307,12 +307,10 @@
     "START_DATE": "Start Date",
     "END_DATE": "End Date",
     "REMOVE_THIS_SESSION": "Remove this session",
-
     "PLANNED_SESSION": "Planned Session",
     "FIXES_SUBJECTS": "For fixed subjects in the timetable",
     "EXTRA_SESSION": "Extra Session",
     "DOUBT_CLEARING": "For doubt clearing, webinars, etc",
-
     "TOPIC": "Topic",
     "SUBTOPIC": "Sub Topic",
     "FACILITATORS": " Facilitators Pre-requisites",
