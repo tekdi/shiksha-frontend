@@ -16,23 +16,21 @@ const CenterSessionModal: React.FC<SessionsModalProps> = ({
   title,
   primary,
 }) => {
+  const theme = useTheme<any>();
+  const { t } = useTranslation();
   const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: '75%',
-    bgcolor: '#fff',
+    bgcolor: theme?.palette?.warning['A400'],
     boxShadow: 24,
     borderRadius: '16px',
     '@media (min-width: 600px)': {
       width: '450px',
     },
   };
-
-  const theme = useTheme();
-  const { t } = useTranslation();
-
   return (
     <>
       <div>
@@ -52,7 +50,7 @@ const CenterSessionModal: React.FC<SessionsModalProps> = ({
                 <Typography
                   variant="h2"
                   sx={{
-                    color: '#4D4639',
+                    color: theme?.palette?.warning['A200'],
                     fontSize: '14px',
                   }}
                   component="h2"
@@ -64,7 +62,7 @@ const CenterSessionModal: React.FC<SessionsModalProps> = ({
                 onClick={handleClose}
                 sx={{
                   cursor: 'pointer',
-                  color: '#4D4639',
+                  color: theme?.palette?.warning['A200'],
                 }}
               />
             </Box>

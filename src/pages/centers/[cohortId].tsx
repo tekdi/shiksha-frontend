@@ -1,13 +1,9 @@
 import {
   Button,
-  Divider,
-  Grid,
   IconButton,
-  InputLabel,
   ListItemIcon,
   Menu,
   MenuItem,
-  Select,
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -21,26 +17,18 @@ import CenterSessionModal from '@/components/CenterSessionModal';
 import CohortLearnerList from '@/components/CohortLearnerList';
 import { CustomField } from '@/utils/Interfaces';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import DeleteSession from '@/components/DeleteSession';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import { GetStaticPaths } from 'next';
 import Header from '@/components/Header';
 import KeyboardBackspaceOutlinedIcon from '@mui/icons-material/KeyboardBackspaceOutlined';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import PlannedSession from '@/components/PlannedSession';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import RenameCenterModal from '@/components/center/RenameCenterModal';
-import ScheduleModal from '@/components/ScheduleModal';
+import Schedule from '@/components/Schedule';
 import { Session } from '../../utils/Interfaces';
 import SessionCard from '@/components/SessionCard';
 import SessionCardFooter from '@/components/SessionCardFooter';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import TopicDetails from '@/components/TopicDetails';
 import WeekCalender from '@/components/WeekCalender';
 import { getCohortDetails } from '@/services/CohortServices';
 import { getSessions } from '@/services/Sessionservice';
@@ -271,10 +259,7 @@ const TeachingCenterDetails = () => {
               title={'Schedule'}
               primary={'Next'}
             >
-              {/* <ScheduleModal />
-              <PlannedSession /> */}
-              {/* <TopicDetails /> */}
-              <DeleteSession />
+              <Schedule />
             </CenterSessionModal>
           </Box>
           <Box mt={3} px={'18px'}>

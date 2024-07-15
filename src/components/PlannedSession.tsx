@@ -36,9 +36,9 @@ const PlannedSession = () => {
           <FormControl>
             <FormLabel
               id="demo-row-radio-buttons-group-label"
-              style={{ color: '#1F1B13' }}
+              style={{ color: theme?.palette?.warning['300'] }}
             >
-              Mode of Session
+              {t('CENTER_SESSION.MODE_OF_SESSION')}
             </FormLabel>
             <RadioGroup
               row
@@ -49,13 +49,25 @@ const PlannedSession = () => {
             >
               <FormControlLabel
                 value="Offline"
-                control={<Radio style={{ color: '#1F1B13' }} />}
-                label={<span style={{ color: '#1F1B13' }}>Offline</span>}
+                control={
+                  <Radio style={{ color: theme?.palette?.warning['300'] }} />
+                }
+                label={
+                  <span style={{ color: theme?.palette?.warning['300'] }}>
+                    {t('CENTER_SESSION.OFFLINE')}
+                  </span>
+                }
               />
               <FormControlLabel
                 value="Online"
-                control={<Radio style={{ color: '#1F1B13' }} />}
-                label={<span style={{ color: '#1F1B13' }}>Online</span>}
+                control={
+                  <Radio style={{ color: theme?.palette?.warning['300'] }} />
+                }
+                label={
+                  <span style={{ color: theme?.palette?.warning['300'] }}>
+                    {t('CENTER_SESSION.ONLINE')}
+                  </span>
+                }
               />
             </RadioGroup>
           </FormControl>
@@ -63,13 +75,15 @@ const PlannedSession = () => {
 
         <Box sx={{ mt: 2 }}>
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Subject</InputLabel>
+            <InputLabel id="demo-simple-select-label">
+              {t('CENTER_SESSION.SUBJECT')}
+            </InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Subject"
             >
-              <MenuItem value={'Mathematics'}>Mathematics</MenuItem>
+              {/* <MenuItem value={'Mathematics'}>Mathematics</MenuItem> */}
             </Select>
           </FormControl>
         </Box>
@@ -79,28 +93,28 @@ const PlannedSession = () => {
             <Box sx={{ mt: 2 }}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">
-                  Meeting Link
+                  {t('CENTER_SESSION.MEETING_LINK')}
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Meeting Link"
                 >
-                  <MenuItem value={'Link1'}>Link 1</MenuItem>
+                  {/* <MenuItem value={'Link1'}>Link 1</MenuItem> */}
                 </Select>
               </FormControl>
             </Box>
             <Box sx={{ mt: 2 }}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">
-                  Meeting Passcode (if applicable)
+                  {t('CENTER_SESSION.MEETING_PASSCODE')}
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Meeting Passcode"
                 >
-                  <MenuItem value={'Passcode1'}>Passcode 1</MenuItem>
+                  {/* <MenuItem value={'Passcode1'}>Passcode 1</MenuItem> */}
                 </Select>
               </FormControl>
             </Box>
@@ -113,14 +127,14 @@ const PlannedSession = () => {
               <Box sx={{ mt: 2 }}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
-                    Start Time
+                    {t('CENTER_SESSION.START_TIME')}
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     label="Start Time"
                   >
-                    <MenuItem value={'Time1'}>Time 1</MenuItem>
+                    {/* <MenuItem value={'Time1'}>Time 1</MenuItem> */}
                   </Select>
                 </FormControl>
               </Box>
@@ -129,14 +143,14 @@ const PlannedSession = () => {
               <Box sx={{ my: 2 }}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
-                    End Time
+                    {t('CENTER_SESSION.END_TIME')}
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     label="End Time"
                   >
-                    <MenuItem value={'Time2'}>Time 2</MenuItem>
+                    {/* <MenuItem value={'Time2'}>Time 2</MenuItem> */}
                   </Select>
                 </FormControl>
               </Box>
@@ -150,14 +164,14 @@ const PlannedSession = () => {
               <Box>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
-                    Start Date
+                    {t('CENTER_SESSION.START_DATE')}
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     label="Start Date"
                   >
-                    <MenuItem value={'Date1'}>Date 1</MenuItem>
+                    {/* <MenuItem value={'Date1'}>Date 1</MenuItem> */}
                   </Select>
                 </FormControl>
               </Box>
@@ -166,14 +180,14 @@ const PlannedSession = () => {
               <Box>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
-                    End Date
+                    {t('CENTER_SESSION.END_DATE')}
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     label="End Date"
                   >
-                    <MenuItem value={'Date2'}>Date 2</MenuItem>
+                    {/* <MenuItem value={'Date2'}>Date 2</MenuItem> */}
                   </Select>
                 </FormControl>
               </Box>
@@ -192,13 +206,15 @@ const PlannedSession = () => {
           <Box
             sx={{
               fontSize: '14px',
-              color: '#0D599E',
+              color: theme?.palette?.secondary.main,
               fontWeight: '500',
             }}
           >
-            Remove this session
+            {t('CENTER_SESSION.REMOVE_THIS_SESSION')}
           </Box>
-          <DeleteOutlineIcon sx={{ fontSize: '18px', color: '#BA1A1A' }} />
+          <DeleteOutlineIcon
+            sx={{ fontSize: '18px', color: theme?.palette?.error.main }}
+          />
         </Box>
 
         <Box sx={{ mt: 2 }}>
