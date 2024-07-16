@@ -38,7 +38,7 @@ jobs:
         run: ssh-keyscan -p ${{ secrets.SSH_PORT_TEKDI_OU}} -H ${{ secrets.SSH_HOST_TEKDI_OU }}  >> ~/.ssh/known_hosts
 
       - name: Copy Build Artifact using Rsync
-        run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT_TEKDI_OU }}" shiksha-ui.tar ${{ secrets.SSH_USER_TEKDI_OU }}@${{ secrets.SSH_HOST_TEKDI_OU }}:/root/shiksha-ui.tar
+        run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT_TEKDI_OU }}" shiksha-ui.tar ${{ secrets.SSH_USER_TEKDI_OU }}@${{ secrets.SSH_HOST_TEKDI_OU }}:/ubuntu/shiksha-ui.tar
 
       - name: Unzip Artifact to Correct Locations to Deploy
         uses: appleboy/ssh-action@master
