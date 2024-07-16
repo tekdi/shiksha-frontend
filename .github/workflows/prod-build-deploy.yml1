@@ -1,4 +1,4 @@
-name: Deploy to PROD
+name: Deploy to DEV Tekdi-OU
 on: 
   push: 
     branches:
@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node Env
         uses: actions/setup-node@v3
         with:
-          node-version: 18.0.0
+          node-version: 21.0.0
           
       - name: Generate React Build
         run: |
@@ -31,21 +31,21 @@ jobs:
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_tekdi-ou }}
           known_hosts: unnecessary
 
       - name: Add Entry to Known Hosts
-        run: ssh-keyscan -p ${{ secrets.SSH_PORT}} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
+        run: ssh-keyscan -p ${{ secrets.SSH_PORT_TEKDI_OU}} -H ${{ secrets.SSH_HOST_TEKDI_OU }}  >> ~/.ssh/known_hosts
 
       - name: Copy Build Artifact using Rsync
-        run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }}" shiksha-ui.tar ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/shiksha-ui.tar
+        run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT_TEKDI_OU }}" shiksha-ui.tar ${{ secrets.SSH_USER_TEKDI_OU }}@${{ secrets.SSH_HOST_TEKDI_OU }}:/root/shiksha-ui.tar
 
       - name: Unzip Artifact to Correct Locations to Deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.SSH_HOST_TEKDI_OU }}
+          username: ${{ secrets.SSH_USER_TEKDI_OU }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_TEKDI_OU }}
           script: |
             cd /root
-            tar -xvf shiksha-ui.tar -C /var/www/shiksha.uniteframework.io/public
+            tar -xvf shiksha-ui.tar -C /var/www/shiksha.tekdinext.com/public
