@@ -12,7 +12,7 @@ function Observation() {
     useEffect(() => {
       const playerElement = questionairePlayerMainRef.current;
       const handlePlayerSubmitOrSaveEvent = (event) => {
-        console.log("Event Data Logged from the react app", event.detail);
+        console.log("Event Data Logged from the OBLF Invigorate", event.detail);
       };
   
       playerElement.addEventListener(

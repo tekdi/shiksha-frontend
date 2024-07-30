@@ -1,4 +1,4 @@
-This example was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This example was bootstrapped with [Create OBLF Invigorate](https://github.com/facebook/create-react-app).
 
 It is linked to the @mylib/common package in the parent directory for development purposes.
 
