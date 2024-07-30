@@ -47,7 +47,7 @@ const CohortDetails = ({ footerLinks, setAlert, appName }) => {
   const [attendanceStatusData, setAttendanceStatusData] = React.useState();
   let isDisabled = false;
   let scope = "self";
-  let captureLocation = "true";
+  let captureLocation = "false";
   let cameraUrl = "";
   let avatarUrlObject = cameraUrl
     ? {
