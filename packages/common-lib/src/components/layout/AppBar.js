@@ -41,6 +41,7 @@ export default function AppBar({
         eventType: 'LOGOUT',
         data: {}
       })
+      navigate('/')
     } else {
       localStorage.setItem('lang', e)
       window.location.reload()
