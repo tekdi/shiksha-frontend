@@ -12,7 +12,7 @@ import {
   InputRightAddon
 } from 'native-base'
 
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import IconByName from '../IconByName'
 import { eventBus } from '../../services/EventBus'
 
@@ -26,12 +26,13 @@ export default function AppBar({
   languages,
   onPressBackButton,
   rightIcon,
-  isShowNotificationButton,
+  isShowNotificationButton = false,
   titleComponent,
   ...props
 }) {
   const [searchInput, setSearchInput] = useState(false)
 
+  const location = useLocation();
   const navigate = useNavigate()
   const setLang = (e) => {
     if (e === 'logout') {
@@ -114,7 +115,7 @@ export default function AppBar({
               {isEnableHamburgerMenuButton ? (
                 <IconByName size='sm' name='bars' color={color ? color : ''} />
               ) : (
-                <IconByName
+                location.pathname !== '/' && (<IconByName
                   size='sm'
                   name='ArrowLeftLineIcon'
                   color={color ? color : ''}
@@ -125,7 +126,8 @@ export default function AppBar({
                       navigate(-1)
                     }
                   }}
-                />
+                />)
+
               )}
             </HStack>
             {titleComponent ? titleComponent : <React.Fragment />}
@@ -142,11 +144,12 @@ export default function AppBar({
               )}
               {rightIcon ? rightIcon : <React.Fragment />}
               {isShowNotificationButton ? (
-                <IconByName
-                  name='Notification2LineIcon'
-                  color={color ? color : ''}
-                  onPress={(e) => navigate('/notification')}
-                />
+                // <IconByName
+                //   name='Notification2LineIcon'
+                //   color={color ? color : ''}
+                //   onPress={(e) => navigate('/notification')} 
+                // /> 
+                ""
               ) : (
                 <React.Fragment />
               )}
