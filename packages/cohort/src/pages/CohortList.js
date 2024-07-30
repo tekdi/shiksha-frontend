@@ -35,14 +35,16 @@ export default function CohortList() {
             tenantid: process.env.REACT_APP_TENANT_ID,
           }
         );
-        if (cohortMemebersData) {
+
+        if (cohortMemebersData?.length > 0) {
           const cohortIdsInfo = cohortMemebersData.map(
             (item) => `${item.cohortId}`
           );
           const cohortIdsData = cohortIdsInfo.join(", ");
           getData(cohortIdsData);
         } else {
-          getData();
+          setLoading(false);
+          console.log("No cohort Memebers Data found");
         }
       }
     };
