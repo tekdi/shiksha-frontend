@@ -190,7 +190,7 @@ function Generic({ footerLinks, appName, setAlert }) {
           title: t("HOME"),
           // subHeading: moment().format("hh:mm A"),
           iconComponent: (
-            <Pressable onPress={(e) => setShowModal(true)}>
+            <Pressable onPress={(e) => setShowModal(false)}>
               {cameraUrl ? (
                 <Image
                   ref={myRef}

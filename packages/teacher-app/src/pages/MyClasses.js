@@ -79,7 +79,7 @@ const MyClasses = ({ footerLinks, setAlert, appName }) => {
           title: t("MY_CLASSES"),
           subHeading: moment().format("hh:mm A"),
           iconComponent: (
-            <Pressable onPress={(e) => setShowModal(true)}>
+            <Pressable onPress={(e) => setShowModal(false)}>
               {cameraUrl ? (
                 <Image
                   ref={myRef}
